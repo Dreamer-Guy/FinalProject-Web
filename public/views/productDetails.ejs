@@ -1,20 +1,242 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple HTML Page</title>
-</head>
-<body>
-    <header>
-        <h1>Welcome to My Simple HTML Page</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shop Page - Ecommerce Tailwind</title>
+
+    <link
+      rel="shortcut icon"
+      href="../assets/images/favicon/favicon.ico"
+      type="image/x-icon"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <header class="shadow-sm bg-white p-2">
+      <div class="flex flex-row items-center justify-between">
+        <a href="index.html">
+          <img src="../assets/images/logo.svg" alt="Logo" class="w-32" />
+        </a>
+
+        <div class="w-full max-w-xl relative hidden md:flex">
+          <span class="absolute left-4 top-3 text-lg text-gray-400">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </span>
+          <input
+            type="text"
+            name="search"
+            id="search"
+            class="w-full border border-primary border-r-0 pl-12 py-3 pr-3 rounded-l-md focus:outline-none"
+            placeholder="search"
+          />
+          <button
+            class="bg-primary border border-primary text-white px-8 rounded-r-md hover:bg-transparent hover:text-primary transition"
+          >
+            Search
+          </button>
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <a
+            href="#"
+            class="text-center text-gray-700 hover:text-primary transition relative"
+          >
+            <div class="text-2xl">
+              <i class="fa-regular fa-heart"></i>
+            </div>
+            <div class="text-xs leading-3">Wishlist</div>
+            <div
+              class="absolute right-0 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs"
+            >
+              8
+            </div>
+          </a>
+          <a
+            href="#"
+            class="text-center text-gray-700 hover:text-primary transition relative"
+          >
+            <div class="text-2xl">
+              <i class="fa-solid fa-bag-shopping"></i>
+            </div>
+            <div class="text-xs leading-3">Cart</div>
+            <div
+              class="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs"
+            >
+              2
+            </div>
+          </a>
+          <a
+            href="#"
+            class="text-center text-gray-700 hover:text-primary transition relative"
+          >
+            <div class="text-2xl">
+              <i class="fa-regular fa-user"></i>
+            </div>
+            <div class="text-xs leading-3">Account</div>
+          </a>
+        </div>
+      </div>
     </header>
-    <main>
-        <p>This is a paragraph of text on the page.</p>
-        <a href="https://www.example.com">Click here for more info</a>
-    </main>
-    <footer>
-        <p>Copyright &copy; 2024</p>
+
+    <!-- Navbar -->
+    <nav class="bg-gray-800 hidden md:block">
+      <div class="container flex">
+        <div
+          class="px-8 py-4 bg-primary flex items-center cursor-pointer relative group"
+        >
+          <span class="text-white">
+            <i class="fa-solid fa-bars"></i>
+          </span>
+          <span class="capitalize ml-2 text-white">All Categories</span>
+          <div
+            class="absolute w-full left-0 top-full bg-white shadow-md py-3 divide-y divide-gray-300 divide-dashed opacity-0 group-hover:opacity-100 transition duration-300 invisible group-hover:visible"
+          >
+            <a
+              href="#"
+              class="flex items-center px-6 py-3 hover:bg-gray-100 transition"
+            >
+              <img
+                src="../assets/images/icons/sofa.svg"
+                alt="sofa"
+                class="w-5 h-5 object-contain"
+              />
+              <span class="ml-6 text-gray-600 text-sm">Sofa</span>
+            </a>
+            <a
+              href="#"
+              class="flex items-center px-6 py-3 hover:bg-gray-100 transition"
+            >
+              <img
+                src="../assets/images/icons/terrace.svg"
+                alt="terrace"
+                class="w-5 h-5 object-contain"
+              />
+              <span class="ml-6 text-gray-600 text-sm">Terrace</span>
+            </a>
+            <!-- Add more categories as needed -->
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between flex-grow pl-12">
+          <div class="flex items-center space-x-6 capitalize">
+            <a
+              href="../index.html"
+              class="text-gray-200 hover:text-white transition"
+              >Home</a
+            >
+            <a
+              href="pages/shop.html"
+              class="text-gray-200 hover:text-white transition"
+              >Shop</a
+            >
+            <a href="#" class="text-gray-200 hover:text-white transition"
+              >About us</a
+            >
+            <a href="#" class="text-gray-200 hover:text-white transition"
+              >Contact us</a
+            >
+          </div>
+          <a href="#" class="text-gray-200 hover:text-white transition"
+            >Login/Register</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="container py-4 flex items-center gap-3">
+      <a href="../index.html" class="text-primary text-base">
+        <i class="fa-solid fa-house"></i>
+      </a>
+      <span class="text-sm text-gray-400">
+        <i class="fa-solid fa-chevron-right"></i>
+      </span>
+      <p class="text-gray-600 font-medium">Product</p>
+    </div>
+
+    <!-- Product Detail -->
+    <div
+      class="container flex flex-col md:flex-row gap-6 justify-center items-center"
+    >
+      <div class="flex justify-center items-center md:w-1/2">
+        <img
+          id="product-img"
+          src="<%= product.image %>"
+          alt="product"
+          class="w-full"
+        />
+      </div>
+
+      <div id="product-infor">
+        <h2 class="text-3xl font-medium uppercase mb-2"><%= product.name %></h2>
+        <div class="flex items-center mb-4">
+          <div class="flex gap-1 text-sm text-yellow-400">
+            <span><i class="fa-solid fa-star"></i></span>
+            <span><i class="fa-solid fa-star"></i></span>
+            <span><i class="fa-solid fa-star"></i></span>
+            <span><i class="fa-solid fa-star"></i></span>
+            <span><i class="fa-solid fa-star"></i></span>
+          </div>
+          <div class="text-xs text-gray-500 ml-3">(150 Reviews)</div>
+        </div>
+        <div class="space-y-2">
+          <p class="text-gray-800 font-semibold space-x-2">
+            <span>Availability: </span>
+            <span class="text-green-600"><%= product.totalStock %></span>
+          </p>
+          <p class="space-x-2">
+            <span class="text-gray-800 font-semibold">Brand: </span>
+            <span class="text-gray-600"><%= product.brand %></span>
+          </p>
+          <p class="space-x-2">
+            <span class="text-gray-800 font-semibold">Type: </span>
+            <span class="text-gray-600"><%= product.type %></span>
+          </p>
+          <p class="space-x-2">
+            <span class="text-gray-800 font-semibold">Weight: </span>
+            <span class="text-gray-600"><%= product.weight %></span>
+          </p>
+        </div>
+        <div class="flex items-baseline mb-1 space-x-2 font-roboto mt-4">
+          <p class="text-gray-800 font-semibold">Price:</p>
+          <p class="text-xl text-primary font-semibold"><%= product.price %></p>
+        </div>
+        <div class="mt-4 flex gap-3">
+          <button
+            id="add-to-cart"
+            class="bg-primary text-white py-3 px-8 rounded-md hover:bg-transparent hover:text-primary transition"
+          >
+            Add to Cart
+          </button>
+          <button
+            id="buy-now"
+            class="bg-secondary text-white py-3 px-8 rounded-md hover:bg-transparent hover:text-secondary transition"
+          >
+            Buy Now
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="bg-gray-800 py-6">
+      <div class="container text-center text-white">
+        <p>&copy; 2024 Your Company. All rights reserved.</p>
+      </div>
     </footer>
-</body>
+
+    <script src="../js/productDetails.js"></script>
+  </body>
 </html>
