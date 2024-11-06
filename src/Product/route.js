@@ -1,5 +1,5 @@
 import express from "express";
-import {fetchAllFilteredProducts,getProductById}
+import {fetchAllFilteredProducts}
 from "./controller.js";
 
 const shoppingProductRouter=express.Router();
