@@ -29,12 +29,12 @@ const formatFilterParam=(filters)=>{
 }
 
 const getQueryParams=(req)=>{
-    //const {page,rowPerPage}=req.query;
+    const {page,rowPerPage}=req.query;
     const {filters={},sort='price-asc'}=req.query;
     const {brands,types}=formatFilterParam(filters);
     const {sortField,sortOrder}=formatSortParam(sort);
-    return {brands,types,sortField,sortOrder};
-    // return {brands,types,sortField,sortOrder,page,rowPerPage};
+    //return {brands,types,sortField,sortOrder};
+    return {brands,types,sortField,sortOrder,page,rowPerPage};
 }
 
 const populateProduct=(product)=>{
@@ -57,15 +57,15 @@ const populateProduct=(product)=>{
 
 const fetchAllFilteredProducts = async (req, res) => {
     try {
+        const user = req.session?.user;
         const { filters = {}, sort = {} } = req.query;
-        //const {page,rowPerPage}=req.query;
-        const {brands,types,sortField,sortOrder}=formatQueryParams(filters,sort);
+        const {brands,types,sortField,sortOrder,page,rowPerPage}=getQueryParams(req);
         const products = await productService.getProducts({ brands, types, sortField, sortOrder });
-        // if(page && rowPerPage){
-        //     products.splice(page*rowPerPage,rowPerPage);
-        // }
+        if(page && rowPerPage){
+            products.splice(page*rowPerPage,rowPerPage);
+        }
         const populateProducts = products.map((product) => (populateProduct(product)));
-        return res.render('products', {products:populateProducts,generateRatingStars});
+        return res.render('products', {products:populateProducts,user,generateRatingStars});
     }
     catch (e) {
         return res.json({

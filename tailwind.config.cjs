@@ -1,5 +1,5 @@
 export default {
-  content: ["./public/**/*.{html,js}"],
+  content: ["./public/**/*.{html,js}","./*.html"],
   
   theme: {
     screen: {
