@@ -17,7 +17,7 @@
     <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet" /> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
 </head>
 
 <body>
@@ -323,52 +323,31 @@
                     <h3 class="text-xl text-gray-800 mb-3 uppercase font-medium">Types</h3>
                     <div class="space-y-2">
                         <% const types=["laptop","phone","television","watch","camera"]; %>
-                        <% types.forEach((type, index) => { %>
-                            <div onclick="handleFilterTypes('<%=types[index]%>')" 
-                            class="flex items-center">
-                              <input type="checkbox" name="cat-<%= index + 1 %>" id="cat-<%= index + 1 %>"
-                                class="text-primary focus:ring-0 rounded-sm cursor-pointer">
-                              <label for="cat-<%= index + 1 %>" class="text-gray-600 ml-3 cursor-pointer">
-                                <%= type.charAt(0).toUpperCase() + type.slice(1) %>
-                                </label>
-                            </div>
-                        <% }); %>
+                            <% types.forEach((type, index)=> { %>
+                                <div onclick="handleFilters('type','<%=types[index]%>')" class="flex items-center">
+                                    <input type="checkbox" name="cat-<%= index + 1 %>" id="cat-<%= index + 1 %>"
+                                        class="text-primary focus:ring-0 rounded-sm cursor-pointer">
+                                    <label for="cat-<%= index + 1 %>" class="text-gray-600 ml-3 cursor-pointer">
+                                        <%= type.charAt(0).toUpperCase() + type.slice(1) %>
+                                    </label>
+                                </div>
+                                <% }); %>
                     </div>
                 </div>
 
                 <div class="pt-4">
                     <h3 class="text-xl text-gray-800 mb-3 uppercase font-medium">Brands</h3>
                     <div class="space-y-2">
-                        <div class="flex items-center">
-                            <input type="checkbox" name="brand-1" id="brand-1"
-                                class="text-primary focus:ring-0 rounded-sm cursor-pointer">
-                            <label for="brand-1" class="text-gray-600 ml-3 cusror-pointer">Apple</label>
-                            <div class="ml-auto text-gray-600 text-sm">(15)</div>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="checkbox" name="brand-2" id="brand-2"
-                                class="text-primary focus:ring-0 rounded-sm cursor-pointer">
-                            <label for="brand-2" class="text-gray-600 ml-3 cusror-pointer">SamSung</label>
-                            <div class="ml-auto text-gray-600 text-sm">(9)</div>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="checkbox" name="brand-3" id="brand-3"
-                                class="text-primary focus:ring-0 rounded-sm cursor-pointer">
-                            <label for="brand-3" class="text-gray-600 ml-3 cusror-pointer">ASUS</label>
-                            <div class="ml-auto text-gray-600 text-sm">(21)</div>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="checkbox" name="brand-4" id="brand-4"
-                                class="text-primary focus:ring-0 rounded-sm cursor-pointer">
-                            <label for="brand-4" class="text-gray-600 ml-3 cusror-pointer">Acer</label>
-                            <div class="ml-auto text-gray-600 text-sm">(10)</div>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="checkbox" name="brand-5" id="brand-5"
-                                class="text-primary focus:ring-0 rounded-sm cursor-pointer">
-                            <label for="brand-5" class="text-gray-600 ml-3 cusror-pointer">Legion</label>
-                            <div class="ml-auto text-gray-600 text-sm">(10)</div>
-                        </div>
+                        <% const brands=["Apple","SamSung","ASUS","Acer","Legion"]; %>
+                            <% brands.forEach((brand, index)=> { %>
+                                <div onclick="handleFilters('brand','<%=brands[index]%>')" class="flex items-center">
+                                    <input type="checkbox" name="cat-<%= index + 1 %>" id="cat-<%= index + 1 %>"
+                                        class="text-primary focus:ring-0 rounded-sm cursor-pointer">
+                                    <label for="cat-<%= index + 1 %>" class="text-gray-600 ml-3 cursor-pointer">
+                                        <%= brand.charAt(0).toUpperCase() + brand.slice(1) %>
+                                    </label>
+                                </div>
+                                <% }); %>
                     </div>
                 </div>
 
@@ -420,12 +399,21 @@
         <!-- products -->
         <div class="col-span-3">
             <div class="flex items-center mb-4">
-                <select name="sort" id="sort"
-                    class="w-44 text-sm text-gray-600 py-3 px-4 border-gray-300 shadow-sm rounded focus:ring-primary focus:border-primary">
-                    <option value="">Default sorting</option>
-                    <option value="price-low-to-high">Price low to high</option>
-                    <option value="price-high-to-low">Price high to low</option>
-                    <option value="latest">Latest product</option>
+                <% const sortOptions = {
+                    "Default Sort": "price-asc",
+                    "Price low to high": "price-asc",
+                    "Price high to low": "price-desc",
+                }; %>
+                <select
+                    onchange="handleFilters('sort',this.value)" 
+                    name="sort" id="sort" 
+                    class="w-44 text-sm text-gray-600 py-3 px-4 border-gray-300 shadow-sm 
+                    rounded focus:ring-primary focus:border-primary">
+                    <% for (let text in sortOptions) { %>
+                        <option value="<%= sortOptions[text] %>">
+                          <%= text %>
+                        </option>
+                    <% } %>
                 </select>
 
                 <div class="flex gap-2 ml-auto">
@@ -441,33 +429,36 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3  gap-4" id="products-grid">
-                <% products.forEach(product => { %>
-                    <div class="bg-white shadow rounded overflow-hidden group cursor-pointer flex flex-col justify-between">
+                <% products.forEach(product=> { %>
+                    <div
+                        class="bg-white shadow rounded overflow-hidden group cursor-pointer flex flex-col justify-between">
                         <div>
                             <div class="relative">
-                                <img 
-                                src="<%= product.image %>" alt="<%= product.name %>" 
-                                class="w-full cursor-pointer"
-                                productId="<%= product.id %>"
-                                onclick="window.location.href='/productDetails/get/<%=product.productId%>'">
+                                <img src="<%= product.image %>" alt="<%= product.name %>" class="w-full cursor-pointer"
+                                    productId="<%= product.id %>"
+                                    onclick="window.location.href='/productDetails/get/<%=product.productId%>'">
                             </div>
                             <div class="pt-4 pb-3 px-4">
                                 <a href="#">
-                                    <h4 class="uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition">
+                                    <h4
+                                        class="uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition">
                                         <%= product.name %> <!-- Output product name -->
                                     </h4>
                                 </a>
                                 <div class="flex items-baseline mb-1 space-x-2">
-                                    <% if(product.salePrice > 0) { %>
-                                        <div class="text-xl text-primary font-semibold">$<%= product.salePrice %></div>
-                                        <div class="text-xl text-gray-500 line-through">$<%= product.price %></div>
-                                    <% } else { %>
-                                        <div class="text-xl text-gray-500 font-semibold">$<%= product.price %></div>
-                                    <% } %>
+                                    <% if(product.salePrice> 0) { %>
+                                        <div class="text-xl text-primary font-semibold">$<%= product.salePrice %>
+                                        </div>
+                                        <div class="text-xl text-gray-500 line-through">$<%= product.price %>
+                                        </div>
+                                        <% } else { %>
+                                            <div class="text-xl text-gray-500 font-semibold">$<%= product.price %>
+                                            </div>
+                                            <% } %>
                                 </div>
                                 <div class="flex items-center">
                                     <div class="flex gap-1 text-sm text-yellow-400">
-                                        <%-generateRatingStars(Math.floor(product.rating))%> 
+                                        <%-generateRatingStars(Math.floor(product.rating))%>
                                     </div>
                                     <div class="text-xs text-gray-500 ml-3">(150)</div>
                                 </div>
@@ -481,46 +472,42 @@
                 <% }) %>
             </div>
             <div class="bg-white py-10 text-center dark:bg-dark">
-                <% 
-                    const rowsPerPage = 6;
-                    const quantity = Math.ceil(products.length / rowsPerPage);
-                %>
-                <ul class="flex items-center justify-center gap-2">
-                    <li>
-                        <button
-                            class="flex h-10 min-w-10 items-center justify-center rounded-lg border border-stroke bg-white px-2 text-base font-medium text-dark hover:bg-gray-1 dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10">
-                            <span>
-                                <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M17.5 9.8125H4.15625L9.46875 4.40625C9.75 4.125 9.75 3.6875 9.46875 3.40625C9.1875 3.125 8.75 3.125 8.46875 3.40625L2 9.96875C1.71875 10.25 1.71875 10.6875 2 10.9688L8.46875 17.5312C8.59375 17.6562 8.78125 17.75 8.96875 17.75C9.15625 17.75 9.3125 17.6875 9.46875 17.5625C9.75 17.2812 9.75 16.8438 9.46875 16.5625L4.1875 11.2188H17.5C17.875 11.2188 18.1875 10.9062 18.1875 10.5312C18.1875 10.125 17.875 9.8125 17.5 9.8125Z"
-                                        fill="currentColor" />
-                                </svg>
-                            </span>
-                        </button>
-                    </li>
-                    <% for (let i = 0; i < quantity; i++) { %>
+                <% const quantity=Math.ceil(totalProducts / rowsPerPage); %>
+                    <ul class="flex items-center justify-center gap-2">
                         <li>
                             <button
-                                onclick="setCurrentPage(<%= i + 1 %>)"
-                                id="page-<%= i + 1 %>"
-                                class="flex h-10 min-w-10 items-center justify-center rounded-lg border 
-                                border-stroke bg-white px-2 text-base font-medium text-dark hover:bg-gray-1 
-                                dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10">
-                                <%= i + 1 %>
+                                class="flex h-10 min-w-10 items-center justify-center rounded-lg border border-stroke bg-white px-2 text-base font-medium text-dark hover:bg-gray-1 dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10">
+                                <span>
+                                    <svg width="20" height="21" viewBox="0 0 20 21" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M17.5 9.8125H4.15625L9.46875 4.40625C9.75 4.125 9.75 3.6875 9.46875 3.40625C9.1875 3.125 8.75 3.125 8.46875 3.40625L2 9.96875C1.71875 10.25 1.71875 10.6875 2 10.9688L8.46875 17.5312C8.59375 17.6562 8.78125 17.75 8.96875 17.75C9.15625 17.75 9.3125 17.6875 9.46875 17.5625C9.75 17.2812 9.75 16.8438 9.46875 16.5625L4.1875 11.2188H17.5C17.875 11.2188 18.1875 10.9062 18.1875 10.5312C18.1875 10.125 17.875 9.8125 17.5 9.8125Z"
+                                            fill="currentColor" />
+                                    </svg>
+                                </span>
                             </button>
                         </li>
-                    <% } %>
-                    <li>
-                        <button
-                            class="flex h-10 min-w-10 items-center justify-center rounded-lg border border-stroke bg-white px-2 text-base font-medium text-dark hover:bg-gray-1 dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10">
-                            <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M18 10L11.5312 3.4375C11.25 3.15625 10.8125 3.15625 10.5312 3.4375C10.25 3.71875 10.25 4.15625 10.5312 4.4375L15.7812 9.78125H2.5C2.125 9.78125 1.8125 10.0937 1.8125 10.4688C1.8125 10.8438 2.125 11.1875 2.5 11.1875H15.8437L10.5312 16.5938C10.25 16.875 10.25 17.3125 10.5312 17.5938C10.6562 17.7188 10.8437 17.7812 11.0312 17.7812C11.2187 17.7812 11.4062 17.7188 11.5312 17.5625L18 11C18.2812 10.7187 18.2812 10.2812 18 10Z"
-                                    fill="currentColor" />
-                            </svg>
-                        </button>
-                    </li>
-                </ul>
+                        <% for (let i=0; i < quantity; i++) { %>
+                            <li>
+                                <button onclick="handleFilters('page','<%= i + 1 %>')" id="page-<%= i + 1 %>" class="flex h-10 min-w-10 items-center justify-center rounded-lg border 
+                                border-stroke bg-white px-2 text-base font-medium text-dark hover:bg-gray-1 
+                                dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10">
+                                    <%= i + 1 %>
+                                </button>
+                            </li>
+                            <% } %>
+                                <li>
+                                    <button
+                                        class="flex h-10 min-w-10 items-center justify-center rounded-lg border border-stroke bg-white px-2 text-base font-medium text-dark hover:bg-gray-1 dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10">
+                                        <svg width="20" height="21" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M18 10L11.5312 3.4375C11.25 3.15625 10.8125 3.15625 10.5312 3.4375C10.25 3.71875 10.25 4.15625 10.5312 4.4375L15.7812 9.78125H2.5C2.125 9.78125 1.8125 10.0937 1.8125 10.4688C1.8125 10.8438 2.125 11.1875 2.5 11.1875H15.8437L10.5312 16.5938C10.25 16.875 10.25 17.3125 10.5312 17.5938C10.6562 17.7188 10.8437 17.7812 11.0312 17.7812C11.2187 17.7812 11.4062 17.7188 11.5312 17.5625L18 11C18.2812 10.7187 18.2812 10.2812 18 10Z"
+                                                fill="currentColor" />
+                                        </svg>
+                                    </button>
+                            </li>
+                    </ul>
             </div>
         </div>
 

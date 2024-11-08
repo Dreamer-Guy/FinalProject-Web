@@ -14,17 +14,18 @@ app.use(session({
     secret: 'yourSecretKey',
     resave: false,
     saveUninitialized: false,
-    store: new session.MemoryStore(), // Store session in memory
-    cookie: { maxAge: 24 * 60 * 60 * 1000 } // 1 day
+    store: new session.MemoryStore(), 
+    cookie: { maxAge: 24 * 60 * 60 * 1000 } 
 }));
 
 
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(process.cwd(), 'public')));
-// app.use(express.static('public'));
+
 app.set('view engine', 'ejs');
-app.set('views', path.join(process.cwd(), 'public', 'views'));
+app.set('views', path.join(process.cwd(), 'views'));
+
 
 app.use("/productDetails", productDetailsRouter);
 app.use("/products", productRouter);

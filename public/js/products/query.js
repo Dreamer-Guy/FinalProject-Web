@@ -4,13 +4,30 @@ const rowPerPage = 6;
 let filters={
     type:[],
     brand:[],
+    sort:'price-asc',
+    page:1,
+    rowPerPage:6,
+    minPrice:null,
+    maxPrice:null,
+};
+
+const generateRatingStars = (rating) => {
+    let ratingStars = '';
+    for (let i = 0; i < 5; i++) {
+        if (i < rating) {
+            ratingStars += '<i class="fa-solid fa-star"></i>';
+        } else {
+            ratingStars += '<i class="fa-regular fa-star"></i>';
+        }
+    }
+    return ratingStars;
 };
 
 
-let sort='price-asc';
 
 function setCurrentPage(page) {
-    currentPage = page;
+    filters.page = page;
+    currentPage=page;
     console.log("Current page set to:", currentPage);
 }
 
@@ -38,28 +55,71 @@ function setType(value){
 }
 
 function setSort(value){
-    sort=value;
+    filters.sort=value;
 }
 
+async function handleFilters(type,value){
+    if(type==='brand'){
+        setBrand(value);
+    }
+    if(type==='type'){
+        setType(value);
+    }
+    if(type==='sort'){
+        setSort(value);
+    }
+    if(type==='page'){
+        setCurrentPage(value);
+    }
+    const queryParams= new URLSearchParams(filters).toString();
+    try{
+        const data=await fetch(`/products/api/get?${queryParams.toString()}`)
+        .then(response => response.json());
+        console.log("Data",data);
+        console.log(queryParams);
+        const productsContainer = document.getElementById('products-grid');
+        productsContainer.innerHTML = '';
+        data.products.forEach(product => {
+            const productDiv = document.createElement('div');
+            productDiv.className = "bg-white shadow rounded overflow-hidden group cursor-pointer flex flex-col justify-between";
 
-function handleFilterTypes(value){
-    setType(value);
-    console.log("Types:",filters.type);
-}
-
-function handleFilterBrands(event){
-    const value=event.target.value;
-    setBrand(value);
-    console.log("Brands:",filters.brand);
-}
-
-function handleSort(event){
-    const value=event.target.value;
-    setSort(value);
-    console.log("Sort:",sort);
-}
-
-function handlePageChange(event){
-    const page=parseInt(event.target.value);
-    setCurrentPage(page);
+            productDiv.innerHTML = `
+                <div>
+                    <div class="relative">
+                        <img src="${product.image}" alt="${product.name}" class="w-full cursor-pointer"
+                            productId="${product.id}"
+                            onclick="window.location.href='/productDetails/get/${product.productId}'">
+                    </div>
+                    <div class="pt-4 pb-3 px-4">
+                        <a href="#">
+                            <h4 class="uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition">
+                                ${product.name}
+                            </h4>
+                        </a>
+                        <div class="flex items-baseline mb-1 space-x-2">
+                            ${product.salePrice > 0
+                                ? `<div class="text-xl text-primary font-semibold">$${product.salePrice}</div>
+                                   <div class="text-xl text-gray-500 line-through">$${product.price}</div>`
+                                : `<div class="text-xl text-gray-500 font-semibold">$${product.price}</div>`
+                            }
+                        </div>
+                        <div class="flex items-center">
+                            <div class="flex gap-1 text-sm text-yellow-400">
+                                ${generateRatingStars(Math.floor(product.rating))}
+                            </div>
+                            <div class="text-xs text-gray-500 ml-3">(150)</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#"
+                    class="block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition">
+                    Add to cart
+                </a>
+            `;
+            productsContainer.appendChild(productDiv);
+        });
+    }
+    catch(e){
+        console.log(e);
+    }
 }
