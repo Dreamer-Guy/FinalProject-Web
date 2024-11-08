@@ -2,6 +2,7 @@ import serviceFactory from "../Factory/serviceFactory.js"
 import {generateRatingStars} from "../utils/viewEngine.js";
 const productService = serviceFactory.getProductSerVice();
 
+const ROW_PER_PAGE=6;
 
 const formatQueryParams = async(filters, sort) => {
     //const {page,rowPerPage}=req.query;
@@ -13,28 +14,29 @@ const formatQueryParams = async(filters, sort) => {
     //return {brands,types,sortField,sortOrder,page,rowPAg};
 }
 
-const formatSortParam=(sort)=>{
-    const SORT_FIELD=0;
-    const SORT_ORDER=1;
+const formatSortParam=(req)=>{
+    const sort=req.query.sort||"price-asc";
+    const SORT_FIELD_INDEX=0;
+    const SORT_ORDER_INDEX=1;
     const sortParam=sort.split('-');
-    const sortField=sortParam[SORT_FIELD];
-    const sortOrder=sortParam[SORT_ORDER];
+    const sortField=sortParam[SORT_FIELD_INDEX];
+    const sortOrder=sortParam[SORT_ORDER_INDEX];
     return {sortField,sortOrder};
 }
 
-const formatFilterParam=(filters)=>{
-    const brands = filters?.brands?.map((brand) => (brand.toLowerCase())) || [];
-    const types = filters?.types?.map((type) => (type.toLowerCase())) || [];
+const formatFilterParam=(req)=>{
+    const brandsEncoded=req.query.brand||"";
+    const typesEncoded=req.query.type||"";
+    const brands=brandsEncoded?decodeURIComponent(brandsEncoded).split(','):[];
+    const types=typesEncoded?decodeURIComponent(typesEncoded).split(','):[];
     return {brands,types};    
 }
 
 const getQueryParams=(req)=>{
-    //const {page,rowPerPage}=req.query;
-    const {filters={},sort='price-asc'}=req.query;
-    const {brands,types}=formatFilterParam(filters);
-    const {sortField,sortOrder}=formatSortParam(sort);
-    return {brands,types,sortField,sortOrder};
-    // return {brands,types,sortField,sortOrder,page,rowPerPage};
+    const {page,rowPerPage}=req.query;
+    const {brands,types}=formatFilterParam(req);
+    const {sortField,sortOrder}=formatSortParam(req);
+    return {brands,types,sortField,sortOrder,page,rowPerPage};
 }
 
 const populateProduct=(product)=>{
@@ -57,15 +59,42 @@ const populateProduct=(product)=>{
 
 const fetchAllFilteredProducts = async (req, res) => {
     try {
-        const { filters = {}, sort = {} } = req.query;
-        //const {page,rowPerPage}=req.query;
-        const {brands,types,sortField,sortOrder}=formatQueryParams(filters,sort);
-        const products = await productService.getProducts({ brands, types, sortField, sortOrder });
-        // if(page && rowPerPage){
-        //     products.splice(page*rowPerPage,rowPerPage);
-        // }
+        const user = req.session?.user;
+        const {brands,types,sortField,sortOrder,page=1,rowsPerPage=ROW_PER_PAGE}=getQueryParams(req);
+        let products = await productService.getProducts({ brands, types, sortField, sortOrder });
+        const totalProducts=products.length;
+        if(page && rowsPerPage){
+            products=products.slice((page-1)*rowsPerPage,page*rowsPerPage);
+        }
         const populateProducts = products.map((product) => (populateProduct(product)));
-        return res.render('products', {products:populateProducts,generateRatingStars});
+        return res.render('products', {
+            products:populateProducts,
+            totalProducts,
+            rowsPerPage,
+            user,
+            generateRatingStars});
+    }
+    catch (e) {
+        return res.json({
+            data: null,
+        });
+    }
+};
+
+const apiGetAllFilteredProducts = async (req, res) => {
+    try {
+        const {brands,types,sortField,sortOrder,page=1,rowsPerPage=ROW_PER_PAGE}=getQueryParams(req);
+        let products = await productService.getProducts({ brands, types, sortField, sortOrder });
+        const totalProducts=products.length;
+        if(page && rowsPerPage){
+            products=products.slice((page-1)*rowsPerPage,page*rowsPerPage);
+        }
+        const populateProducts = products.map((product) => (populateProduct(product)));
+        return res.send({
+            products:populateProducts,
+            totalProducts,
+            rowsPerPage,
+        });
     }
     catch (e) {
         return res.json({
@@ -108,4 +137,4 @@ const fetchAllFilteredProducts = async (req, res) => {
 //         });
 //     }
 // };
-export { fetchAllFilteredProducts };
+export { fetchAllFilteredProducts,apiGetAllFilteredProducts };

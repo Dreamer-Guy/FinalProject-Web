@@ -2,13 +2,31 @@ import serviceFactory from "../Factory/serviceFactory.js";
 import {generateRatingStars} from "../utils/viewEngine.js";
 const productDetailService=serviceFactory.getProductDetailsSerVice();
 const productService=serviceFactory.getProductSerVice();
+const populateProduct=(product)=>{
+    const populatedProduct={
+        productId: product._id,
+        type: product.type,
+        name: product.name,
+        price: product.price,
+        salePrice: product.salePrice,
+        brand: product.brand,
+        totalStock: product.totalStock,
+        image: product.image,
+        rating: product.rating,
+    };
+    return populatedProduct;
+}
+
 const getProductDetailsByID=async(req,res)=>{
     try{
         const {id}=req.params;
         const productDetails=await productDetailService.get(id);
         const product=await productService.getProductById(id);
+        const rawRelatedProducts=await productService.getRelatedProducts(product)||[];
+        const relatedProducts=rawRelatedProducts.map((product)=>populateProduct(product));
+        console.log(relatedProducts);
         if(productDetails){
-            return res.render('productDetails',{product,productDetails,generateRatingStars});
+            return res.render('productDetails',{product,productDetails,relatedProducts,generateRatingStars});
         }else{
             return res.json({
                 data:null,
