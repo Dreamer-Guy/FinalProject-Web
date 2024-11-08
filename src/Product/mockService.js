@@ -147,7 +147,20 @@ const productService = {
             && p._id!==product._id)
         ||[];
         return products;
-    }
+    },
+
+    getProductsBySearch: async (searchTerm) => {
+        const products = mockProducts.filter((product) => {
+            const flag_type=product.type.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase());
+            const flag_brand=product.brand.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase());
+            const flag_name=product.name.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase());
+            if(flag_brand || flag_name || flag_type){
+                return true;
+            }
+        }) || [];
+        return products;
+    },
+
 };
 
 export default productService;
