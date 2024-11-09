@@ -5,7 +5,7 @@ import productDetailsRouter from "./src/ProductDetails/route.js";
 import session from 'express-session';
 import passport from './src/middleWare/PassPort.js';
 import userRouter from './src/User/route.js';
-
+import homeRouter from './src/HomePage/controller.js';
 const app = express();
 const PORT = 3000;
 app.use(express.json());
@@ -26,7 +26,7 @@ app.use(express.static(path.join(process.cwd(), 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(process.cwd(), 'views'));
 
-
+app.use("/", homeRouter);
 app.use("/productDetails", productDetailsRouter);
 app.use("/products", productRouter);
 app.use("/user", userRouter);

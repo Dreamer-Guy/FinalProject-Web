@@ -103,38 +103,26 @@ const apiGetAllFilteredProducts = async (req, res) => {
     }
 };
 
-// const searchProducts = async (req, res) => {
-//     try {
-//         const { search } = req.query;
-//         const products = await Product.find({
-//             $text: {
-//                 $search: search,
-//             }
-//         });
-//         const populateProducts = products.map((product) => ({
-//             productId: product._id,
-//             type: product.type,
-//             name: product.name,
-//             price: product.price,
-//             salePrice: product.salePrice,
-//             brand: product.brand,
-//             totalStock: product.totalStock,
-//             image: product.image,
-//             rating: product.rating,
-//         }));
-//         return res.status(200).send({
-//             status: "success",
-//             msg: "success fetch products",
-//             data: {
-//                 products: populateProducts,
-//             }
-//         });
-//     }
-//     catch (e) {
-//         return res.status(500).send({
-//             status: "error",
-//             msg: "server err",
-//         });
-//     }
-// };
-export { fetchAllFilteredProducts,apiGetAllFilteredProducts };
+const searchProducts = async (req, res) => {
+    try {
+        const user = req.session?.user;
+        const { search } = req.query;
+        const decodedSearch=decodeURIComponent(search);
+        const rawProducts = await productService.getProductsBySearch(decodedSearch);
+        const populatedProducts = rawProducts.map((product) => (populateProduct(product)));
+        const totalProducts=populatedProducts.length;
+        return res.render('products', {
+            products:populatedProducts,
+            totalProducts,
+            rowsPerPage:ROW_PER_PAGE,
+            user,
+            generateRatingStars});
+    }
+    catch (e) {
+        return res.status(500).send({
+            status: "error",
+            msg: "server err",
+        });
+    }
+};
+export { fetchAllFilteredProducts,apiGetAllFilteredProducts,searchProducts};
