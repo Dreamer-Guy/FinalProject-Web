@@ -160,6 +160,11 @@ const productService = {
         }) || [];
         return products;
     },
+    
+    getTopProducts: async (top) => {
+        const products = mockProducts.sort((productA, productB) => productB.rating - productA.rating).slice(0,top) || [];
+        return products;
+    },
 
 };
 
