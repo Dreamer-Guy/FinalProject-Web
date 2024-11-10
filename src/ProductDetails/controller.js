@@ -17,16 +17,32 @@ const populateProduct=(product)=>{
     return populatedProduct;
 }
 
+const populateProductDetails=(productDetails)=>{
+    const populatedProductDetails={};
+    for(const key of Object.keys(productDetails)){
+        if(key==='_id'){
+            continue;
+        }
+        populatedProductDetails[key]=productDetails[key];
+    }
+    return populatedProductDetails;
+};
+
+
+
 const getProductDetailsByID=async(req,res)=>{
     try{
         const {id}=req.params;
         const productDetails=await productDetailService.get(id);
+        const populatedProductDetails=populateProductDetails(productDetails);
         const product=await productService.getProductById(id);
         const rawRelatedProducts=await productService.getRelatedProducts(product)||[];
         const relatedProducts=rawRelatedProducts.map((product)=>populateProduct(product));
-        console.log(relatedProducts);
         if(productDetails){
-            return res.render('productDetails',{product,productDetails,relatedProducts,generateRatingStars});
+            return res.render('productDetails',{product,
+                productDetails:populatedProductDetails,
+                relatedProducts,
+                generateRatingStars});
         }else{
             return res.json({
                 data:null,

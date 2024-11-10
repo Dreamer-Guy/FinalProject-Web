@@ -4,6 +4,7 @@
   "description": "ecommerce base on tailwind css",
   "main": "index.js",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "npx tailwindcss -i ./public/main.css -o ./public/assets/css/main.css --watch",
     "dev": "nodemon server.js"

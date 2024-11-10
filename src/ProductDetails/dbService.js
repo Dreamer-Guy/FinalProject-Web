@@ -3,16 +3,8 @@ import productDetails from "../Model/ProductDetails.js";
 
 const productDetailsService={
     get:async(id)=>{
-        try{
-            console.log(id);
-        const productDetailsRes=await productDetails.findOne({productId:id});
-        console.log("ad");
+        const productDetailsRes=await productDetails.findOne({productId:id}).lean();
         return productDetailsRes;
-        }
-        catch(e){
-            console.log(e);
-            return null;
-        }
     },  
     getAll:async()=>{
         const allProductDetails=await productDetails.find();
