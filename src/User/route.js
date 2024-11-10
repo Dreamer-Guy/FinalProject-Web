@@ -17,8 +17,6 @@ userRouter.post("/loginUser",passportLocal.authenticate('local'),(req, res) => {
 });
 
 userRouter.get("/isLogin",(req, res) => {
-    console.log(req.session);
-    console.log(req.sessionID);
     res.send("Login Fail");
 });
 

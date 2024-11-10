@@ -16,6 +16,7 @@ document.getElementById("registerForm").addEventListener("submit", async functio
             },
             body: JSON.stringify(formData)
         });
+        window.location.href = "/user/login";
     } 
     catch (error) {
         console.error("Error:", error);

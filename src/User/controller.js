@@ -1,5 +1,7 @@
-import userService from "./mockService.js";
+import serviceFactory from "../Factory/serviceFactory.js";
 import { hashPassword } from "../utils/hashAndCompare.js";
+
+const userService=serviceFactory.getUserService();
 const registerUser=async(req,res)=>{
     const {fullName,userName,password}=req.body;
     const user={
@@ -7,14 +9,12 @@ const registerUser=async(req,res)=>{
         userName,
         password:await hashPassword(password),
     }
-    userService.createUser(user);
-    console.log(user);
-    await userService.saveUser(user);
+    const userObj=await userService.createUser(user);
+    await userService.saveUser(userObj);
     res.redirect('login');
 }
 
 const logoutUser=async(req,res)=>{
-    console.log("bug");
     req.session.destroy();
     res.render('products');
 }

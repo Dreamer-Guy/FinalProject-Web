@@ -3,9 +3,9 @@ import Product from "../Model/Product.js";
 
 const productService = {
     getProducts: async ({ brands, types, sortField='price', sortOrder=1 }) => {
-        const products = Product.find()
-            .byBrand(brands)
+        const products = await Product.find()
             .byType(types)
+            .byBrand(brands)
             .sort({ [sortField]: sortOrder })
             .exec();
         return products;
