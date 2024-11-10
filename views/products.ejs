@@ -110,7 +110,7 @@
             <div class="flex items-center justify-between flex-grow pl-12">
                 <div class="flex items-center space-x-6 capitalize">
                     <a href="/" class="text-gray-200 hover:text-white transition">Home</a>
-                    <a href="products/get" class="text-gray-200 hover:text-white transition">Shop</a>
+                    <a href="/products/get" class="text-gray-200 hover:text-white transition">Shop</a>
                     <a href="#" class="text-gray-200 hover:text-white transition">About us</a>
                     <a href="#" class="text-gray-200 hover:text-white transition">Contact us</a>
                 </div>
@@ -329,12 +329,13 @@
                             <% types.forEach((type, index)=> { %>
                                 <div onclick="handleFilters('type','<%=types[index]%>')" class="flex items-center">
                                     <input type="checkbox" name="cat-<%= index + 1 %>" id="cat-<%= index + 1 %>"
-                                        class="text-primary focus:ring-0 rounded-sm cursor-pointer">
+                                        class="text-primary focus:ring-0 rounded-sm cursor-pointer"
+                                        value="<%= type %>">
                                     <label for="cat-<%= index + 1 %>" class="text-gray-600 ml-3 cursor-pointer">
                                         <%= type.charAt(0).toUpperCase() + type.slice(1) %>
                                     </label>
                                 </div>
-                                <% }); %>
+                            <% }); %>
                     </div>
                 </div>
 
@@ -345,7 +346,8 @@
                             <% brands.forEach((brand, index)=> { %>
                                 <div onclick="handleFilters('brand','<%=brands[index]%>')" class="flex items-center">
                                     <input type="checkbox" name="cat-<%= index + 1 %>" id="cat-<%= index + 1 %>"
-                                        class="text-primary focus:ring-0 rounded-sm cursor-pointer">
+                                        class="text-primary focus:ring-0 rounded-sm cursor-pointer"
+                                        value="<%= brand.toLowerCase() %>">
                                     <label for="cat-<%= index + 1 %>" class="text-gray-600 ml-3 cursor-pointer">
                                         <%= brand.charAt(0).toUpperCase() + brand.slice(1) %>
                                     </label>
