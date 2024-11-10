@@ -1,9 +1,12 @@
 import express from 'express';
 import path from 'path';
-import productRouter from "./src/Product/route.js";
-import productDetailsRouter from "./src/ProductDetails/route.js";
 import session from 'express-session';
 import passport from './src/middleWare/PassPort.js';
+
+import mongoose from './src/Config/mongooseDB.js';
+
+import productRouter from "./src/Product/route.js";
+import productDetailsRouter from "./src/ProductDetails/route.js";
 import userRouter from './src/User/route.js';
 import homeRouter from './src/HomePage/controller.js';
 const app = express();

@@ -2,7 +2,7 @@ import Product from "../Model/Product.js";
 
 
 const productService = {
-    getProducts: async ({ brands, types, sortField, sortOrder }) => {
+    getProducts: async ({ brands, types, sortField='price', sortOrder=1 }) => {
         const products = Product.find()
             .byBrand(brands)
             .byType(types)
@@ -12,7 +12,7 @@ const productService = {
     },
     
     getProductById: async (productId) => {
-        const product = await getProductById(productId);
+        const product = await Product.findById(productId);
         return product;
     },
 
@@ -34,6 +34,7 @@ const productService = {
     
     getTopProducts: async (top) => {
         const products = await Product.find().sort({ rating: -1 }).limit(top);
+        return products;
     },
 };
 

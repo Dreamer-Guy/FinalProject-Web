@@ -1,7 +1,7 @@
 const config = {
   mongodb: {
-    url: "mongodb://admin:admin@localhost:27023",
-    databaseName: "My-Shop",
+    url: "mongodb://localhost:27023",
+    databaseName: "MyShop",
     options: {
       // connectTimeoutMS: 3600000, // Optional: increase connection timeout
       // socketTimeoutMS: 3600000,  // Optional: increase socket timeout

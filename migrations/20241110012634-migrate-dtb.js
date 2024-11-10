@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 const mockProducts = [
   {
-    "_id": "P01",
     "type": "Phone",
     "name": "iPhone 13 Pro",
     "price": 999.99,
@@ -12,7 +11,6 @@ const mockProducts = [
     "image": "https://images.pexels.com/photos/6078127/pexels-photo-6078127.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
   },
   {
-    "_id": "P02",
     "type": "Laptop",
     "name": "ASUS ROG Zephyrus",
     "price": 1599.99,
@@ -23,7 +21,6 @@ const mockProducts = [
     "image": "https://images.pexels.com/photos/2582937/pexels-photo-2582937.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
   },
   {
-    "_id": "P03",
     "type": "Television",
     "name": "Samsung QLED 4K TV",
     "price": 1299.99,
@@ -34,7 +31,6 @@ const mockProducts = [
     "image": "https://images.pexels.com/photos/1448378/pexels-photo-1448378.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
   },
   {
-    "_id": "P04",
     "type": "Watch",
     "name": "Apple Watch Series 7",
     "price": 399.99,
@@ -45,7 +41,6 @@ const mockProducts = [
     "image": "https://images.pexels.com/photos/8927576/pexels-photo-8927576.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
   },
   {
-    "_id": "P05",
     "type": "Camera",
     "name": "Sony Alpha 7C",
     "price": 1799.99,
@@ -56,7 +51,6 @@ const mockProducts = [
     "image": "https://images.pexels.com/photos/10711676/pexels-photo-10711676.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
   },
   {
-    "_id": "P06",
     "type": "Phone",
     "name": "Samsung Galaxy S21",
     "price": 799.99,
@@ -67,7 +61,6 @@ const mockProducts = [
     "image": "https://images.pexels.com/photos/4601065/pexels-photo-4601065.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
   },
   {
-    "_id": "P07",
     "type": "Laptop",
     "name": "Acer Predator Helios",
     "price": 1399.99,
@@ -78,7 +71,6 @@ const mockProducts = [
     "image": "https://images.pexels.com/photos/2978837/pexels-photo-2978837.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
   },
   {
-    "_id": "P08",
     "type": "Television",
     "name": "LG OLED TV",
     "price": 999.99,
@@ -89,7 +81,6 @@ const mockProducts = [
     "image": "https://images.pexels.com/photos/1031283/pexels-photo-1031283.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
   },
   {
-    "_id": "P09",
     "type": "Watch",
     "name": "Galaxy Watch 4",
     "price": 249.99,
@@ -100,7 +91,6 @@ const mockProducts = [
     "image": "https://images.pexels.com/photos/3603798/pexels-photo-3603798.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
   },
   {
-    "_id": "P10",
     "type": "Camera",
     "name": "Canon EOS R5",
     "price": 3899.99,
@@ -251,11 +241,18 @@ const mockProductDetails = [
 
 
 export const up = async (db, client) => {
-    await db.createCollection("products");
-    await db.createCollection("productdetails");
-    await db.collection("products").insertMany(mockProducts);
-    await db.collection("productdetails").insertMany(mockProductDetails);
-}
+    const products = await db.collection("products").insertMany(mockProducts);
+    const productIdMap = products.insertedIds;
+
+    const updatedProductDetails = mockProductDetails.map((detail,index) => {
+      return {
+        ...detail,
+        productId: productIdMap[index].toString(),  
+      };
+    });
+
+    await db.collection("productdetails").insertMany(updatedProductDetails);
+};
 
 
 export const down = async (db, client) => {

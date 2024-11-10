@@ -11,7 +11,7 @@ const ProductDetailSchema=new mongoose.Schema({
     weight:String,
 },options);
 
-const ProductDetail=mongoose.model("ProductDetail",ProductDetailSchema);   
+const ProductDetail=mongoose.model("productdetails",ProductDetailSchema);   
 
 const PhoneDetailSchema= new mongoose.Schema({
     internalMemory:String,

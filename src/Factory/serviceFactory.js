@@ -1,7 +1,9 @@
 import mockProductService from "../Product/mockService.js";
 import mockProductDetailsService from "../ProductDetails/mockService.js";
-const productService=mockProductService;
-const productDetailsServce=mockProductDetailsService;
+import dbProductService from "../Product/dbService.js";
+import dbProductDetailsService from "../ProductDetails/dbService.js";
+const productService=dbProductService;
+const productDetailsServce=dbProductDetailsService;
 const serviceFactory = {
     getProductSerVice:()=>{
         return productService;
