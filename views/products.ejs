@@ -440,14 +440,16 @@
             <div class="grid grid-cols-1 md:grid-cols-3  gap-4" id="products-grid">
                 <% products.forEach(product=> { %>
                     <div
-                        class="bg-white shadow rounded overflow-hidden group cursor-pointer flex flex-col justify-between">
+                        class="bg-white shadow rounded overflow-hidden group cursor-pointer 
+                        flex flex-col justify-between">
                         <div>
                             <div class="relative">
                                 <img src="<%= product.image %>" alt="<%= product.name %>" class="product-img cursor-pointer"
-                                    
                                     productId="<%= product.id %>"
                                     onclick="window.location.href='/productDetails/get/<%=product.productId%>'">
                             </div>
+                        </div>
+                        <div>
                             <div class="pt-4 pb-3 px-4">
                                 <a href="#">
                                     <h4
@@ -473,11 +475,11 @@
                                     <div class="text-xs text-gray-500 ml-3">(150)</div>
                                 </div>
                             </div>
+                            <a href="#"
+                                class="block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition">
+                                Add to cart
+                            </a>
                         </div>
-                        <a href="#"
-                            class="block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition">
-                            Add to cart
-                        </a>
                     </div>
                 <% }) %>
             </div>
