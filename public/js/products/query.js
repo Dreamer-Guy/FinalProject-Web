@@ -60,9 +60,11 @@ function setSort(value){
 
 async function handleFilters(type,value){
     if(type==='brand'){
+        setCurrentPage(1);
         setBrand(value.toLowerCase());
     }
     if(type==='type'){
+        setCurrentPage(1);
         setType(value);
     }
     if(type==='sort'){

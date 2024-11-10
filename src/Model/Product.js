@@ -15,6 +15,7 @@ const productSchema= new mongoose.Schema({
         default:0,
     },
 });
+
 //exptected receit an arr
 productSchema.query.byType = function(types) {
     if (!types || types.length <= 0) return this;
