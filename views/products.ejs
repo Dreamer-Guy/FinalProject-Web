@@ -39,33 +39,40 @@
                     hover:bg-transparent hover:text-primary transition">
                     Search</button>
             </div>
-
-            <div class="flex items-center space-x-4">
-                <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
-                    <div class="text-2xl">
-                        <i class="fa-regular fa-heart"></i>
+                <% if(user){%>
+                    <div class="flex items-center space-x-4">
+                        <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
+                            <div class="text-2xl">
+                                <i class="fa-regular fa-heart"></i>
+                            </div>
+                            <div class="text-xs leading-3">Wishlist</div>
+                            <div
+                                class="absolute right-0 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
+                                8</div>
+                        </a>
+                        <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
+                            <div class="text-2xl">
+                                <i class="fa-solid fa-bag-shopping"></i>
+                            </div>
+                            <div class="text-xs leading-3">Cart</div>
+                            <div
+                                class="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
+                                2</div>
+                        </a>
+                        <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
+                            <div class="text-2xl">
+                                <i class="fa-regular fa-user"></i>
+                            </div>
+                            <div class="text-xs leading-3">Account</div>
+                        </a>
                     </div>
-                    <div class="text-xs leading-3">Wishlist</div>
-                    <div
-                        class="absolute right-0 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
-                        8</div>
-                </a>
-                <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
-                    <div class="text-2xl">
-                        <i class="fa-solid fa-bag-shopping"></i>
+                <% } else { %>
+                    <div class="flex items-center space-x-4 font-bold ">
+                        <a href="/user/login" class="text-black hover:text-white transition">Login</a>
+                        <span class="text-black">/</span>
+                        <a href="/user/register" class="text-black hover:text-white transition">Register</a>
                     </div>
-                    <div class="text-xs leading-3">Cart</div>
-                    <div
-                        class="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
-                        2</div>
-                </a>
-                <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
-                    <div class="text-2xl">
-                        <i class="fa-regular fa-user"></i>
-                    </div>
-                    <div class="text-xs leading-3">Account</div>
-                </a>
-            </div>
+                <% } %>
         </div>
     </header>
     <!-- ./header -->
@@ -112,11 +119,11 @@
                     <a href="#" class="text-gray-200 hover:text-white transition">About us</a>
                     <a href="#" class="text-gray-200 hover:text-white transition">Contact us</a>
                 </div>
-                <div>
+                <!-- <div>
                     <a href="/user/login" class="text-gray-200 hover:text-white transition">Login</a>
                     <span class="text-gray-200">/</span>
                     <a href="/user/register" class="text-gray-200 hover:text-white transition">Register</a>
-                </div>
+                </div> -->
             </div>
         </div>
     </nav>

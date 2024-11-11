@@ -10,10 +10,9 @@ userRouter.get("/login", (req, res) => {
 });
 
 userRouter.post("/loginUser",passportLocal.authenticate('local'),(req, res) => {
-    req.session.user = true;
-    console.log(req.session);
-    console.log(req.sessionID);
-    return res.redirect("/products/get");
+    // console.log(req.session);
+    // console.log(req.sessionID);
+    return res.json({message:"Login Success"});
 });
 
 userRouter.get("/isLogin",(req, res) => {
