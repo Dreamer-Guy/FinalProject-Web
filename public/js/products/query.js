@@ -58,7 +58,13 @@ function setSort(value){
     filters.sort=value;
 }
 
-async function handleFilters(type,value){
+function setPrice(min,max){
+    filters.minPrice=min;
+    filters.maxPrice=max;
+}
+
+async function handleFilters(type,value,value2_optional){
+    console.log("type",type);
     if(type==='brand'){
         setCurrentPage(1);
         setBrand(value.toLowerCase());
@@ -72,6 +78,10 @@ async function handleFilters(type,value){
     }
     if(type==='page'){
         setCurrentPage(value);
+    }
+    if(type=='price'){
+       
+        setPrice(value,value2_optional);
     }
     const queryParams= new URLSearchParams(filters).toString();
     window.location.href=`/products/get?${queryParams}`;
@@ -137,7 +147,6 @@ function handleSearch(){
 function controlTypeState() {
     const urlParams = new URLSearchParams(window.location.search);
     const typesFromUrl = urlParams.get('type')?.split(',') || [];
-    console.log(typesFromUrl);
     typesFromUrl.forEach(type => {
         const checkbox = document.querySelector(`input[value="${type}"]`);
         if (checkbox) {
@@ -157,6 +166,19 @@ function controlBrandState() {
     });
 }
 
+function controlPriceState(){
+    const urlParams = new URLSearchParams(window.location.search);
+    const minPrice = urlParams.get('minPrice');
+    const maxPrice = urlParams.get('maxPrice');
+    console.log(minPrice,maxPrice);
+    console.log(`price-${minPrice}:${maxPrice}`);
+    const checkbox=document.getElementById(`price-${minPrice}:${maxPrice}`);
+    if (checkbox) {
+        checkbox.checked = true;
+    }
+}
+
+//update filter obj
 function updateFiltersFromUrl() {
     const urlParams = new URLSearchParams(window.location.search);
     filters.type = urlParams.get('type') ? urlParams.get('type').split(',').map(type=>type.toLowerCase()) 
@@ -174,3 +196,4 @@ function updateFiltersFromUrl() {
 updateFiltersFromUrl();
 controlTypeState();
 controlBrandState();
+controlPriceState();

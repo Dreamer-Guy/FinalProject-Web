@@ -37,7 +37,8 @@ const getQueryParams=(req)=>{
     const {page,rowPerPage}=req.query;
     const {brands,types}=formatFilterParam(req);
     const {sortField,sortOrder}=formatSortParam(req);
-    return {brands,types,sortField,sortOrder,page,rowPerPage};
+    const {minPrice,maxPrice}=req.query;
+    return {brands,types,sortField,sortOrder,page,rowPerPage,minPrice,maxPrice};
 }
 
 const populateProduct=(product)=>{
@@ -61,8 +62,12 @@ const populateProduct=(product)=>{
 const fetchAllFilteredProducts = async (req, res) => {
     try {
         const user = req.session?.user;
-        const {brands,types,sortField,sortOrder,page=1,rowsPerPage=ROW_PER_PAGE}=getQueryParams(req);
-        let products = await productService.getProducts({ brands, types, sortField, sortOrder });
+        const {brands,types,
+            sortField,sortOrder,
+            page=1,rowsPerPage=ROW_PER_PAGE,
+            minPrice=0,maxPrice=Number.MAX_VALUE}=getQueryParams(req);
+        
+        let products = await productService.getProducts({ brands, types, sortField, sortOrder,minPrice,maxPrice });
         const totalProducts=products.length;
         if(page && rowsPerPage){
             products=products.slice((page-1)*rowsPerPage,page*rowsPerPage);

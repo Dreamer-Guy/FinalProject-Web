@@ -29,6 +29,10 @@ productSchema.query.byBrand = function(brands) {
     });
 };
 
+productSchema.query.byPrice=function(minPrice,maxPrice){
+    if(!minPrice || !maxPrice) return this;
+    return this.where({price:{$gte:minPrice,$lte:maxPrice}});
+}
 
 productSchema.index({name:'text',brand:'text',type:'text'});
 
