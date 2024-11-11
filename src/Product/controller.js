@@ -33,11 +33,26 @@ const formatFilterParam=(req)=>{
     return {brands,types};    
 }
 
+const formatPriceParam=(req)=>{
+    const DEFAULT_MIN_PRICE=0;
+    const DEFAULT_MAX_PRICE=Number.MAX_VALUE;
+    const flag_null=req.query==null?true:false;
+    const flag_nullString=(req.query.minPrice==='null')||(req.query.maxPrice==='null')?true:false;
+    const badQueryParams=flag_null||flag_nullString;
+
+    if(badQueryParams){
+        return {minPrice:DEFAULT_MIN_PRICE,maxPrice:DEFAULT_MAX_PRICE};
+    }
+    const minPrice=req.query.minPrice;
+    const maxPrice=req.query.maxPrice;
+    return {minPrice,maxPrice};
+};
 const getQueryParams=(req)=>{
     const {page,rowPerPage}=req.query;
     const {brands,types}=formatFilterParam(req);
     const {sortField,sortOrder}=formatSortParam(req);
-    const {minPrice,maxPrice}=req.query;
+    const {minPrice,maxPrice}=formatPriceParam(req);
+
     return {brands,types,sortField,sortOrder,page,rowPerPage,minPrice,maxPrice};
 }
 
@@ -61,16 +76,19 @@ const populateProduct=(product)=>{
 
 const fetchAllFilteredProducts = async (req, res) => {
     try {
-        const user = req.session?.user;
+        const user = req.   session?.user;
         const {brands,types,
             sortField,sortOrder,
             page=1,rowsPerPage=ROW_PER_PAGE,
-            minPrice=0,maxPrice=Number.MAX_VALUE}=getQueryParams(req);
-        
+            minPrice,maxPrice}=getQueryParams(req);
+        const {onSales}=req.query;
         let products = await productService.getProducts({ brands, types, sortField, sortOrder,minPrice,maxPrice });
         const totalProducts=products.length;
         if(page && rowsPerPage){
             products=products.slice((page-1)*rowsPerPage,page*rowsPerPage);
+        }
+        if(onSales==='true'){
+            products=products.filter((product)=>product.salePrice>0);
         }
         const populateProducts = products.map((product) => (populateProduct(product)));
         return res.render('products', {

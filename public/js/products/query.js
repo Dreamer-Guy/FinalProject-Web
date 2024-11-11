@@ -1,4 +1,7 @@
 // pagination.js
+const DEFAULT_MIN_PRICE=0;
+const DEFAULT_MAX_PRICE=200;
+const DEFAULT_ONSALES=false;
 let currentPage = 1;
 const rowPerPage = 6;
 let filters={
@@ -7,8 +10,9 @@ let filters={
     sort:'price-asc',
     page:1,
     rowPerPage:6,
-    minPrice:null,
-    maxPrice:null,
+    minPrice:0,
+    maxPrice:200,
+    onSales:false,//true or false
 };
 
 const generateRatingStars = (rating) => {
@@ -59,8 +63,22 @@ function setSort(value){
 }
 
 function setPrice(min,max){
+    if(Number(min)===filters.minPrice && filters.maxPrice===Number(max)){
+        filters.minPrice=null;
+        filters.maxPrice=null;
+        return;
+    }
     filters.minPrice=min;
     filters.maxPrice=max;
+}
+
+function setOnSales(){
+    if(filters.onSales==='true'){
+        filters.onSales=false;
+    }
+    else{
+        filters.onSales=true;
+    }
 }
 
 async function handleFilters(type,value,value2_optional){
@@ -79,9 +97,12 @@ async function handleFilters(type,value,value2_optional){
     if(type==='page'){
         setCurrentPage(value);
     }
-    if(type=='price'){
+    if(type==='price'){
        
         setPrice(value,value2_optional);
+    }
+    if(type==='onSales'){
+        setOnSales();
     }
     const queryParams= new URLSearchParams(filters).toString();
     window.location.href=`/products/get?${queryParams}`;
@@ -170,13 +191,20 @@ function controlPriceState(){
     const urlParams = new URLSearchParams(window.location.search);
     const minPrice = urlParams.get('minPrice');
     const maxPrice = urlParams.get('maxPrice');
-    console.log(minPrice,maxPrice);
-    console.log(`price-${minPrice}:${maxPrice}`);
     const checkbox=document.getElementById(`price-${minPrice}:${maxPrice}`);
     if (checkbox) {
         checkbox.checked = true;
     }
 }
+
+function controlOnSalesState(){
+    const urlParams = new URLSearchParams(window.location.search);
+    const onSales = urlParams.get('onSales');
+    const checkbox=document.getElementById(`onSales`);
+    if (checkbox && onSales==='true') {
+        checkbox.checked = true;
+    }
+};
 
 //update filter obj
 function updateFiltersFromUrl() {
@@ -189,11 +217,15 @@ function updateFiltersFromUrl() {
     filters.sort = urlParams.get('sort') || filters.sort;
     filters.page = parseInt(urlParams.get('page')) || filters.page;
     filters.rowPerPage = parseInt(urlParams.get('rowPerPage')) || filters.rowPerPage;
-    filters.minPrice = urlParams.get('minPrice') !== 'null' ? parseFloat(urlParams.get('minPrice')) : null;
-    filters.maxPrice = urlParams.get('maxPrice') !== 'null' ? parseFloat(urlParams.get('maxPrice')) : null;
+    filters.minPrice = urlParams.get('minPrice') 
+        && !isNaN(urlParams.get('minPrice'))? parseFloat(urlParams.get('minPrice')) : null;
+    filters.maxPrice = urlParams.get('maxPrice') 
+        &&!isNaN(urlParams.get('maxPrice'))? parseFloat(urlParams.get('maxPrice')) : null;
+    filters.onSales = urlParams.get('onSales') ? urlParams.get('onSales') : DEFAULT_ONSALES;
 }
 
 updateFiltersFromUrl();
 controlTypeState();
 controlBrandState();
 controlPriceState();
+controlOnSalesState();
