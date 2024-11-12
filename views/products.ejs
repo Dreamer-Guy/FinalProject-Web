@@ -35,39 +35,44 @@
                 <input type="text" name="search" id="search"
                     class="w-full border border-primary border-r-0 pl-12 py-3 pr-3 rounded-l-md focus:outline-none"
                     placeholder="Search">
-                <button
-                    onclick="handleSearch()"
-                    class="bg-primary border border-primary text-white px-8 rounded-r-md 
+                <button onclick="handleSearch()" class="bg-primary border border-primary text-white px-8 rounded-r-md 
                     hover:bg-transparent hover:text-primary transition">
-                Search</button>
+                    Search</button>
             </div>
-
-            <div class="flex items-center space-x-4">
-                <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
-                    <div class="text-2xl">
-                        <i class="fa-regular fa-heart"></i>
+                <% if(user){%>
+                    <div class="flex items-center space-x-4">
+                        <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
+                            <div class="text-2xl">
+                                <i class="fa-regular fa-heart"></i>
+                            </div>
+                            <div class="text-xs leading-3">Wishlist</div>
+                            <div
+                                class="absolute right-0 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
+                                8</div>
+                        </a>
+                        <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
+                            <div class="text-2xl">
+                                <i class="fa-solid fa-bag-shopping"></i>
+                            </div>
+                            <div class="text-xs leading-3">Cart</div>
+                            <div
+                                class="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
+                                2</div>
+                        </a>
+                        <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
+                            <div class="text-2xl">
+                                <i class="fa-regular fa-user"></i>
+                            </div>
+                            <div class="text-xs leading-3">Account</div>
+                        </a>
                     </div>
-                    <div class="text-xs leading-3">Wishlist</div>
-                    <div
-                        class="absolute right-0 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
-                        8</div>
-                </a>
-                <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
-                    <div class="text-2xl">
-                        <i class="fa-solid fa-bag-shopping"></i>
+                <% } else { %>
+                    <div class="flex items-center space-x-4 font-bold ">
+                        <a href="/user/login" class="text-black hover:text-white transition">Login</a>
+                        <span class="text-black">/</span>
+                        <a href="/user/register" class="text-black hover:text-white transition">Register</a>
                     </div>
-                    <div class="text-xs leading-3">Cart</div>
-                    <div
-                        class="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
-                        2</div>
-                </a>
-                <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
-                    <div class="text-2xl">
-                        <i class="fa-regular fa-user"></i>
-                    </div>
-                    <div class="text-xs leading-3">Account</div>
-                </a>
-            </div>
+                <% } %>
         </div>
     </header>
     <!-- ./header -->
@@ -114,11 +119,11 @@
                     <a href="#" class="text-gray-200 hover:text-white transition">About us</a>
                     <a href="#" class="text-gray-200 hover:text-white transition">Contact us</a>
                 </div>
-                <div>
+                <!-- <div>
                     <a href="/user/login" class="text-gray-200 hover:text-white transition">Login</a>
                     <span class="text-gray-200">/</span>
                     <a href="/user/register" class="text-gray-200 hover:text-white transition">Register</a>
-                </div>
+                </div> -->
             </div>
         </div>
     </nav>
@@ -241,11 +246,11 @@
                 <div class="pt-4">
                     <h3 class="text-xl text-gray-800 mb-3 uppercase font-medium">Price</h3>
                     <div class="mt-4 flex items-center">
-                        <input type="text" name="min" id="min"
+                        <input type="text" name="min" id="min-price"
                             class="w-full border-gray-300 focus:border-primary rounded focus:ring-0 px-3 py-1 text-gray-600 shadow-sm"
                             placeholder="min">
                         <span class="mx-3 text-gray-500">-</span>
-                        <input type="text" name="max" id="max"
+                        <input type="text" name="max" id="max-price"
                             class="w-full border-gray-300 focus:border-primary rounded focus:ring-0 px-3 py-1 text-gray-600 shadow-sm"
                             placeholder="max">
                     </div>
@@ -333,13 +338,12 @@
                             <% types.forEach((type, index)=> { %>
                                 <div onclick="handleFilters('type','<%=types[index]%>')" class="flex items-center">
                                     <input type="checkbox" name="cat-<%= index + 1 %>" id="cat-<%= index + 1 %>"
-                                        class="text-primary focus:ring-0 rounded-sm cursor-pointer"
-                                        value="<%= type %>">
+                                        class="text-primary focus:ring-0 rounded-sm cursor-pointer" value="<%= type %>">
                                     <label for="cat-<%= index + 1 %>" class="text-gray-600 ml-3 cursor-pointer">
                                         <%= type.charAt(0).toUpperCase() + type.slice(1) %>
                                     </label>
                                 </div>
-                            <% }); %>
+                                <% }); %>
                     </div>
                 </div>
 
@@ -362,45 +366,35 @@
 
                 <div class="pt-4">
                     <h3 class="text-xl text-gray-800 mb-3 uppercase font-medium">Price</h3>
-                    <div class="mt-4 flex items-center">
-                        <input type="text" name="min" id="min"
-                            class="w-full border-gray-300 focus:border-primary rounded focus:ring-0 px-3 py-1 text-gray-600 shadow-sm"
-                            placeholder="min">
-                        <span class="mx-3 text-gray-500">-</span>
-                        <input type="text" name="max" id="max"
-                            class="w-full border-gray-300 focus:border-primary rounded focus:ring-0 px-3 py-1 text-gray-600 shadow-sm"
-                            placeholder="max">
+                    <div class="space-y-2">
+                        <% const prices=[0, 200, 450, 700]; %>
+                            <% for (let i=0; i < prices.length - 1; i +=1) { %>
+                                <div onclick="handleFilters('price',`<%= prices[i] %>`,`<%= prices[i+1] %>`)" class="flex items-center">
+                                    <input type="checkbox" name="price-<%= i + 1 %>" id="price-<%= prices[i]  %>:<%= prices[i+1] %>"
+                                        class="text-primary focus:ring-0 rounded-sm cursor-pointer"
+                                        value="<%=prices[i]%>-<%=prices[i+1]%>">
+                                    <label for="price-<%= i + 1 %>" class="text-gray-600 ml-3 cursor-pointer">
+                                        <span>$</span>
+                                        <%= prices[i] %>
+                                        <span>-</span>
+                                        <%= prices[i + 1] %>
+                                    </label>
+                                </div>
+                        <% } %>
+
                     </div>
                 </div>
 
                 <div class="pt-4">
-                    <h3 class="text-xl text-gray-800 mb-3 uppercase font-medium">size</h3>
-                    <div class="flex items-center gap-2">
-                        <div class="size-selector">
-                            <input type="radio" name="size" id="size-xs" class="hidden">
-                            <label for="size-xs"
-                                class="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600">XS</label>
-                        </div>
-                        <div class="size-selector">
-                            <input type="radio" name="size" id="size-sm" class="hidden">
-                            <label for="size-sm"
-                                class="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600">S</label>
-                        </div>
-                        <div class="size-selector">
-                            <input type="radio" name="size" id="size-m" class="hidden">
-                            <label for="size-m"
-                                class="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600">M</label>
-                        </div>
-                        <div class="size-selector">
-                            <input type="radio" name="size" id="size-l" class="hidden">
-                            <label for="size-l"
-                                class="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600">L</label>
-                        </div>
-                        <div class="size-selector">
-                            <input type="radio" name="size" id="size-xl" class="hidden">
-                            <label for="size-xl"
-                                class="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600">XL</label>
-                        </div>
+                    <h3 class="text-xl text-gray-800 mb-3 uppercase font-medium">Sales</h3>
+                    <div onclick="handleFilters('onSales')" class="flex items-center">
+                        <input
+                            id="onSales" 
+                            type="checkbox"
+                            class="text-primary focus:ring-0 rounded-sm cursor-pointer">
+                        <label class="text-gray-600 ml-3 cursor-pointer">
+                            On sales
+                        </label>
                     </div>
                 </div>
             </div>
@@ -408,39 +402,32 @@
         <!-- products -->
         <div class="col-span-3">
             <div class="flex items-center mb-4">
-                <% const sortOptions = {
-                    "Default Sort": "price-asc",
-                    "Price low to high": "price-asc",
-                    "Price high to low": "price-desc",
-                }; %>
-                <select
-                    onchange="handleFilters('sort',this.value)" 
-                    name="sort" id="sort" 
-                    class="w-44 text-sm text-gray-600 py-3 px-4 border-gray-300 shadow-sm 
+                <% const sortOptions={ "Default Sort" : "price-asc" , "Price low to high" : "price-asc"
+                    , "Price high to low" : "price-desc" , }; %>
+                    <select onchange="handleFilters('sort',this.value)" name="sort" id="sort" class="w-44 text-sm text-gray-600 py-3 px-4 border-gray-300 shadow-sm 
                     rounded focus:ring-primary focus:border-primary">
-                    <% for (let text in sortOptions) { %>
-                        <option value="<%= sortOptions[text] %>">
-                          <%= text %>
-                        </option>
-                    <% } %>
-                </select>
+                        <% for (let text in sortOptions) { %>
+                            <option value="<%= sortOptions[text] %>">
+                                <%= text %>
+                            </option>
+                            <% } %>
+                    </select>
 
-                <div class="flex gap-2 ml-auto">
-                    <div
-                        class="border border-primary w-10 h-9 flex items-center justify-center text-white bg-primary rounded cursor-pointer">
-                        <i class="fa-solid fa-grip-vertical"></i>
+                    <div class="flex gap-2 ml-auto">
+                        <div
+                            class="border border-primary w-10 h-9 flex items-center justify-center text-white bg-primary rounded cursor-pointer">
+                            <i class="fa-solid fa-grip-vertical"></i>
+                        </div>
+                        <div
+                            class="border border-gray-300 w-10 h-9 flex items-center justify-center text-gray-600 rounded cursor-pointer">
+                            <i class="fa-solid fa-list"></i>
+                        </div>
                     </div>
-                    <div
-                        class="border border-gray-300 w-10 h-9 flex items-center justify-center text-gray-600 rounded cursor-pointer">
-                        <i class="fa-solid fa-list"></i>
-                    </div>
-                </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3  gap-4" id="products-grid">
                 <% products.forEach(product=> { %>
-                    <div
-                        class="bg-white shadow rounded overflow-hidden group cursor-pointer 
+                    <div class="bg-white shadow rounded overflow-hidden group cursor-pointer 
                         flex flex-col justify-between">
                         <div>
                             <div class="relative">
@@ -481,7 +468,7 @@
                             </a>
                         </div>
                     </div>
-                <% }) %>
+                    <% }) %>
             </div>
             <div class="bg-white py-10 text-center dark:bg-dark">
                 <% const quantity=Math.ceil(totalProducts / rowsPerPage); %>
@@ -518,7 +505,7 @@
                                                 fill="currentColor" />
                                         </svg>
                                     </button>
-                            </li>
+                                </li>
                     </ul>
             </div>
         </div>
