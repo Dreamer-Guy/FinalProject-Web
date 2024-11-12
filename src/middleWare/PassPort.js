@@ -1,7 +1,9 @@
-import userService from "../User/mockService.js";
 import { Strategy } from "passport-local";
 import { hashPassword, comparePlainAndHashed } from "../utils/hashAndCompare.js";
+import serviceFactory from "../Factory/serviceFactory.js";
 import passport from "passport";
+import { raw } from "express";
+const userService = serviceFactory.getUserService();
 const localStrategy = new Strategy(async (username, password, done) => {
     try {
         const user = await userService.getUserByEmailOrUsername(username);
@@ -22,19 +24,18 @@ const localStrategy = new Strategy(async (username, password, done) => {
 passport.use(localStrategy);
 
 passport.serializeUser((user, done) => {
-    console.log("serializeUser", user);
     done(null, user._id);
 });
 
 passport.deserializeUser(async (id, done) => {
     try {
-        console.log("deserializeUser\n\n\n\n", id);
-        const user = await userService.getUserById(id);
-        const populatedUser={
-            _id:user._id,
-            fullName:user.fullName,
-            userName:user.userName,
-            role:user.role,
+        //console.log("deserializeUser\n\n\n\n", id);
+        const rawUser = await userService.getUserById(id);
+        const user={
+            _id:rawUser._id.toString(),
+            fullName:rawUser.fullName,
+            userName:rawUser.userName,
+            role:rawUser.role,
         }
         done(null, user);
     } catch (err) {

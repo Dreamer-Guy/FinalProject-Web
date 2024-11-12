@@ -224,6 +224,15 @@ const mockProductDetails = [
   }
 ];
 
+const mockUsers=[
+    {
+      "fullName": "Quoc Vinh",
+      "userName": "vinh",
+      "password": "$2y$10$gTYBIMRLuYYmIy7GzpojFe7zMJXqlZObegEr.Ogva1KwTfogGMfd.",
+      "role":"user",
+    },
+];
+
 
 // const productSchema = new mongoose.Schema({
 //     type: { type: String, required: true },
@@ -252,6 +261,7 @@ export const up = async (db, client) => {
     });
 
     await db.collection("productdetails").insertMany(updatedProductDetails);
+    await db.collection("users").insertMany(mockUsers);
 };
 
 
@@ -259,6 +269,8 @@ export const down = async (db, client) => {
     const productIds = mockProducts.map(product => product._id);
     await db.collection("products").deleteMany({ _id: { $in: productIds } });
     await db.collection("productdetails").deleteMany({ productId: { $in: productIds } });
+    await db.collection("users").deleteMany({ userName: { $in: mockUsers.map(user => user.userName) } });
     await db.collection("products").drop();
     await db.collection("productdetails").drop();
+    await db.collection("users").drop();
 };

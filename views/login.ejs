@@ -131,11 +131,11 @@
             <p class="text-gray-600 mb-6 text-sm">
                 welcome back customer
             </p>
-            <form action="#" method="post" autocomplete="off">
+            <div id="login-form">
                 <div class="space-y-2">
                     <div>
                         <label for="email" class="text-gray-600 mb-2 block">Email address</label>
-                        <input type="email" name="email" id="email"
+                        <input type="text" name="email" id="userName"
                             class="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
                             placeholder="youremail.@domain.com">
                     </div>
@@ -155,10 +155,11 @@
                     <a href="#" class="text-primary">Forgot password</a>
                 </div>
                 <div class="mt-4">
-                    <button type="submit"
+                    <button 
+                        onclick="handleLogin()"
                         class="block w-full py-2 text-center text-white bg-primary border border-primary rounded hover:bg-transparent hover:text-primary transition uppercase font-roboto font-medium">Login</button>
                 </div>
-            </form>
+            </div>
 
             <!-- login with -->
             <div class="mt-6 flex justify-center relative">
