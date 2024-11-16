@@ -2,7 +2,7 @@ export default {
   content: [
     "./public/**/*.{html,js}", // Existing rule for static assets
     "./*.html",                // Existing rule for root HTML files
-    "./views/**/*.ejs",      // Add this rule for EJS files in the views folder
+    "./views/**/*.{ejs,html}",      // Add this rule for EJS files in the views folder
   ],
 
   theme: {

@@ -3,7 +3,7 @@ import productDetails from "../Model/ProductDetails.js";
 
 const productDetailsService={
     get:async(id)=>{
-        const productDetailsRes=await productDetails.findOne({productId:id}).lean();
+        const productDetailsRes=await productDetails.findOne({productId:id}).lean()||{};
         return productDetailsRes;
     },  
     getAll:async()=>{

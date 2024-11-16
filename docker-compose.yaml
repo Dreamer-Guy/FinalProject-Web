@@ -1,14 +1,14 @@
 version: '3.7'
 services:
-  mongodb:
+  mongo:
     image: mongo:4.2.3-bionic
-    container_name: mongodb
+    container_name: mongo
     ports:
       - 27023:27017
-    # environment:
-    #   - MONGO_INITDB_DATABASE=MyShop
-    #   - MONGO_INITDB_ROOT_USERNAME=admin
-    #   - MONGO_INITDB_ROOT_PASSWORD=admin
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+      
     volumes:
       - mongodbVol:/data/db
       - mongoconfig:/data/configdb

@@ -9,6 +9,7 @@ import productRouter from "./src/Product/route.js";
 import productDetailsRouter from "./src/ProductDetails/route.js";
 import userRouter from './src/User/route.js';
 import homeRouter from './src/HomePage/controller.js';
+import reviewRouter from './src/Review/route.js';
 const app = express();
 const PORT = 3000;
 app.use(express.json());
@@ -33,6 +34,7 @@ app.use("/", homeRouter);
 app.use("/productDetails", productDetailsRouter);
 app.use("/products", productRouter);
 app.use("/user", userRouter);
+app.use("/reviews", reviewRouter);
 
 
 app.listen(PORT, () => {

@@ -234,6 +234,36 @@ const mockUsers=[
 ];
 
 
+const mockReviews=[
+  {
+      "productId": "673354a2f68f049bcbd46ea5",
+      "user": "673354a2f68f049bcbd46eb4",
+      "rating": 4,
+      "comment": "Good quality, satisfied with the purchase.",
+      "createdAt": "2024-11-13T12:34:56.789Z"
+  },
+  {
+      "productId": "673354a2f68f049bcbd46ea5",
+      "user": "673354a2f68f049bcbd46eb4",
+      "rating": 5,
+      "comment": "Excellent product, exceeded my expectations!",
+      "createdAt": "2024-11-13T12:35:56.789Z"
+  },
+  {
+      "productId": "673354a2f68f049bcbd46ea5",
+      "user": "673354a2f68f049bcbd46eb4",
+      "rating": 3,
+      "comment": "Decent, but there's room for improvement.",
+      "createdAt": "2024-11-13T12:36:56.789Z"
+  },
+  {
+      "productId": "673354a2f68f049bcbd46ea5",
+      "user": "673354a2f68f049bcbd46eb4",
+      "rating": 4,
+      "comment": "Pretty good value for the price.",
+      "createdAt": "2024-11-13T12:37:56.789Z"
+  }
+];
 // const productSchema = new mongoose.Schema({
 //     type: { type: String, required: true },
 //     name: { type: String, required: true },
@@ -251,8 +281,10 @@ const mockUsers=[
 
 export const up = async (db, client) => {
     const products = await db.collection("products").insertMany(mockProducts);
+    const users=await db.collection("users").insertMany(mockUsers);
+    const userIdMap=users.insertedIds;
     const productIdMap = products.insertedIds;
-
+    console.log(productIdMap);
     const updatedProductDetails = mockProductDetails.map((detail,index) => {
       return {
         ...detail,
@@ -260,9 +292,17 @@ export const up = async (db, client) => {
       };
     });
 
+    const updatedReviews=mockReviews.map((review)=>{
+        return {
+          ...review,
+          productId:productIdMap[0].toString(),
+          user:userIdMap[0],
+        }
+    });
     await db.collection("productdetails").insertMany(updatedProductDetails);
-    await db.collection("users").insertMany(mockUsers);
-};
+    
+    await db.collection("reviews").insertMany(updatedReviews);
+  };
 
 
 export const down = async (db, client) => {
@@ -270,7 +310,9 @@ export const down = async (db, client) => {
     await db.collection("products").deleteMany({ _id: { $in: productIds } });
     await db.collection("productdetails").deleteMany({ productId: { $in: productIds } });
     await db.collection("users").deleteMany({ userName: { $in: mockUsers.map(user => user.userName) } });
+    await db.collection("reviews").deleteMany({ productId: { $in: productIds } });
     await db.collection("products").drop();
     await db.collection("productdetails").drop();
     await db.collection("users").drop();
+    await db.collection("reviews").drop();
 };

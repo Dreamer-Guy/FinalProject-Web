@@ -26,7 +26,7 @@
     <header class="shadow-sm bg-white  p-2">
         <div class="flex flex-row items-center justify-between">
             <a href="index.html">
-                <img src="../assets/images/logo.svg" alt="Logo" class="w-32">
+                <img src="/assets/images/logo.svg" alt="Logo" class="w-32">
             </a>
 
             <div class="w-full max-w-xl relative hidden md:flex">
@@ -36,39 +36,44 @@
                 <input type="text" name="search" id="search"
                     class="w-full border border-primary border-r-0 pl-12 py-3 pr-3 rounded-l-md focus:outline-none"
                     placeholder="Search">
-                <button
-                    onclick="handleSearch()"
-                    class="bg-primary border border-primary text-white px-8 rounded-r-md 
+                <button onclick="handleSearch()" class="bg-primary border border-primary text-white px-8 rounded-r-md 
                     hover:bg-transparent hover:text-primary transition">
-                Search</button>
+                    Search</button>
             </div>
-
-            <div class="flex items-center space-x-4">
-                <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
-                    <div class="text-2xl">
-                        <i class="fa-regular fa-heart"></i>
+                <% if(user){%>
+                    <div class="flex items-center space-x-4">
+                        <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
+                            <div class="text-2xl">
+                                <i class="fa-regular fa-heart"></i>
+                            </div>
+                            <div class="text-xs leading-3">Wishlist</div>
+                            <div
+                                class="absolute right-0 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
+                                8</div>
+                        </a>
+                        <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
+                            <div class="text-2xl">
+                                <i class="fa-solid fa-bag-shopping"></i>
+                            </div>
+                            <div class="text-xs leading-3">Cart</div>
+                            <div
+                                class="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
+                                2</div>
+                        </a>
+                        <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
+                            <div class="text-2xl">
+                                <i class="fa-regular fa-user"></i>
+                            </div>
+                            <div class="text-xs leading-3">Account</div>
+                        </a>
                     </div>
-                    <div class="text-xs leading-3">Wishlist</div>
-                    <div
-                        class="absolute right-0 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
-                        8</div>
-                </a>
-                <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
-                    <div class="text-2xl">
-                        <i class="fa-solid fa-bag-shopping"></i>
+                <% } else { %>
+                    <div class="flex items-center space-x-4 font-bold ">
+                        <a href="/user/login" class="text-black hover:text-white transition">Login</a>
+                        <span class="text-black">/</span>
+                        <a href="/user/register" class="text-black hover:text-white transition">Register</a>
                     </div>
-                    <div class="text-xs leading-3">Cart</div>
-                    <div
-                        class="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
-                        2</div>
-                </a>
-                <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
-                    <div class="text-2xl">
-                        <i class="fa-regular fa-user"></i>
-                    </div>
-                    <div class="text-xs leading-3">Account</div>
-                </a>
-            </div>
+                <% } %>
         </div>
     </header>
     <!-- ./header -->
@@ -86,23 +91,23 @@
                 <div
                     class="absolute w-full left-0 top-full bg-white shadow-md py-3 divide-y divide-gray-300 divide-dashed opacity-0 group-hover:opacity-100 transition duration-300 invisible group-hover:visible">
                     <a href="#" class="flex items-center px-6 py-3 hover:bg-gray-100 transition">
-                        <img src="../assets/images/icons/laptop.svg" alt="sofa" class="w-5 h-5 object-contain">
+                        <img src="/assets/images/icons/laptop.svg" alt="sofa" class="w-5 h-5 object-contain">
                         <span class="ml-6 text-gray-600 text-sm">Laptop</span>
                     </a>
                     <a href="#" class="flex items-center px-6 py-3 hover:bg-gray-100 transition">
-                        <img src="../assets/images/icons/phone.svg" alt="terrace" class="w-5 h-5 object-contain">
+                        <img src="/assets/images/icons/phone.svg" alt="terrace" class="w-5 h-5 object-contain">
                         <span class="ml-6 text-gray-600 text-sm">Phone</span>
                     </a>
                     <a href="#" class="flex items-center px-6 py-3 hover:bg-gray-100 transition">
-                        <img src="../assets/images/icons/television-tv.svg" alt="bed" class="w-5 h-5 object-contain">
+                        <img src="/assets/images/icons/television-tv.svg" alt="bed" class="w-5 h-5 object-contain">
                         <span class="ml-6 text-gray-600 text-sm">Television</span>
                     </a>
                     <a href="#" class="flex items-center px-6 py-3 hover:bg-gray-100 transition">
-                        <img src="../assets/images/icons/watch.svg" alt="office" class="w-5 h-5 object-contain">
+                        <img src="/assets/images/icons/watch.svg" alt="office" class="w-5 h-5 object-contain">
                         <span class="ml-6 text-gray-600 text-sm">Watch</span>
                     </a>
                     <a href="#" class="flex items-center px-6 py-3 hover:bg-gray-100 transition">
-                        <img src="../assets/images/icons/photo-camera.svg" alt="outdoor" class="w-5 h-5 object-contain">
+                        <img src="/assets/images/icons/photo-camera.svg" alt="outdoor" class="w-5 h-5 object-contain">
                         <span class="ml-6 text-gray-600 text-sm">Camera</span>
                     </a>
                 </div>
@@ -115,11 +120,11 @@
                     <a href="#" class="text-gray-200 hover:text-white transition">About us</a>
                     <a href="#" class="text-gray-200 hover:text-white transition">Contact us</a>
                 </div>
-                <div>
+                <!-- <div>
                     <a href="/user/login" class="text-gray-200 hover:text-white transition">Login</a>
                     <span class="text-gray-200">/</span>
                     <a href="/user/register" class="text-gray-200 hover:text-white transition">Register</a>
-                </div>
+                </div> -->
             </div>
         </div>
     </nav>
@@ -221,7 +226,66 @@
         </div>
     </div>
     <!-- Product Detail -->
-
+    <!--Review-->
+    <div class="container pb-16">
+        <div>
+            <h2 class="text-2xl font-medium text-gray-800 uppercase mb-6">Review</h2>
+        <% reviews.forEach(review => { %>    
+            <div class="flex flex-row justify-start items-center gap-4">
+                <div class="w-[50px] h-[50px]">
+                    <img 
+                    class="w-full h-full object-cover rounded-full"
+                    src="https://github.com/octocat.png?s=200" alt="doing" />
+                </div>
+                <div>
+                    <div class="flex flex-row gap-6">
+                        <h3 class="font-bold"><%=review.user.fullName%></h3>
+                        <p class="opacity-50 text-blue-400"><%=review.createdAt%></p>
+                    </div>
+                    <div>
+                        <div class="flex gap-1 text-sm text-yellow-400">
+                            <%-generateRatingStars(review.rating) %>
+                        </div>
+                    </div>
+                    <div>
+                        <p><%=review.comment%></p>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+        </div>
+        <% if(user){%>
+            <div>
+                <label for="review" class="block text-gray-800 font-medium mt-6">Add a review</label>
+                <% const TOTAL_STAR = 5; %>
+                <% const rating = 0; %>
+                <div class="flex gap-2 mt-2" id="input-starsRating">
+                    <% for (let i = 1; i <= TOTAL_STAR; i++) { %>
+                        <% if (i <= rating) { %>
+                            <label
+                                onclick="handleRating('<%=i%>')"
+                                for="rating<%=i%>" class="text-2xl text-yellow-400 cursor-pointer">
+                                <i class="fa-solid fa-star"></i>
+                            </label>
+                        <% } else { %>
+                            <label
+                                onclick="handleRating('<%=i%>')"
+                                for="rating<%=i%>" class="text-2xl text-yellow-400 cursor-pointer">
+                                <i class="fa-regular fa-star"></i>
+                            </label>
+                        <%}%>
+                    <% } %>
+                </div>
+                <input type="text" name="review" id="comment" 
+                    class="w-full border border-gray-300 rounded-md p-3 mt-2"/>
+                <button 
+                    onclick="handleAddReview()"
+                    class="bg-black text-white py-3 px-8 rounded-md hover:text-blue-500 transition mt-2"
+                    id="add-review">Add review</button>
+            </div>
+        <% } %>
+    </div>
+    <!--Review-->
     <!-- Related product -->
     <div class="container pb-16">
         <h2 class="text-2xl font-medium text-gray-800 uppercase mb-6">Related products</h2>
@@ -267,7 +331,7 @@
     <footer class="bg-white pt-16 pb-12 border-t border-gray-100">
         <div class="container grid grid-cols-1 ">
             <div class="col-span-1 space-y-4">
-                <img src="/assets//images//logo.svg" alt="logo" class="w-30">
+                <img src="/assets/images/logo.svg" alt="logo" class="w-30">
                 <div class="mr-2">
                     <p class="text-gray-500">
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, hic?
@@ -344,8 +408,11 @@
         </div>
     </div>
     <!-- ./copyright -->
+    <script>
+        const user = "<%= JSON.stringify(user) %>"; 
+    </script>
     <script src="/js/common/util.js"></script>
-    <script src="/js/productDetails.js"></script>
+    <script src="/js/productDetails/productDetails.js"></script>
 </body>
 
 </html>
