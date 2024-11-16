@@ -817,6 +817,10 @@ h1, h2, h3, h4, h5, h6 {
   inset: 0px;
 }
 
+.-left-8 {
+  left: -2rem;
+}
+
 .-right-3 {
   right: -0.75rem;
 }
@@ -875,6 +879,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .col-span-3 {
   grid-column: span 3 / span 3;
+}
+
+.col-span-9 {
+  grid-column: span 9 / span 9;
 }
 
 .mx-3 {
@@ -979,6 +987,10 @@ h1, h2, h3, h4, h5, h6 {
   height: 3rem;
 }
 
+.h-14 {
+  height: 3.5rem;
+}
+
 .h-4 {
   height: 1rem;
 }
@@ -1011,8 +1023,16 @@ h1, h2, h3, h4, h5, h6 {
   height: 100vh;
 }
 
+.h-\[35px\] {
+  height: 35px;
+}
+
 .w-1\/2 {
   width: 50%;
+}
+
+.w-1\/3 {
+  width: 33.333333%;
 }
 
 .w-10 {
@@ -1027,8 +1047,16 @@ h1, h2, h3, h4, h5, h6 {
   width: 3rem;
 }
 
+.w-14 {
+  width: 3.5rem;
+}
+
 .w-2\/3 {
   width: 66.666667%;
+}
+
+.w-28 {
+  width: 7rem;
 }
 
 .w-3\/5 {
@@ -1080,6 +1108,18 @@ h1, h2, h3, h4, h5, h6 {
   width: max-content;
 }
 
+.w-\[20px\] {
+  width: 20px;
+}
+
+.w-\[40px\] {
+  width: 40px;
+}
+
+.w-\[35px\] {
+  width: 35px;
+}
+
 .min-w-10 {
   min-width: 2.5rem;
 }
@@ -1094,6 +1134,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .max-w-xl {
   max-width: 36rem;
+}
+
+.flex-shrink-0 {
+  flex-shrink: 0;
 }
 
 .flex-grow {
@@ -1113,6 +1157,10 @@ h1, h2, h3, h4, h5, h6 {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
+.cursor-not-allowed {
+  cursor: not-allowed;
+}
+
 .cursor-pointer {
   cursor: pointer;
 }
@@ -1125,6 +1173,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .grid-cols-1 {
   grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.grid-cols-12 {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
 }
 
 .grid-cols-2 {
@@ -1227,6 +1279,12 @@ h1, h2, h3, h4, h5, h6 {
   margin-left: calc(1.5rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
+.space-y-1 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(0.25rem * var(--tw-space-y-reverse));
+}
+
 .space-y-2 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;
   margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
@@ -1305,6 +1363,10 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 0.125rem;
 }
 
+.rounded-xl {
+  border-radius: 0.75rem;
+}
+
 .rounded-b {
   border-bottom-right-radius: 0.25rem;
   border-bottom-left-radius: 0.25rem;
@@ -1360,6 +1422,16 @@ h1, h2, h3, h4, h5, h6 {
   border-color: rgb(253 61 87 / var(--tw-border-opacity));
 }
 
+.border-red-400 {
+  --tw-border-opacity: 1;
+  border-color: rgb(248 113 113 / var(--tw-border-opacity));
+}
+
+.border-black {
+  --tw-border-opacity: 1;
+  border-color: rgb(0 0 0 / var(--tw-border-opacity));
+}
+
 .bg-black {
   --tw-bg-opacity: 1;
   background-color: rgb(0 0 0 / var(--tw-bg-opacity));
@@ -1383,6 +1455,11 @@ h1, h2, h3, h4, h5, h6 {
 .bg-primary {
   --tw-bg-opacity: 1;
   background-color: rgb(253 61 87 / var(--tw-bg-opacity));
+}
+
+.bg-red-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(248 113 113 / var(--tw-bg-opacity));
 }
 
 .bg-red-600 {
@@ -1423,6 +1500,10 @@ h1, h2, h3, h4, h5, h6 {
 .object-cover {
   -o-object-fit: cover;
      object-fit: cover;
+}
+
+.p-1 {
+  padding: 0.25rem;
 }
 
 .p-1\.5 {
@@ -1543,6 +1624,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .pl-12 {
   padding-left: 3rem;
+}
+
+.pl-8 {
+  padding-left: 2rem;
 }
 
 .pr-3 {
@@ -1705,6 +1790,11 @@ h1, h2, h3, h4, h5, h6 {
   color: rgb(239 68 68 / var(--tw-text-opacity));
 }
 
+.text-red-600 {
+  --tw-text-opacity: 1;
+  color: rgb(220 38 38 / var(--tw-text-opacity));
+}
+
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
@@ -1820,6 +1910,11 @@ h1, h2, h3, h4, h5, h6 {
   background-color: transparent;
 }
 
+.hover\:text-blue-500:hover {
+  --tw-text-opacity: 1;
+  color: rgb(59 130 246 / var(--tw-text-opacity));
+}
+
 .hover\:text-blue-700:hover {
   --tw-text-opacity: 1;
   color: rgb(29 78 216 / var(--tw-text-opacity));
@@ -1843,11 +1938,6 @@ h1, h2, h3, h4, h5, h6 {
 .hover\:text-white:hover {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-
-.hover\:text-blue-500:hover {
-  --tw-text-opacity: 1;
-  color: rgb(59 130 246 / var(--tw-text-opacity));
 }
 
 .focus\:z-10:focus {
