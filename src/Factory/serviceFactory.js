@@ -4,12 +4,13 @@ import dbProductService from "../Product/dbService.js";
 import dbProductDetailsService from "../ProductDetails/dbService.js";
 import dbUserService from "../User/dbService.js";
 import dbReviewService from "../Review/dbService.js";
-import { get } from "mongoose";
+import dbCartService from "../Cart/dbService.js"
 
 const productService=dbProductService;
 const productDetailsServce=dbProductDetailsService;
 const userService=dbUserService;
 const reviewService=dbReviewService;
+const cartService=dbCartService;
 
 const serviceFactory = {
     getProductSerVice:()=>{
@@ -24,6 +25,9 @@ const serviceFactory = {
     getReviewService:()=>{
         return reviewService;
     },
+    getCartService:()=>{
+        return cartService;
+    }
 };
 
 export default serviceFactory;

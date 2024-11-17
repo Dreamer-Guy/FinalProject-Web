@@ -8,7 +8,7 @@ const mockProducts = [
     "brand": "Apple",
     "rating": 4.5,
     "totalStock": 40,
-    "image": "https://images.pexels.com/photos/6078127/pexels-photo-6078127.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+    "image": "https://cdn.tgdd.vn/Products/Images/42/250258/iphone-13-midnight-1-600x600.jpg"
   },
   {
     "type": "Laptop",
@@ -18,7 +18,7 @@ const mockProducts = [
     "brand": "ASUS",
     "rating": 4.7,
     "totalStock": 25,
-    "image": "https://images.pexels.com/photos/2582937/pexels-photo-2582937.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+    "image": "https://cdn.tgdd.vn/Products/Images/42/250258/iphone-13-midnight-1-600x600.jpg"
   },
   {
     "type": "Television",
@@ -28,7 +28,7 @@ const mockProducts = [
     "brand": "Samsung",
     "rating": 4.6,
     "totalStock": 30,
-    "image": "https://images.pexels.com/photos/1448378/pexels-photo-1448378.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+    "image": "https://cdn.tgdd.vn/Products/Images/42/250258/iphone-13-midnight-1-600x600.jpg"
   },
   {
     "type": "Watch",
@@ -38,7 +38,7 @@ const mockProducts = [
     "brand": "Apple",
     "rating": 4.4,
     "totalStock": 50,
-    "image": "https://images.pexels.com/photos/8927576/pexels-photo-8927576.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+    "image": "https://cdn.tgdd.vn/Products/Images/42/250258/iphone-13-midnight-1-600x600.jpg"
   },
   {
     "type": "Camera",
@@ -48,7 +48,7 @@ const mockProducts = [
     "brand": "Sony",
     "rating": 4.8,
     "totalStock": 15,
-    "image": "https://images.pexels.com/photos/10711676/pexels-photo-10711676.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+    "image": "https://cdn.tgdd.vn/Products/Images/42/250258/iphone-13-midnight-1-600x600.jpg"
   },
   {
     "type": "Phone",
@@ -58,7 +58,7 @@ const mockProducts = [
     "brand": "Samsung",
     "rating": 4.3,
     "totalStock": 60,
-    "image": "https://images.pexels.com/photos/4601065/pexels-photo-4601065.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+    "image": "https://cdn.tgdd.vn/Products/Images/42/250258/iphone-13-midnight-1-600x600.jpg"
   },
   {
     "type": "Laptop",
@@ -68,7 +68,7 @@ const mockProducts = [
     "brand": "Acer",
     "rating": 4.5,
     "totalStock": 20,
-    "image": "https://images.pexels.com/photos/2978837/pexels-photo-2978837.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+    "image": "https://cdn.tgdd.vn/Products/Images/42/250258/iphone-13-midnight-1-600x600.jpg"
   },
   {
     "type": "Television",
@@ -78,7 +78,7 @@ const mockProducts = [
     "brand": "LG",
     "rating": 4.2,
     "totalStock": 35,
-    "image": "https://images.pexels.com/photos/1031283/pexels-photo-1031283.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+    "image": "https://cdn.tgdd.vn/Products/Images/42/250258/iphone-13-midnight-1-600x600.jpg"
   },
   {
     "type": "Watch",
@@ -88,7 +88,7 @@ const mockProducts = [
     "brand": "Samsung",
     "rating": 4.1,
     "totalStock": 75,
-    "image": "https://images.pexels.com/photos/3603798/pexels-photo-3603798.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+    "image": "https://cdn.tgdd.vn/Products/Images/42/250258/iphone-13-midnight-1-600x600.jpg"
   },
   {
     "type": "Camera",
@@ -98,7 +98,7 @@ const mockProducts = [
     "brand": "Canon",
     "rating": 4.9,
     "totalStock": 8,
-    "image": "https://images.pexels.com/photos/2104156/pexels-photo-2104156.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+    "image": "https://cdn.tgdd.vn/Products/Images/42/250258/iphone-13-midnight-1-600x600.jpg"
   }
 ];
 
@@ -264,6 +264,22 @@ const mockReviews=[
       "createdAt": "2024-11-13T12:37:56.789Z"
   }
 ];
+
+const mockCarts=[
+    {
+      userId: "647f8fc01234567890123456",
+      items: [
+        {
+          productId: "648a1fc01234567890123456",
+          quantity: 2
+        },
+        {
+          productId: "648a1fc01234567890123457",
+          quantity: 3
+        }
+      ]
+    },
+];
 // const productSchema = new mongoose.Schema({
 //     type: { type: String, required: true },
 //     name: { type: String, required: true },
@@ -284,14 +300,12 @@ export const up = async (db, client) => {
     const users=await db.collection("users").insertMany(mockUsers);
     const userIdMap=users.insertedIds;
     const productIdMap = products.insertedIds;
-    console.log(productIdMap);
     const updatedProductDetails = mockProductDetails.map((detail,index) => {
       return {
         ...detail,
         productId: productIdMap[index].toString(),  
       };
     });
-
     const updatedReviews=mockReviews.map((review)=>{
         return {
           ...review,
@@ -299,9 +313,21 @@ export const up = async (db, client) => {
           user:userIdMap[0],
         }
     });
+    const updatedCarts=mockCarts.map((cart)=>{
+      return {
+        ...cart,
+        userId:userIdMap[0],
+        items:cart.items.map((item,index)=>{
+          return {
+            ...item,
+            productId:productIdMap[index],
+          }
+        })
+      }
+    });
     await db.collection("productdetails").insertMany(updatedProductDetails);
-    
     await db.collection("reviews").insertMany(updatedReviews);
+    await db.collection("carts").insertMany(updatedCarts);
   };
 
 
@@ -315,4 +341,5 @@ export const down = async (db, client) => {
     await db.collection("productdetails").drop();
     await db.collection("users").drop();
     await db.collection("reviews").drop();
+    await db.collection("carts").drop();
 };
