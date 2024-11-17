@@ -20,7 +20,10 @@ const logoutUser=async(req,res)=>{
 }
 
 const register=async(req,res)=>{
-    res.render('register');
+    const user=req.user;
+    res.render('register',{
+        user,
+    });
 }
 
 

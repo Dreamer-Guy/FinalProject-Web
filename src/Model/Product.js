@@ -14,6 +14,7 @@ const productSchema= new mongoose.Schema({
         type:Number,
         default:0,
     },
+    description: {type: String,default:"No description"},
 });
 
 //exptected receit an arr
@@ -34,7 +35,7 @@ productSchema.query.byPrice=function(minPrice,maxPrice){
     return this.where({price:{$gte:minPrice,$lte:maxPrice}});
 }
 
-productSchema.index({name:'text',brand:'text',type:'text'});
+productSchema.index({name:'text',brand:'text',type:'text',description:'text'});
 
 const Product=mongoose.model('Product',productSchema);
 export default Product;

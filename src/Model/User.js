@@ -5,7 +5,10 @@ const userSchema= new mongoose.Schema({
     fullName: {type: String, required: true},
     userName: {type: String, required: true,unique:true},
     password: {type: String, required: true},
-    role:{type:String,default:"user"}
+    role:{type:String,default:"user"},
+    email:{type:String},
+    avatar:{type:String,default:"https://www.kindpng.com/picc/m/78-785827_user-profile-avatar-login"},
+    birthDate:{type:Date},
 });
 const User=mongoose.model('User',userSchema);
 

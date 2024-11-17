@@ -6,7 +6,10 @@ const userRouter = expresss.Router();
 
 
 userRouter.get("/login", (req, res) => {
-    res.render("login");
+    const user=req.user;
+    res.render("login",{
+        user,
+    });
 });
 
 userRouter.post("/loginUser",passportLocal.authenticate('local'),(req, res) => {

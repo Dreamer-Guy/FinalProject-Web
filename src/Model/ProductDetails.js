@@ -7,7 +7,6 @@ const ProductDetailSchema=new mongoose.Schema({
         type:String,
         required:true,
     },
-    description:String,
     weight:String,
 },options);
 
