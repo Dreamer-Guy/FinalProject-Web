@@ -83,12 +83,12 @@ const fetchAllFilteredProducts = async (req, res) => {
             minPrice,maxPrice}=getQueryParams(req);
         const {onSales}=req.query;
         let products = await productService.getProducts({ brands, types, sortField, sortOrder,minPrice,maxPrice });
+        if(onSales==='true'){
+            products=products.filter((product)=>product.salePrice>0);
+        }
         const totalProducts=products.length;
         if(page && rowsPerPage){
             products=products.slice((page-1)*rowsPerPage,page*rowsPerPage);
-        }
-        if(onSales==='true'){
-            products=products.filter((product)=>product.salePrice>0);
         }
         const populateProducts = products.map((product) => (populateProduct(product)));
         return res.render('products', {

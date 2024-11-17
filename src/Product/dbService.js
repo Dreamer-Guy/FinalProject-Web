@@ -27,7 +27,8 @@ const productService = {
             $or: [
                 { type: { $regex: searchTerm, $options: 'i' } },
                 { brand: { $regex: searchTerm, $options: 'i' } },
-                { name: { $regex: searchTerm, $options: 'i' } }
+                { name: { $regex: searchTerm, $options: 'i' } },
+                {description:{ $regex: searchTerm, $options: 'i' }},
             ]
         });
         return products;
