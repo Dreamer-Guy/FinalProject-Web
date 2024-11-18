@@ -129,7 +129,7 @@ const apiGetAllFilteredProducts = async (req, res) => {
 
 const searchProducts = async (req, res) => {
     try {
-        const user = req.session?.user;
+        const user = req.user;
         const { search } = req.query;
         const decodedSearch=decodeURIComponent(search);
         const rawProducts = await productService.getProductsBySearch(decodedSearch);
