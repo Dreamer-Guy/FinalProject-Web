@@ -3,6 +3,8 @@ import serviceFactory from "../Factory/serviceFactory.js";
 const orderService=serviceFactory.getOrderService();
 
 
+const ROW_PER_PAGE=2;
+
 const formatDate=(date)=>{
     return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
 }
@@ -18,6 +20,7 @@ const getOrderViewPage=async(req,res)=>{
     const user=req.user||{_id:"673acf13fbb04dec26fc84c6"};
     const rawOrders=await orderService.getOrdersByUserId(user._id);
     const orders=rawOrders.map(order=>populateOrder(order));
+    const totalOrders=orders.length;
     return res.render("order",{
         user:user,
         orders:orders,
