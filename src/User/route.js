@@ -1,7 +1,7 @@
 import expresss from "express";
 import {registerUser,logoutUser,register} from "./controller.js";
 import passportLocal from "../middleWare/PassPort.js";
-
+import googlePassPort from "../middleWare/googlePassport.js";
 const userRouter = expresss.Router();
 
 
@@ -16,6 +16,16 @@ userRouter.post("/loginUser",passportLocal.authenticate('local'),(req, res) => {
     // console.log(req.session);
     // console.log(req.sessionID);
     return res.json({message:"Login Success"});
+});
+
+userRouter.get("/auth/google",googlePassPort.authenticate('google'),(req, res) => {
+    return res.json({message:"Login Success"});
+});
+
+userRouter.get("/auth/google/callback",googlePassPort.authenticate('google',
+    { failureRedirect: '/user/login' }),
+    (req, res) => {
+        return res.redirect('/products/get');
 });
 
 userRouter.get("/isLogin",(req, res) => {
