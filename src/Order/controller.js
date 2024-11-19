@@ -23,4 +23,15 @@ const getOrderViewPage=async(req,res)=>{
         orders:orders,
     });
 }
-export {getOrderViewPage};
+
+const getOrderDetailsPage=async(req,res)=>{
+    const user=req.user||{_id:"673acf13fbb04dec26fc84c6"};
+    const orderId=req.params.id;
+    const order=await orderService.getOrderById(orderId);
+    const populatedOrder=populateOrder(order);
+    return res.render("orderDetails",{
+        user:user,
+        order:populatedOrder,
+    });
+};
+export {getOrderViewPage,getOrderDetailsPage};

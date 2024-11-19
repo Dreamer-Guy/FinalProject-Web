@@ -15,9 +15,12 @@ const orderSchema= new mongoose.Schema({
             quantity:Number,
         }
     ],
-    addressId:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'Address',
+    address:{
+        fullName:String,
+        street:String,
+        city:String,
+        postalCode:String,
+        phone:String,
     },
     total: {type: Number, required: true},
     orderStatus: {type: String, required: true},
