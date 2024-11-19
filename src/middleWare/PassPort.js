@@ -2,7 +2,6 @@ import { Strategy } from "passport-local";
 import { hashPassword, comparePlainAndHashed } from "../utils/hashAndCompare.js";
 import serviceFactory from "../Factory/serviceFactory.js";
 import passport from "passport";
-import { raw } from "express";
 const userService = serviceFactory.getUserService();
 const localStrategy = new Strategy(async (username, password, done) => {
     try {

@@ -11,7 +11,6 @@ const orderSchema= new mongoose.Schema({
             brand:String,
             image:String,
             price:Number,
-            salePrice:Number,
             quantity:Number,
         }
     ],
