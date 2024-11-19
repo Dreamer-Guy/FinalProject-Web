@@ -10,7 +10,8 @@ import productDetailsRouter from "./src/ProductDetails/route.js";
 import userRouter from './src/User/route.js';
 import homeRouter from './src/HomePage/controller.js';
 import reviewRouter from './src/Review/route.js';
-import cartRouter from "./src/Cart/route.js"
+import cartRouter from "./src/Cart/route.js";
+import orderRouter from './src/Order/route.js';
 
 const app = express();
 const PORT = 3000;
@@ -38,7 +39,7 @@ app.use("/products", productRouter);
 app.use("/user", userRouter);
 app.use("/reviews", reviewRouter);
 app.use("/carts", cartRouter);
-
+app.use("/orders", orderRouter);
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

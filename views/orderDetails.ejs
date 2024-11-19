@@ -92,23 +92,23 @@
                 <div
                     class="absolute w-full left-0 top-full bg-white shadow-md py-3 divide-y divide-gray-300 divide-dashed opacity-0 group-hover:opacity-100 transition duration-300 invisible group-hover:visible">
                     <a href="#" class="flex items-center px-6 py-3 hover:bg-gray-100 transition">
-                        <img src="../assets/images/icons/laptop.svg" alt="sofa" class="w-5 h-5 object-contain">
+                        <img src="/assets/images/icons/laptop.svg" alt="sofa" class="w-5 h-5 object-contain">
                         <span class="ml-6 text-gray-600 text-sm">Laptop</span>
                     </a>
                     <a href="#" class="flex items-center px-6 py-3 hover:bg-gray-100 transition">
-                        <img src="../assets/images/icons/phone.svg" alt="terrace" class="w-5 h-5 object-contain">
+                        <img src="/assets/images/icons/phone.svg" alt="terrace" class="w-5 h-5 object-contain">
                         <span class="ml-6 text-gray-600 text-sm">Phone</span>
                     </a>
                     <a href="#" class="flex items-center px-6 py-3 hover:bg-gray-100 transition">
-                        <img src="../assets/images/icons/television-tv.svg" alt="bed" class="w-5 h-5 object-contain">
+                        <img src="/assets/images/icons/television-tv.svg" alt="bed" class="w-5 h-5 object-contain">
                         <span class="ml-6 text-gray-600 text-sm">Television</span>
                     </a>
                     <a href="#" class="flex items-center px-6 py-3 hover:bg-gray-100 transition">
-                        <img src="../assets/images/icons/watch.svg" alt="office" class="w-5 h-5 object-contain">
+                        <img src="/assets/images/icons/watch.svg" alt="office" class="w-5 h-5 object-contain">
                         <span class="ml-6 text-gray-600 text-sm">Watch</span>
                     </a>
                     <a href="#" class="flex items-center px-6 py-3 hover:bg-gray-100 transition">
-                        <img src="../assets/images/icons/photo-camera.svg" alt="outdoor" class="w-5 h-5 object-contain">
+                        <img src="/assets/images/icons/photo-camera.svg" alt="outdoor" class="w-5 h-5 object-contain">
                         <span class="ml-6 text-gray-600 text-sm">Camera</span>
                     </a>
                 </div>
@@ -150,7 +150,7 @@
         <div class="w-1/4 hidden md:block">
             <div class="px-4 py-3 shadow flex items-center gap-4">
                 <div class="flex-shrink-0">
-                    <img src="../assets/images/avatar.png" alt="profile"
+                    <img src="/assets/images/avatar.png" alt="profile"
                         class="rounded-full w-14 h-14 border border-gray-200 p-1 object-cover">
                 </div>
                 <div class="flex-grow">
@@ -243,7 +243,7 @@
                 <div class="flex flex-row justify-between items-start bg-white p-2">
                     <div class="px-4 py-3 shadow flex items-center gap-4">
                         <div class="flex-shrink-0">
-                            <img src="../assets/images/avatar.png" alt="profile"
+                            <img src="/assets/images/avatar.png" alt="profile"
                                 class="rounded-full w-14 h-14 border border-gray-200 p-1 object-cover">
                         </div>
                         <div class="flex-grow">
@@ -332,93 +332,71 @@
         </div>
         <!-- ./diaglog -->
 
-        <!-- cart -->
+        <!-- order details -->
         <div class="w-full md:w-3/4 flex flex-col gap-5">
-            <% cart.items.forEach((item,index)=>{ %>
-                <div class="w-full flex flex-col md:flex-row items-center justify-between border gap-3 md:gap-6 p-4 border-gray-200 rounded">
-                    <div class="w-full md:w-2/6 flex flex-row justify-between items-center gap-3">
-                        <div class="">
-                            <img src="<%=item.productId.image%>" alt="product 6" class="w-[60px] h-[60px] object-cover">
-                        </div>
-                        <div class="flex flex-col justify-center items-end gap-1">
-                            <h2 class="text-gray-800 text-lg font-medium uppercase"><%= item.productId.name %></h2>
-                            <p class="text-gray-500 text-sm">Availability: <span class="text-green-600"><%=item.productId.totalStock %></span></p>
-                        </div>
-                    </div>
-        
-                    <div class="w-full md:w-4/6 flex flex-row gap-4 justify-center md:justify-end items-center">
-                        <div class="flex flex-row justify-center gap-4">
-                            <% if(item.productId.salePrice>0){%>
-                                <div class="text-primary text-lg font-semibold">$<%= item.productId.salePrice %></div>
-                                <div class="text-gray-700 text-lg font-semibold line-through">$<%= item.productId.price %></div>
-                            <%}else{%>
-                                <div class="text-black text-lg font-semibold">$<%= item.productId.price%></div>
-                            <%}%>
-                        </div>
-                        
-                        <div class="flex flex-row gap-2 justify-center items-center">
-                            <button
-                                onclick="updateCartItems('<%= item.productId._id %>','<%= item.quantity-1%>')" 
-                                class="p-2 border border-black w-[35px] h-[35px] 
-                                flex justify-center items-center rounded-xl ">-</button>
-                            <span class="p-2 w-[35px] h-[35px] flex justify-center items-center"><%= item.quantity %></span>
-                            <button 
-                            onclick="updateCartItems('<%= item.productId._id %>','<%= item.quantity+1%>')"
-                                class="p-2 border border-black w-[35px] h-[35px] 
-                                flex justify-center items-center rounded-xl ">+</button>
-                        </div>
-        
-                        <div
-                            onclick="deleteCartItems('<%= item.productId._id %>')" 
-                            class="text-gray-600 cursor-pointer hover:text-primary">
-                            <i class="fa-solid fa-trash"></i>
-                        </div>
-                    </div>
-                </div>
-            <% }); %>
-
-            <div class="col-span-4 border border-gray-200 p-4 rounded">
-                <h4 class="text-gray-800 text-lg mb-4 font-medium uppercase">order summary</h4>
+            <div class="bg-gray-100 col-span-4 border border-gray-200 p-4 rounded">
+                <h3 class="text-gray-800 text-lg mb-4 font-medium uppercase">Order Details</h3>
                 <div class="space-y-2">
-                    <% cart.items.forEach((item,index)=>{ %>
-                        <div class="flex justify-between">
-                            <div>
-                                <h5 class="text-gray-800 font-medium">Italian shape sofa</h5>
-                                <p class="text-sm text-gray-600">Size: M</p>
-                            </div>
-                            <p class="text-gray-600">
-                                x<%= item.quantity %>
-                            </p>
-                            <% if(item.productId.salePrice>0){%>
-                                <p class="text-gray-800 font-medium">$<%= item.productId.salePrice %></p>
-                            <%}else{%>
-                                <p class="text-gray-800 font-medium">$<%= item.productId.price %></p>
-                            <%}%>
+                    <div class="flex flex-row gap-2">
+                        <h4 class="font-bold">Order ID:</h4>
+                        <p> <%=order._id%></p>
+                    </div>
+                    <div class="flex flex-row gap-2">
+                        <h4 class="font-bold">Order Date:</h4>
+                        <p> <%=order.createdAt%></p>
+                    </div>
+                    <div class="flex flex-row gap-2">
+                        <h4 class="font-bold">Order Status:</h4>
+                        <p> <%=order.orderStatus%></p>
+                    </div>
+                    <div class="flex flex-row gap-2">
+                        <h4 class="font-bold">Payment:</h4>
+                        <p> <%=order.checkoutStatus%></p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold">Shipping Address:</h4>
+                        <div class="px-5">
+                            <% for(const key of Object.keys(order.address)){ %>
+                                <p> <span class="text-sm font-semibold"><%=key%>:</span> <%=order.address[key]%></p>
+                            <% } %>
                         </div>
-                    <% }); %>
-                        
+                    </div>
+                    <div>
+                        <h4 class="font-bold">Items:</h4>
+                        <div class="px-3 flex flex-col gap-2">
+                            <div class="flex flex-row justify-between">
+                                <div class="flex flex-row gap-5">
+                                    <div class="font-semibold">Product</div>
+                                </div>
+                                <div class="flex flex-row gap-6 items-center justify-between w-1/2">
+                                    <div class="font-semibold w-1/3 flex justify-center items-center">Quantity</div>
+                                    <div class="font-semibold w-1/3 flex justify-center items-center">Price</div>
+                                    <div class="font-semibold w-1/3 flex flex-row justify-end items-center">Total</div>
+                                </div>
+                            </div>
+                            <% for(const item of order.items){ %>
+                            <div class="flex flex-row justify-between w-full">
+                                <div class="flex flex-row gap-2 items-center w-1/2">
+                                    <div class="w-[30px] h-[30px] object-cover">
+                                        <img src="<%=item.image%>"/></div>
+                                    <div><%=item.name%></div>
+                                </div>
+                                <div class="flex flex-row gap-10 items-center justify-between w-1/2">
+                                    <div class="w-1/3 flex flex-row justify-center items-center"><%=item.quantity%></div>
+                                    <div class="w-1/3 flex flex-row justify-center items-center"><%=item.price%></div>
+                                    <div class="w-1/3 flex flex-row justify-end items-center">$<%=item.quantity*item.price%></div>
+                                </div>
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
                 </div>
-    
-                <div class="flex justify-between border-y border-gray-200 mt-1 text-gray-800 font-medium py-3 uppercas">
-                    <p>shipping</p>
-                    <p>Free</p>
-                </div>
-    
-                <div class="flex justify-between text-gray-800 font-medium py-3 uppercas">
+                
+                
+                <div class="flex justify-between text-gray-800 font-medium py-3 uppercase mt-2">
                     <p class="font-semibold">Total</p>
-                    <p>$1280</p>
-                </div>
-    
-                <div class="flex items-center mb-4 mt-2">
-                    <input type="checkbox" name="aggrement" id="aggrement"
-                        class="text-primary focus:ring-0 rounded-sm cursor-pointer w-3 h-3">
-                    <label for="aggrement" class="text-gray-600 ml-3 cursor-pointer text-sm">I agree to the <a href="#"
-                            class="text-primary">terms & conditions</a></label>
-                </div>
-    
-                <a href="#"
-                    class="block w-full py-3 px-4 text-center text-white bg-primary border border-primary rounded-md hover:bg-transparent hover:text-primary transition font-medium">Place
-                    order</a>
+                    <p>$<%= order.items.reduce((acc,item)=>acc+=item.quantity*item.price,0)%></p>
+                </div>    
             </div>
         </div>
         <!-- ./cart -->
@@ -503,7 +481,7 @@
         <div class="container flex items-center justify-between">
             <p class="text-white">&copy; TailCommerce - All Right Reserved</p>
             <div>
-                <img src="../assets/images/methods.png" alt="methods" class="h-5">
+                <img src="/assets/images/methods.png" alt="methods" class="h-5">
             </div>
         </div>
     </div>

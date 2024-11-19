@@ -334,91 +334,65 @@
 
         <!-- cart -->
         <div class="w-full md:w-3/4 flex flex-col gap-5">
-            <% cart.items.forEach((item,index)=>{ %>
-                <div class="w-full flex flex-col md:flex-row items-center justify-between border gap-3 md:gap-6 p-4 border-gray-200 rounded">
-                    <div class="w-full md:w-2/6 flex flex-row justify-between items-center gap-3">
-                        <div class="">
-                            <img src="<%=item.productId.image%>" alt="product 6" class="w-[60px] h-[60px] object-cover">
-                        </div>
-                        <div class="flex flex-col justify-center items-end gap-1">
-                            <h2 class="text-gray-800 text-lg font-medium uppercase"><%= item.productId.name %></h2>
-                            <p class="text-gray-500 text-sm">Availability: <span class="text-green-600"><%=item.productId.totalStock %></span></p>
-                        </div>
-                    </div>
-        
-                    <div class="w-full md:w-4/6 flex flex-row gap-4 justify-center md:justify-end items-center">
-                        <div class="flex flex-row justify-center gap-4">
-                            <% if(item.productId.salePrice>0){%>
-                                <div class="text-primary text-lg font-semibold">$<%= item.productId.salePrice %></div>
-                                <div class="text-gray-700 text-lg font-semibold line-through">$<%= item.productId.price %></div>
-                            <%}else{%>
-                                <div class="text-black text-lg font-semibold">$<%= item.productId.price%></div>
-                            <%}%>
-                        </div>
-                        
-                        <div class="flex flex-row gap-2 justify-center items-center">
-                            <button
-                                onclick="updateCartItems('<%= item.productId._id %>','<%= item.quantity-1%>')" 
-                                class="p-2 border border-black w-[35px] h-[35px] 
-                                flex justify-center items-center rounded-xl ">-</button>
-                            <span class="p-2 w-[35px] h-[35px] flex justify-center items-center"><%= item.quantity %></span>
-                            <button 
-                            onclick="updateCartItems('<%= item.productId._id %>','<%= item.quantity+1%>')"
-                                class="p-2 border border-black w-[35px] h-[35px] 
-                                flex justify-center items-center rounded-xl ">+</button>
-                        </div>
-        
-                        <div
-                            onclick="deleteCartItems('<%= item.productId._id %>')" 
-                            class="text-gray-600 cursor-pointer hover:text-primary">
-                            <i class="fa-solid fa-trash"></i>
-                        </div>
-                    </div>
-                </div>
-            <% }); %>
-
-            <div class="col-span-4 border border-gray-200 p-4 rounded">
-                <h4 class="text-gray-800 text-lg mb-4 font-medium uppercase">order summary</h4>
+            <div class="bg-gray-100 col-span-4 border border-gray-200 p-4 rounded">
+                <h4 class="text-gray-800 text-lg mb-4 font-medium uppercase">Your Orders</h4>
                 <div class="space-y-2">
-                    <% cart.items.forEach((item,index)=>{ %>
-                        <div class="flex justify-between">
-                            <div>
-                                <h5 class="text-gray-800 font-medium">Italian shape sofa</h5>
-                                <p class="text-sm text-gray-600">Size: M</p>
+                    <div class="hidden md:flex flex-col gap-3">
+                        <div class="flex flex-row gap-2 w-full items-center justify-between
+                                bg-white border border-black rounded-md text-xl font-bold">
+                            <div class="w-1/4 flex justify-center items-center">Order.No</div>
+                            <div class="w-3/4 flex flex-row justify-between items-center">
+                                <div class="w-1/4 break-words flex justify-center items-center">Date</div>
+                                <div class="w-1/4 break-words flex justify-center items-center">Payment</div>
+                                <div class="w-1/4 break-words flex justify-center items-center">Status</div>
+                                <div class="w-1/4 break-words flex justify-center items-center">Total</div>
                             </div>
-                            <p class="text-gray-600">
-                                x<%= item.quantity %>
-                            </p>
-                            <% if(item.productId.salePrice>0){%>
-                                <p class="text-gray-800 font-medium">$<%= item.productId.salePrice %></p>
-                            <%}else{%>
-                                <p class="text-gray-800 font-medium">$<%= item.productId.price %></p>
-                            <%}%>
+                
                         </div>
-                    <% }); %>
-                        
+                        <% orders.forEach((order,index)=>{ %>
+                            <div
+                                onclick="handleGetOrderDetails('<%=order._id%>')" 
+                                class="flex flex-row gap-2 items-center justify-between bg-white 
+                                        border border-black rounded-lg text-sm p-2 w-full cursor-pointer">
+                                <div class="w-1/4 break-words flex justify-center items-center"><%=index+1%></div>
+                                <div class="w-3/4 flex flex-row justify-between items-center flex-wrap">
+                                    <div class="w-1/4 break-words flex justify-center 
+                                        items-center"><%=order.createdAt%></div>
+                                    <div class="w-1/4 break-words flex justify-center 
+                                        items-center"><%=order.checkoutStatus%></div>
+                                    <div class="w-1/4 break-words flex justify-center 
+                                        items-center"><%=order.orderStatus%></div>
+                                    <div class="w-1/4 break-words flex justify-center 
+                                        items-center">$<%=order.total%></div>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                    <div class="md:hidden flex flex-col gap-3">
+                        <% orders.forEach((order,index)=>{ %>
+                            <div
+                                onclick="handleGetOrderDetails('<%=order._id%>')"  
+                                class="flex flex-col border border-black rounded-md p-2">
+                                <div class="flex flex-row gap-3 justify-between items-center" >
+                                    <div class="">
+                                        <span class="text-lg font-semibold">Order.No:</span> <%=index+1%></div>
+                                    <div><span class="text-lg font-semibold">Total:</span> $<%=order.total%></div> 
+                                </div>
+                                <div><span class="text-lg font-semibold">Date:</span> <%=order.createdAt%></div>
+                                <div class="flex flex-row justify-between items-center gap-3">
+                                    <div><span class="text-lg font-semibold">Payment:</span> <%=order.checkoutStatus%></div>
+                                    <div><span class="text-lg font-semibold">Status:</span> <%=order.orderStatus%></div>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
                 </div>
-    
-                <div class="flex justify-between border-y border-gray-200 mt-1 text-gray-800 font-medium py-3 uppercas">
-                    <p>shipping</p>
-                    <p>Free</p>
-                </div>
-    
+                
+                
                 <div class="flex justify-between text-gray-800 font-medium py-3 uppercas">
                     <p class="font-semibold">Total</p>
-                    <p>$1280</p>
-                </div>
-    
-                <div class="flex items-center mb-4 mt-2">
-                    <input type="checkbox" name="aggrement" id="aggrement"
-                        class="text-primary focus:ring-0 rounded-sm cursor-pointer w-3 h-3">
-                    <label for="aggrement" class="text-gray-600 ml-3 cursor-pointer text-sm">I agree to the <a href="#"
-                            class="text-primary">terms & conditions</a></label>
-                </div>
-    
-                <a href="#"
-                    class="block w-full py-3 px-4 text-center text-white bg-primary border border-primary rounded-md hover:bg-transparent hover:text-primary transition font-medium">Place
-                    order</a>
+                    <p>$<%=orders.reduce((acc,order)=>(acc+=order.total),0)%></p>
+                </div>    
             </div>
         </div>
         <!-- ./cart -->
@@ -508,7 +482,7 @@
         </div>
     </div>
     <!-- ./copyright -->
-    <script src="/js/cart/cart.js"></script>
+    <script src="/js/order/order.js"></script>
 </body>
 
 </html>
