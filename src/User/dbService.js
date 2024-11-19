@@ -8,6 +8,14 @@ const userService={
         const user=await User.findOne({$or:[{email:emailOrUsername},{userName:emailOrUsername}]});
         return user;
     },
+    getUserByUserName:async(userName)=> {
+        const user=await User.findOne({userName:userName});
+        return user;
+    },
+    isUserExistByUserName: async (userName) => {
+        const user=await User.findOne({userName:userName});
+        return user?true:false;
+    },
     createUser: async (user) => {
         const newUser=new User(user);
         return newUser;

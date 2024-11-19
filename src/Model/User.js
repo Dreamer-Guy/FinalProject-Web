@@ -6,7 +6,7 @@ const userSchema= new mongoose.Schema({
     userName: {type: String, required: true,unique:true},
     password: {type: String, required: true},
     role:{type:String,default:"user"},
-    email:{type:String},
+    email:{type:String,default:""},
     avatar:{type:String,default:"https://www.kindpng.com/picc/m/78-785827_user-profile-avatar-login"},
     birthDate:{type:Date},
 });

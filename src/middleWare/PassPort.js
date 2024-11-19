@@ -28,12 +28,13 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
     try {
-        //console.log("deserializeUser\n\n\n\n", id);
         const rawUser = await userService.getUserById(id);
         const user={
             _id:rawUser._id.toString(),
             fullName:rawUser.fullName,
             userName:rawUser.userName,
+            avatar:rawUser.avatar,
+            email:rawUser.email,
             role:rawUser.role,
         }
         done(null, user);

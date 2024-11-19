@@ -6,6 +6,7 @@ import dbUserService from "../User/dbService.js";
 import dbReviewService from "../Review/dbService.js";
 import dbCartService from "../Cart/dbService.js";
 import dbOrderService from "../Order/dbService.js";
+import dbAddressService from "../Address/dbService.js";
 
 const productService=dbProductService;
 const productDetailsServce=dbProductDetailsService;
@@ -13,7 +14,7 @@ const userService=dbUserService;
 const reviewService=dbReviewService;
 const cartService=dbCartService;
 const orderService=dbOrderService;
-
+const addressService=dbAddressService;
 const serviceFactory = {
     getProductSerVice:()=>{
         return productService;
@@ -33,6 +34,9 @@ const serviceFactory = {
     getOrderService:()=>{
         return orderService;
     },
+    getAddressService:()=>{
+        return addressService;
+    }
 };
 
 export default serviceFactory;
