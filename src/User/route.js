@@ -1,8 +1,11 @@
 import expresss from "express";
-import {registerUser,logoutUser,register} from "./controller.js";
+import {register,registerUser,logoutUser,getForgotPasswordPage,getResetPasswordPage,forgotPassword,resetPassWord} 
+from "./controller.js";
 import passportLocal from "../middleWare/PassPort.js";
 import googlePassPort from "../middleWare/googlePassport.js";
 const userRouter = expresss.Router();
+
+
 
 
 userRouter.get("/login", (req, res) => {
@@ -35,5 +38,10 @@ userRouter.get("/isLogin",(req, res) => {
 userRouter.get("/logout",logoutUser);
 userRouter.get("/register",register);
 userRouter.post("/registeruser",registerUser);
+
+userRouter.get("/forgot/get",getForgotPasswordPage);
+userRouter.get("/reset/get",getResetPasswordPage);
+userRouter.get("/forgotPassword",forgotPassword);
+userRouter.post("/resetPassword",resetPassWord);
 
 export default userRouter;

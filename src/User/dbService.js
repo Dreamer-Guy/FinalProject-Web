@@ -12,6 +12,10 @@ const userService={
         const user=await User.findOne({userName:userName});
         return user;
     },
+    getUserByEmail:async(email)=> {
+        const user=await User.findOne({email:email});
+        return user;
+    },
     isUserExistByUserName: async (userName) => {
         const user=await User.findOne({userName:userName});
         return user?true:false;
