@@ -5,7 +5,6 @@ dotenv.config();
 const bcryptSaltRounds = process.env.BCRYPT_SALT_ROUNDS;
 
 const hashPassword = async (password) => {
-    console.log(bcryptSaltRounds);
     const hashedPassword = await bcrypt.hash(password, Number(bcryptSaltRounds));
     return hashedPassword;
 }

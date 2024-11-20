@@ -7,6 +7,7 @@ import dbReviewService from "../Review/dbService.js";
 import dbCartService from "../Cart/dbService.js";
 import dbOrderService from "../Order/dbService.js";
 import dbAddressService from "../Address/dbService.js";
+import dbForgotPasswordService from "../ForgotPasswordToken/dbService.js";
 
 const productService=dbProductService;
 const productDetailsServce=dbProductDetailsService;
@@ -15,6 +16,8 @@ const reviewService=dbReviewService;
 const cartService=dbCartService;
 const orderService=dbOrderService;
 const addressService=dbAddressService;
+const forgotPasswordService=dbForgotPasswordService;
+
 const serviceFactory = {
     getProductSerVice:()=>{
         return productService;
@@ -36,7 +39,10 @@ const serviceFactory = {
     },
     getAddressService:()=>{
         return addressService;
-    }
+    },
+    getForgotPasswordTokenService:()=>{
+        return forgotPasswordService;
+    },
 };
 
 export default serviceFactory;

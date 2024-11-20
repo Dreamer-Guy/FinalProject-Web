@@ -77,7 +77,6 @@ const populateProduct=(product)=>{
 const fetchAllFilteredProducts = async (req, res) => {
     try {
         const user = req.user;
-        console.log(user);
         const {brands,types,
             sortField,sortOrder,
             page=1,rowsPerPage=ROW_PER_PAGE,
