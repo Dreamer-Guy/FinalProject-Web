@@ -5,9 +5,11 @@ import dotenv from 'dotenv';
 import { randomBytes } from 'crypto';
 import uploadImage from "../utils/uploadImage.js"
 import fs from 'fs-extra';
+import { console } from "inspector";
 dotenv.config();
 
 const userService=serviceFactory.getUserService();
+const addressService=serviceFactory.getAddressService();
 const forgotPasswordTokenService=serviceFactory.getForgotPasswordTokenService();
 
 const generateGetPasswordLink = (queryData) => {
@@ -143,7 +145,43 @@ const updateInformation=async(req,res,next)=>{
     res.redirect('/user/profile')
 }
 
-export {register,registerUser,logoutUser,getForgotPasswordPage,getResetPasswordPage,forgotPassword,resetPassWord,editInformation,updateInformation};
+const changePassword = async (req, res) => {
+   try {
+    const {oldPassword,newPassword, confirmNewPassword}=req.body;
+    const user = req.user._id;
+    
+    // console.log(oldPassword);
+    // console.log(newPassword);
+    // console.log(confirmNewPassword);
+    
+    if(newPassword !== confirmNewPassword){
+        return res.status(400).send("New password and confirm password are not the same");
+    }
+    
+    const userObj = await userService.getUserById(user);
+    
+    if(!userObj){
+        return res.status(400).send("User not found");
+    }
+    
+    if(!await comparePlainAndHashed(oldPassword,userObj.password)){
+        return res.status(400).send("Old password is incorrect");
+    }
+    
+    userObj.password = await hashPassword(newPassword);
+    await userService.saveUser(userObj);
+    
+    // res.status(200).send("Success");
+    res.redirect('changePassword');
+    
+   } catch (e) {
+       return res.status(500)
+   }
+};
+
+
+
+export {register,registerUser,logoutUser,getForgotPasswordPage,getResetPasswordPage,forgotPassword,resetPassWord,editInformation,updateInformation, changePassword };
 
 
 

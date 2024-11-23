@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Information - Ecommerce Tailwind</title>
+    <title>Manage Address - Ecommerce Tailwind</title>
 
     <link rel="shortcut icon" href="../assets/images/favicon/favicon.ico" type="image/x-icon">
 
@@ -221,38 +221,45 @@
         <!-- ./sidebar -->
 
         <!-- info -->
-        <form id="profileForm" method="POST" action="/user/<%= user._id %>?_method=PUT"" class="col-span-9 shadow rounded px-6 pt-5 pb-7" enctype="multipart/form-data">
+        <form id="addressForm" method="POST" action="/user/manageAddress?_method=PUT" class="col-span-9 shadow rounded px-6 pt-5 pb-7">
             <h4 class="text-lg font-medium capitalize mb-4">
-                Profile information
+                Address
             </h4>
             <div class="space-y-4 grid grid-cols-2 gap-6">
                 <div class="grid grid-cols-1 gap-y-4">
                     <div class="">
                         <div>
-                            <label for="first">Fullname</label>
-                            <input type="text" name="fullName"  id="fullname" class="input-box" value="<%= user.fullName %>">
-                            <p id="fullname-error" class="text-red-600"></p>
+                            <label for="street">Street</label>
+                            <input type="text" name="street"  id="street" class="input-box" value="<%= address.street %>">
+                            
                         </div>
                     </div>
                     <div class="">
                         <div>
-                            <label for="birthday">Birthday</label>
-                            <input type="date" name="birthDate" id="birthday" class="input-box" value="<%= user.birthDay %>">
+                            <label for="city">City</label>
+                            <input type="text" name="city" id="city" class="input-box" value="<%= address.city %>">
                         </div>
                     </div>
                     <div class="">
                         <div>
-                            <label for="email">Email Address</label>
-                            <input type="email" name="email" id="email" class="input-box" value="<%= user.email %>">
-                            <p id="email-error" class="text-red-600"></p>
+                            <label for="postalCode">Postal Code</label>
+                            <input type="text" name="postalCode" id="postalCode" class="input-box" value="<%= address.postalCode %>">    
+                        </div>
+                    </div>
+                    <div class="">
+                        <div>
+                            <label for="phone">Phone</label>
+                            <input type="text" name="phone" id="phone" class="input-box" value="<%= address.phone %>">
+                        </div>
+                    </div>
+                    <div class="">
+                        <div>
+                            <label for="notes">Notes</label>
+                            <input type="text" name="notes" id="notes" class="input-box" value="<%= address.notes %>">
                         </div>
                     </div>
                 </div>
-                <div class="flex justify-center items-center flex-col">
-                <img id="imageDisplay" src="<%= user.avatar %>" alt="" class="h-52 w-52 rounded-full mb-10 border border-gray-200 p-1 object-cover" >
-                <label for="inputImage" class="bg-slate-400 px-3 py-1 rounded-md">Choose avatar</label>
-                <input id="inputImage" class="hidden" type="file" name="avatar">
-                </div>
+                
             </div>
             <div class="mt-4">
                 <button type="submit"
