@@ -3,6 +3,8 @@ import { hashPassword ,comparePlainAndHashed} from "../utils/hashAndCompare.js";
 import sendEmail from "../utils/sendEmail.js";
 import dotenv from 'dotenv';
 import { randomBytes } from 'crypto';
+import uploadImage from "../utils/uploadImage.js"
+import fs from 'fs-extra';
 dotenv.config();
 
 const userService=serviceFactory.getUserService();
@@ -117,9 +119,31 @@ const resetPassWord = async (req, res) => {
     }
 }
 
+const editInformation =async(req,res)=>{
+    const userObj=await userService.getUserById(req.user._id)
+    const user = {
+        _id:userObj._id,
+        fullName: userObj.fullName,
+        avatar:userObj.avatar,
+        birthDay:userObj.birthDate? userObj.birthDate.toISOString().split('T')[0] : "",
+        email:userObj.email
+    }
+    res.render('profile',{user})
+}
+const updateInformation=async(req,res,next)=>{
+    let user={}
+    if(req.file){
+        const filePath=req.file.path
+        const downLoadUrl= await uploadImage(filePath)
+        fs.unlinkSync(filePath)
+        user.avatar=downLoadUrl
+    }
+    user ={...user,...req.body}
+    const userObj =await userService.updateUser(req.params.id,user)
+    res.redirect('/user/profile')
+}
 
-
-export {register,registerUser,logoutUser,getForgotPasswordPage,getResetPasswordPage,forgotPassword,resetPassWord};
+export {register,registerUser,logoutUser,getForgotPasswordPage,getResetPasswordPage,forgotPassword,resetPassWord,editInformation,updateInformation};
 
 
 

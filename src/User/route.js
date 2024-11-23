@@ -1,12 +1,30 @@
 import expresss from "express";
-import {register,registerUser,logoutUser,getForgotPasswordPage,getResetPasswordPage,forgotPassword,resetPassWord} 
+import {register,registerUser,logoutUser,getForgotPasswordPage,getResetPasswordPage,forgotPassword,resetPassWord,editInformation,updateInformation} 
 from "./controller.js";
 import passportLocal from "../middleWare/PassPort.js";
 import googlePassPort from "../middleWare/googlePassport.js";
 const userRouter = expresss.Router();
+import multer from "multer";
+import path from 'path';
+const storageConfig = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, './uploads/');
+    },
+    filename: (req, file, cb) => {
+      cb(null, Date.now() + path.extname(file.originalname));
+    },
+  });
+  const upload = multer({ storage: storageConfig });
 
 
-
+  userRouter.get("/profile", editInformation)
+  userRouter.get("/account", (req, res) => {
+      const user=req.user;
+      res.render("account",{
+          user,
+      });
+  });
+  userRouter.put('/:id', upload.single('avatar'), updateInformation)
 
 userRouter.get("/login", (req, res) => {
     const user=req.user;
