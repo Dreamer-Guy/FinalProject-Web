@@ -18,9 +18,6 @@ const storageConfig = multer.diskStorage({
 });
 const upload = multer({ storage: storageConfig });
 
-  
-// Manage Address
-
 userRouter.get("/manageAddress", editAddress);
 
 userRouter.put('/:id', updateAddress);
@@ -43,8 +40,6 @@ userRouter.get("/login", (req, res) => {
 });
 
 userRouter.post("/loginUser",passportLocal.authenticate('local'),(req, res) => {
-    // console.log(req.session);
-    // console.log(req.sessionID);
     return res.json({message:"Login Success"});
 });
 
