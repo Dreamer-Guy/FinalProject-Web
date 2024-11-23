@@ -7,7 +7,12 @@ import uploadImage from "../utils/uploadImage.js"
 import fs from 'fs-extra';
 dotenv.config();
 
+import Address from "../Model/Address.js";
+import mongoose from "mongoose";
+import { get } from "http";
+
 const userService=serviceFactory.getUserService();
+const addressService=serviceFactory.getAddressService();
 const forgotPasswordTokenService=serviceFactory.getForgotPasswordTokenService();
 
 const generateGetPasswordLink = (queryData) => {
@@ -143,7 +148,59 @@ const updateInformation=async(req,res,next)=>{
     res.redirect('/user/profile')
 }
 
-export {register,registerUser,logoutUser,getForgotPasswordPage,getResetPasswordPage,forgotPassword,resetPassWord,editInformation,updateInformation};
+const editAddress = async (req, res) => {
+    try{
+        const userId = req.user._id;
+        const address = await addressService.getAddressByUserId(userId);
+        
+        res.render('manageAddress', {
+            address: address || {}, user: req.user
+        });
+        
+    } catch (err) {
+        console.log(err);
+        return res.status(500).send(err);
+    }
+}
+
+const updateAddress = async (req, res) => {
+    try{
+        const userId = req.user._id;
+        const { street, city, postalCode, phone, notes } = req.body;
+        
+        
+        const address = await addressService.getAddressByUserId(userId);
+        
+        if(address){
+            address.street = street;
+            address.city = city;
+            address.postalCode = postalCode;
+            address.phone = phone;
+            address.notes = notes;
+            await addressService.updateAddress(userId, address);
+            // res.status(200).send("Update address successfully");
+            
+        } else {
+            const newAddress = new Address({
+                userId: userId,
+                street: street,
+                city: city,
+                postalCode: postalCode,
+                phone: phone,
+                notes: notes
+            });
+            await addressService.saveAddress(newAddress);
+            // res.status(200).send("Create address successfully");
+        }   
+        res.redirect('/user/manageAddress');
+        
+    } catch (err) {
+        console.log(err);
+        return res.status(500).send(err);
+    }
+}
+
+export {register,registerUser,logoutUser,getForgotPasswordPage,getResetPasswordPage,forgotPassword,resetPassWord,editInformation,updateInformation, editAddress, updateAddress};
 
 
 

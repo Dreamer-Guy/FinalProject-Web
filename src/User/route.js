@@ -1,11 +1,13 @@
 import expresss from "express";
-import {register,registerUser,logoutUser,getForgotPasswordPage,getResetPasswordPage,forgotPassword,resetPassWord,editInformation,updateInformation} 
+import {register,registerUser,logoutUser,getForgotPasswordPage,getResetPasswordPage,forgotPassword,resetPassWord,editInformation,updateInformation, editAddress, updateAddress} 
 from "./controller.js";
 import passportLocal from "../middleWare/PassPort.js";
 import googlePassPort from "../middleWare/googlePassport.js";
 const userRouter = expresss.Router();
 import multer from "multer";
 import path from 'path';
+import Address from "../Model/Address.js";
+
 const storageConfig = multer.diskStorage({
     destination: (req, file, cb) => {
       cb(null, './uploads/');
@@ -13,18 +15,25 @@ const storageConfig = multer.diskStorage({
     filename: (req, file, cb) => {
       cb(null, Date.now() + path.extname(file.originalname));
     },
-  });
-  const upload = multer({ storage: storageConfig });
+});
+const upload = multer({ storage: storageConfig });
+
+  
+// Manage Address
+
+userRouter.get("/manageAddress", editAddress);
+
+userRouter.put('/:id', updateAddress);
 
 
-  userRouter.get("/profile", editInformation)
-  userRouter.get("/account", (req, res) => {
-      const user=req.user;
-      res.render("account",{
-          user,
-      });
-  });
-  userRouter.put('/:id', upload.single('avatar'), updateInformation)
+userRouter.get("/profile", editInformation)
+userRouter.get("/account", (req, res) => {
+    const user=req.user;
+    res.render("account",{
+        user,
+    });
+});
+userRouter.put('/:id', upload.single('avatar'), updateInformation)
 
 userRouter.get("/login", (req, res) => {
     const user=req.user;
