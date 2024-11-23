@@ -2,7 +2,7 @@ import express from 'express';
 import path from 'path';
 import session from 'express-session';
 import passport from './src/middleWare/PassPort.js';
-
+import methodOverride  from 'method-override'
 import mongoose from './src/Config/mongooseDB.js';
 
 import productRouter from "./src/Product/route.js";
@@ -16,7 +16,12 @@ import orderRouter from './src/Order/route.js';
 const app = express();
 const PORT = 3000;
 app.use(express.json());
-
+app.use(methodOverride('_method'))
+app.use(express.urlencoded(
+    {
+        extended:true
+    }
+))
 app.use(session({
     secret: 'yourSecretKey',
     resave: false,

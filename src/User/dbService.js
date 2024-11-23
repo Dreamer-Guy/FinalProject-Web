@@ -28,6 +28,9 @@ const userService={
         await user.save();
         return user;
     },
+    updateUser: (id,user)=>{
+        return User.updateOne({_id:id},user)
+    },
 }
 
 export default userService;
