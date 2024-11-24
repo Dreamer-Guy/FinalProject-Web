@@ -150,7 +150,7 @@
         <div class="w-1/4 hidden md:block">
             <div class="px-4 py-3 shadow flex items-center gap-4">
                 <div class="flex-shrink-0">
-                    <img src="../assets/images/avatar.png" alt="profile"
+                    <img src="/assets/images/avatar.png" alt="profile"
                         class="rounded-full w-14 h-14 border border-gray-200 p-1 object-cover">
                 </div>
                 <div class="flex-grow">
@@ -161,59 +161,46 @@
 
             <div class="mt-6 bg-white shadow rounded p-4 divide-y divide-gray-200 space-y-4 text-gray-600">
                 <div class="space-y-1 pl-8">
-                    <a href="#" class="block font-medium capitalize transition">
+                    <a id="account" href="#" class="block font-medium capitalize transition">
                         <span class="absolute -left-8 top-0 text-base">
                             <i class="fa-regular fa-address-card"></i>
                         </span>
                         Manage account
                     </a>
-                    <a href="#" class="relative hover:text-primary block capitalize transition">
+                    <a id="profile" href="#" class="relative hover:text-primary block capitalize transition">
                         Profile information
                     </a>
-                    <a href="#" class="relative hover:text-primary block capitalize transition">
+                    <a id="addresses" href="#" class="relative hover:text-primary block capitalize transition">
                         Manage addresses
                     </a>
-                    <a href="#" class="relative hover:text-primary block capitalize transition">
+                    <a id="passwords" href="#" class="relative hover:text-primary block capitalize transition">
                         Change password
                     </a>
                 </div>
 
                 <div class="space-y-1 pl-8 pt-4">
-                    <a href="#" class="relative hover:text-primary block font-medium capitalize transition">
+                    <a id="orders" 
+                    href="#" 
+                    class="relative hover:text-primary block font-medium capitalize transition">
                         <span class="absolute -left-8 top-0 text-base">
                             <i class="fa-solid fa-box-archive"></i>
                         </span>
                         My order history
                     </a>
-                    <a href="#" class="relative hover:text-primary block capitalize transition">
-                        My returns
-                    </a>
-                    <a href="#" class="relative hover:text-primary block capitalize transition">
-                        My Cancellations
-                    </a>
-                    <a href="#" class="relative hover:text-primary block capitalize transition">
+                    <a id="reviews" 
+                    href="#" 
+                    class="relative hover:text-primary block capitalize transition">
                         My reviews
                     </a>
                 </div>
-
                 <div class="space-y-1 pl-8 pt-4">
-                    <a href="#" class="relative hover:text-primary block font-medium capitalize transition">
-                        <span class="absolute -left-8 top-0 text-base">
-                            <i class="fa-regular fa-credit-card"></i>
-                        </span>
-                        Payment methods
-                    </a>
-                    <a href="#" class="relative hover:text-primary block capitalize transition">
-                        voucher
-                    </a>
-                </div>
-
-                <div class="space-y-1 pl-8 pt-4">
-                    <a href="#" class="relative text-primary block font-medium capitalize transition">
+                    <a id="carts" 
+                    href="#" 
+                    class="relative text-primary block font-medium capitalize transition">
                         <span class="absolute -left-8 top-0 text-base">
                             <i class="fa-regular fa-heart"></i>
                         </span>
-                        My wishlist
+                        My Cart
                     </a>
                 </div>
 
@@ -429,9 +416,9 @@
 
     <!-- footer -->
     <footer class="bg-white pt-16 pb-12 border-t border-gray-100">
-        <div class="container grid grid-cols-1 md:grid-cols-3">
+        <div class="container grid grid-cols-3">
             <div class="col-span-1 space-y-8 mr-2">
-                <img src="/assets/images/logo.svg" alt="logo" class="w-30">
+                <img src="../assets/images/logo.svg" alt="logo" class="w-30">
                 <div class="mr-2">
                     <p class="text-gray-500">
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, hic?
@@ -450,7 +437,7 @@
                 </div>
             </div>
 
-            <div class="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="col-span-2 grid grid-cols-2 gap-8">
                 <div class="grid grid-cols-2 gap-8">
                     <div>
                         <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Solutions</h3>
@@ -509,6 +496,7 @@
     </div>
     <!-- ./copyright -->
     <script src="/js/cart/cart.js"></script>
+    <script src="/js/common/profile/updateProfileStatus.js"></script>
 </body>
 
 </html>

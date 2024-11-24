@@ -1,13 +1,13 @@
 import expresss from "express";
-import {register,registerUser,logoutUser,getForgotPasswordPage,getResetPasswordPage,forgotPassword,resetPassWord,editInformation,updateInformation, changePassword} 
+import {register,registerUser,logoutUser,getForgotPasswordPage,getResetPasswordPage,forgotPassword,
+resetPassWord,editInformation,updateInformation, editAddress, updateAddress,changePassword} 
 from "./controller.js";
 import passportLocal from "../middleWare/PassPort.js";
 import googlePassPort from "../middleWare/googlePassport.js";
 const userRouter = expresss.Router();
 import multer from "multer";
 import path from 'path';
-
-
+import Address from "../Model/Address.js";
 
 const storageConfig = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -16,8 +16,8 @@ const storageConfig = multer.diskStorage({
     filename: (req, file, cb) => {
       cb(null, Date.now() + path.extname(file.originalname));
     },
-  });
-  const upload = multer({ storage: storageConfig });
+});
+const upload = multer({ storage: storageConfig });
 
 // Change Password  
 userRouter.get("/changePassword", (req, res) => {
@@ -34,15 +34,19 @@ userRouter.put("/changePassword", changePassword);
 
 
 //=======================================================
+userRouter.get("/manageAddress", editAddress);
 
-  userRouter.get("/profile", editInformation)
-  userRouter.get("/account", (req, res) => {
-      const user=req.user;
-      res.render("account",{
-          user,
-      });
-  });
-  userRouter.put('/:id', upload.single('avatar'), updateInformation)
+userRouter.put('/:id', updateAddress);
+
+
+userRouter.get("/profile", editInformation)
+userRouter.get("/account", (req, res) => {
+    const user=req.user;
+    res.render("account",{
+        user,
+    });
+});
+userRouter.put('/:id', upload.single('avatar'), updateInformation)
 
 
 
@@ -56,8 +60,6 @@ userRouter.get("/login", (req, res) => {
 
 
 userRouter.post("/loginUser",passportLocal.authenticate('local'),(req, res) => {
-    // console.log(req.session);
-    // console.log(req.sessionID);
     return res.json({message:"Login Success"});
 });
 
