@@ -1,5 +1,6 @@
 import expresss from "express";
-import {register,registerUser,logoutUser,getForgotPasswordPage,getResetPasswordPage,forgotPassword,resetPassWord,editInformation,updateInformation, editAddress, updateAddress} 
+import {register,registerUser,logoutUser,getForgotPasswordPage,getResetPasswordPage,forgotPassword,
+resetPassWord,editInformation,updateInformation, editAddress, updateAddress,changePassword} 
 from "./controller.js";
 import passportLocal from "../middleWare/PassPort.js";
 import googlePassPort from "../middleWare/googlePassport.js";
@@ -18,6 +19,21 @@ const storageConfig = multer.diskStorage({
 });
 const upload = multer({ storage: storageConfig });
 
+// Change Password  
+userRouter.get("/changePassword", (req, res) => {
+    const user=req.user;
+    // console.log(user);
+    res.render("changePassword", {
+        user,
+    });
+});
+userRouter.put("/changePassword", changePassword);
+//=======================================================  
+
+
+
+
+//=======================================================
 userRouter.get("/manageAddress", editAddress);
 
 userRouter.put('/:id', updateAddress);
@@ -32,12 +48,16 @@ userRouter.get("/account", (req, res) => {
 });
 userRouter.put('/:id', upload.single('avatar'), updateInformation)
 
+
+
 userRouter.get("/login", (req, res) => {
     const user=req.user;
     res.render("login",{
         user,
     });
 });
+
+
 
 userRouter.post("/loginUser",passportLocal.authenticate('local'),(req, res) => {
     return res.json({message:"Login Success"});
