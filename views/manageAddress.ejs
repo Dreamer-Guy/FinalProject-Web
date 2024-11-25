@@ -205,7 +205,7 @@
         <!-- ./sidebar -->
 
         <!-- info -->
-        <form id="addressForm" method="POST" action="/addresses/<%= address._id %>?_method=PUT" class="col-span-9 shadow rounded px-6 pt-5 pb-7">
+        <form id="addressForm" method="POST" action="<%= address ? '/addresses/' + address._id + '?_method=PUT' : '/addresses' %>" class="col-span-9 shadow rounded px-6 pt-5 pb-7">
             <h4 class="text-lg font-medium capitalize mb-4">
                 Address
             </h4>

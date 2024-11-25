@@ -2,10 +2,10 @@ import mongoose from "mongoose";
 
 const addressSchema=new mongoose.Schema({
     userId:String,
-    street:{type:String,required:true},
-    city:{type:String,required:true},
-    postalCode:{type:String,required:true},
-    phone:{type:String,required:true},
+    street:{type:String,required:false,default:""},
+    city:{type:String,required:false,default:""},
+    postalCode:{type:String,required:false,default:""},
+    phone:{type:String,required:false,default:""},
     notes:String,
 });
 

@@ -7,7 +7,8 @@ import googlePassPort from "../middleWare/googlePassport.js";
 const userRouter = expresss.Router();
 import multer from "multer";
 import path from 'path';
-
+import serviceFactory from "../Factory/serviceFactory.js";
+import Address from "../Model/Address.js";
 
 const storageConfig = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -18,6 +19,7 @@ const storageConfig = multer.diskStorage({
     },
 });
 const upload = multer({ storage: storageConfig });
+const addressService=serviceFactory.getAddressService();
 
 // Change Password  
 userRouter.get("/changePassword", (req, res) => {
@@ -51,7 +53,22 @@ userRouter.get("/login", (req, res) => {
 
 
 
-userRouter.post("/loginUser",passportLocal.authenticate('local'),(req, res) => {
+userRouter.post("/loginUser",passportLocal.authenticate('local'), async (req, res) => {
+    const userId = req.user._id;
+    let address = await addressService.getAddressByUserId(userId);
+    if(!address){
+        const defaultAddress = new Address({
+            userId: userId,
+            street: "",
+            city: "",
+            postalCode: "",
+            phone: "",
+            notes: ""
+        });
+        await addressService.saveAddress(defaultAddress);
+    }
+    
+    
     return res.json({message:"Login Success"});
 });
 
@@ -61,7 +78,22 @@ userRouter.get("/auth/google",googlePassPort.authenticate('google'),(req, res) =
 
 userRouter.get("/auth/google/callback",googlePassPort.authenticate('google',
     { failureRedirect: '/user/login' }),
-    (req, res) => {
+    async (req, res) => {
+        const userId = req.user._id;
+        const address = await addressService.getAddressByUserId(userId);
+        if(!address){
+            const defaultAddress = new Address({
+                userId: userId,
+                street: "",
+                city: "",
+                postalCode: "",
+                phone: "",
+                notes: ""
+            });
+            
+            await addressService.saveAddress(defaultAddress);
+        }    
+        
         return res.redirect('/products/get');
 });
 

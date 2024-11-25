@@ -42,7 +42,7 @@ const updateAddress = async (req, res) => {
         const userId = req.user._id;
         const { street, city, postalCode, phone, notes } = req.body;
         
-        const address = await addressService.getAddressByUserId(userId);
+        let address = await addressService.getAddressByUserId(userId);
         let message = "";
         
         if(address){
@@ -70,6 +70,7 @@ const updateAddress = async (req, res) => {
             });
             await addressService.saveAddress(newAddress);
             message = "Address added successfully.";
+            address = newAddress;
         }   
         
         res.render("manageAddress",{
