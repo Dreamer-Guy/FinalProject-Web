@@ -66,8 +66,8 @@ const registerUser=async(req,res)=>{
 }
 
 const logoutUser=async(req,res)=>{
-    req.session.destroy();
-    res.render('products');
+    res.clearCookie('connect.sid');
+    res.redirect('/products/get');
 }
 
 const register=async(req,res)=>{
@@ -76,8 +76,6 @@ const register=async(req,res)=>{
         user,
     });
 }
-
-
 
 const getForgotPasswordPage=async(req,res)=>{
     res.render('forgotPassword');
@@ -103,7 +101,6 @@ const forgotPassword = async (req, res) => {
         });
     }
     catch (e) {
-        console.log(e);
         return res.status(500).send(e);
     }
 }

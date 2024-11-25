@@ -194,7 +194,7 @@
                 </div>
 
                 <div class="space-y-1 pl-8 pt-4">
-                    <a href="#" class="relative hover:text-primary block font-medium capitalize transition">
+                    <a href="/user/logout" class="relative hover:text-primary block font-medium capitalize transition">
                         <span class="absolute -left-8 top-0 text-base">
                             <i class="fa-solid fa-right-from-bracket"></i>
                         </span>
@@ -382,7 +382,7 @@
     
                 <div class="flex justify-between text-gray-800 font-medium py-3 uppercas">
                     <p class="font-semibold">Total</p>
-                    <p>$1280</p>
+                    <p><%= cart.items.reduce((acc,item)=>{item.salePrice>0?acc+=item.salePrice:acc+=item.price},0)%></p>
                 </div>
     
                 <div class="flex items-center mb-4 mt-2">

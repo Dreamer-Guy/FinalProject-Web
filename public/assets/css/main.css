@@ -2150,12 +2150,6 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 1;
 }
 
-@media (min-width: 640px) {
-  .sm\:inline {
-    display: inline;
-  }
-}
-
 @media (min-width: 768px) {
   .md\:mx-8 {
     margin-left: 2rem;

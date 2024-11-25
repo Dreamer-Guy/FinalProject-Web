@@ -72,22 +72,20 @@ userRouter.post("/loginUser",passportLocal.authenticate('local'), async (req, re
     return res.json({message:"Login Success"});
 });
 
-// userRouter.post("/loginUser",(req,res,next)=>{
-//     passportLocal.authenticate('local', (err, user, info) => {
-//         if (err) {
-//             return res.status(500).json({ error: 'Internal server error' });
-//         }
-//         if (!user) {
-//             return res.status(401).json({ message: info.message }); 
-//         }
-//         req.logIn(user, (err) => {
-//             if (err) {
-//                 return res.status(500).json({ error: 'Bad credentials' });
-//             }
-//             return res.status(200).json({ message: 'Login successful', user });
-//         });
-//     })(req, res, next);
-// });
+
+
+userRouter.get("/isLogin",(req, res) => {
+    res.send("Login Fail");
+});
+
+userRouter.get("/logout",logoutUser);
+userRouter.get("/register",register);
+userRouter.post("/registeruser",registerUser);
+
+userRouter.get("/forgot/get",getForgotPasswordPage);
+userRouter.get("/reset/get",getResetPasswordPage);
+userRouter.get("/forgotPassword",forgotPassword);
+userRouter.post("/resetPassword",resetPassWord);
 
 userRouter.get("/auth/google",googlePassPort.authenticate('google'),(req, res) => {
     return res.json({message:"Login Success"});
@@ -113,18 +111,5 @@ userRouter.get("/auth/google/callback",googlePassPort.authenticate('google',
         
         return res.redirect('/products/get');
 });
-
-userRouter.get("/isLogin",(req, res) => {
-    res.send("Login Fail");
-});
-
-userRouter.get("/logout",logoutUser);
-userRouter.get("/register",register);
-userRouter.post("/registeruser",registerUser);
-
-userRouter.get("/forgot/get",getForgotPasswordPage);
-userRouter.get("/reset/get",getResetPasswordPage);
-userRouter.get("/forgotPassword",forgotPassword);
-userRouter.post("/resetPassword",resetPassWord);
 
 export default userRouter;
