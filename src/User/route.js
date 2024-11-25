@@ -24,7 +24,6 @@ const addressService=serviceFactory.getAddressService();
 // Change Password  
 userRouter.get("/changePassword", (req, res) => {
     const user=req.user;
-    // console.log(user);
     res.render("changePassword", {
         user,
         success: null,
@@ -32,7 +31,6 @@ userRouter.get("/changePassword", (req, res) => {
     });
 });
 userRouter.put("/changePassword", changePassword);
-//=======================================================  
 
 
 userRouter.get("/profile", editInformation)

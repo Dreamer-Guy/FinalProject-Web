@@ -1,10 +1,31 @@
 
+const saveUsernameAndPassword = () => {
+    localStorage.setItem('remember', true);
+    localStorage.setItem('username', document.getElementById('userName').value);
+    localStorage.setItem('password', document.getElementById('password').value);
+};
+
+const clearUsernameAndPassword = () => {
+    localStorage.removeItem('remember');
+    localStorage.removeItem('username');
+    localStorage.removeItem('password');
+};
+
+handleRememberMe = (remember) => {
+    if(remember===true){
+        saveUsernameAndPassword();
+    }
+    else{
+        clearUsernameAndPassword();
+    }
+};
 
 const handleLogin = async () => {
     const username = document.getElementById('userName').value;
     const password = document.getElementById('password').value;
+    const isRememberMe = document.getElementById('remember').checked;
     const formData = { username, password };
-
+    handleRememberMe(isRememberMe);
     try {
         if(username === "" || password === ""){
             alert("Please fill in all fields");
@@ -32,4 +53,6 @@ const handleLogin = async () => {
 };
 
 
-console.log("Login Page");
+document.getElementById('userName').value = localStorage.getItem('username') || '';
+document.getElementById('password').value = localStorage.getItem('password') || ''; 
+document.getElementById('remember').checked = localStorage.getItem('remember')!==null?true:false;
