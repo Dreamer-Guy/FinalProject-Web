@@ -45,6 +45,9 @@ app.use("/user", userRouter);
 app.use("/reviews", reviewRouter);
 app.use("/carts", cartRouter);
 app.use("/orders", orderRouter);
+app.use((req, res) => {
+    res.status(404).render('notFound');
+}); 
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
