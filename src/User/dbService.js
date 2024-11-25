@@ -20,6 +20,10 @@ const userService={
         const user=await User.findOne({userName:userName});
         return user?true:false;
     },
+    isUserExistByEmail: async (email) => {
+        const user=await User.findOne({email:email});
+        return user?true:false;
+    },
     createUser: async (user) => {
         const newUser=new User(user);
         return newUser;
