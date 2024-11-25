@@ -11,6 +11,8 @@ dotenv.config();
 import Address from "../Model/Address.js";
 import mongoose from "mongoose";
 import { get } from "http";
+import { render } from "ejs";
+import { error } from "console";
 
 const userService=serviceFactory.getUserService();
 const addressService=serviceFactory.getAddressService();
@@ -154,32 +156,48 @@ const changePassword = async (req, res) => {
     const {oldPassword,newPassword, confirmNewPassword}=req.body;
     const user = req.user._id;
     
-    // console.log(oldPassword);
-    // console.log(newPassword);
-    // console.log(confirmNewPassword);
-    
     if(newPassword !== confirmNewPassword){
-        return res.status(400).send("New password and confirm password are not the same");
+        return res.render('changePassword',{
+            user: req.user,
+            success: false,
+            message: "New password and confirm new password are not the same"       
+        });
     }
     
     const userObj = await userService.getUserById(user);
-    
     if(!userObj){
-        return res.status(400).send("User not found");
+        return res.render('changePassword',{
+            user: req.user,
+            success: false,
+            message: "User not found"       
+        });
     }
     
     if(!await comparePlainAndHashed(oldPassword,userObj.password)){
-        return res.status(400).send("Old password is incorrect");
+        return res.render('changePassword',{
+            user: req.user,
+            success: false,
+            message: "Old password is incorrect" 
+        });
     }
     
     userObj.password = await hashPassword(newPassword);
     await userService.saveUser(userObj);
+
+    return res.render('changePassword',{
+        user: req.user,
+        success: true,
+        message: "Change password successfully" 
+    });
     
-    // res.status(200).send("Success");
-    res.redirect('changePassword');
-    
-   } catch (e) {
-       return res.status(500)
+   } catch (err) {
+       console.log(err);
+       
+       return res.render('changePassword',{
+            user: req.user,
+            success: false,
+            message: `Error: ${err.message}`
+       });
    }
 };
 

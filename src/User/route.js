@@ -27,6 +27,8 @@ userRouter.get("/changePassword", (req, res) => {
     // console.log(user);
     res.render("changePassword", {
         user,
+        success: null,
+        message: ""
     });
 });
 userRouter.put("/changePassword", changePassword);
