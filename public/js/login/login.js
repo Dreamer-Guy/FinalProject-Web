@@ -6,6 +6,10 @@ const handleLogin = async () => {
     const formData = { username, password };
 
     try {
+        if(username === "" || password === ""){
+            alert("Please fill in all fields");
+            return;
+        }
         const res = await fetch('/user/loginUser', {
             method: 'POST',
             headers: {
@@ -15,10 +19,12 @@ const handleLogin = async () => {
         });
         if (res.ok) { 
             window.location.href = "/products/get";
-            console.log("here");
         } 
-        else {
-            console.log("Login failed");
+        else if (res.status === 401) {
+            document.getElementById('error-message').classList.remove('hidden');
+        }
+        else{
+            alert("Login failed, please try again");
         }
     } catch (err) {
         console.log(err);

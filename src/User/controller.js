@@ -11,6 +11,8 @@ dotenv.config();
 import Address from "../Model/Address.js";
 import mongoose from "mongoose";
 import { get } from "http";
+import { render } from "ejs";
+import { error } from "console";
 
 const userService=serviceFactory.getUserService();
 const addressService=serviceFactory.getAddressService();
@@ -43,7 +45,16 @@ const handleSendEmail = async (userId, userEmail) => {
 }
 
 const registerUser=async(req,res)=>{
-    const {fullName,userName,password}=req.body;
+    const {fullName,userName,password,confirm}=req.body;
+    if(!fullName || !userName || !password || !confirm){
+        return res.status(400).send({message:"Miss required information"});
+    }
+    if(await userService.isUserExistByUserName(userName)){
+        return res.status(400).send({message:"User name is already taken"});
+    }
+    if(password!==confirm){
+        return res.status(400).send({message:"Password and confirm password are not the same"});
+    }
     const user={
         fullName,
         userName,
@@ -55,8 +66,8 @@ const registerUser=async(req,res)=>{
 }
 
 const logoutUser=async(req,res)=>{
-    req.session.destroy();
-    res.render('products');
+    res.clearCookie('connect.sid');
+    res.redirect('/products/get');
 }
 
 const register=async(req,res)=>{
@@ -65,8 +76,6 @@ const register=async(req,res)=>{
         user,
     });
 }
-
-
 
 const getForgotPasswordPage=async(req,res)=>{
     res.render('forgotPassword');
@@ -92,7 +101,6 @@ const forgotPassword = async (req, res) => {
         });
     }
     catch (e) {
-        console.log(e);
         return res.status(500).send(e);
     }
 }
@@ -149,95 +157,59 @@ const updateInformation=async(req,res,next)=>{
     res.redirect('/user/profile')
 }
 
-const editAddress = async (req, res) => {
-    try{
-        const userId = req.user._id;
-        const address = await addressService.getAddressByUserId(userId);
-        
-        res.render('manageAddress', {
-            address: address || {}, user: req.user
-        });
-        
-    } catch (err) {
-        console.log(err);
-        return res.status(500).send(err);
-    }
-}
-
-const updateAddress = async (req, res) => {
-    try{
-        const userId = req.user._id;
-        const { street, city, postalCode, phone, notes } = req.body;
-        
-        
-        const address = await addressService.getAddressByUserId(userId);
-        
-        if(address){
-            address.street = street;
-            address.city = city;
-            address.postalCode = postalCode;
-            address.phone = phone;
-            address.notes = notes;
-            await addressService.updateAddress(userId, address);
-            // res.status(200).send("Update address successfully");
-            
-        } else {
-            const newAddress = new Address({
-                userId: userId,
-                street: street,
-                city: city,
-                postalCode: postalCode,
-                phone: phone,
-                notes: notes
-            });
-            await addressService.saveAddress(newAddress);
-            // res.status(200).send("Create address successfully");
-        }   
-        res.redirect('/user/manageAddress');
-        
-    } catch (err) {
-        console.log(err);
-        return res.status(500).send(err);
-    }
-}
-
 const changePassword = async (req, res) => {
    try {
     const {oldPassword,newPassword, confirmNewPassword}=req.body;
     const user = req.user._id;
     
-    // console.log(oldPassword);
-    // console.log(newPassword);
-    // console.log(confirmNewPassword);
-    
     if(newPassword !== confirmNewPassword){
-        return res.status(400).send("New password and confirm password are not the same");
+        return res.render('changePassword',{
+            user: req.user,
+            success: false,
+            message: "New password and confirm new password are not the same"       
+        });
     }
     
     const userObj = await userService.getUserById(user);
-    
     if(!userObj){
-        return res.status(400).send("User not found");
+        return res.render('changePassword',{
+            user: req.user,
+            success: false,
+            message: "User not found"       
+        });
     }
     
     if(!await comparePlainAndHashed(oldPassword,userObj.password)){
-        return res.status(400).send("Old password is incorrect");
+        return res.render('changePassword',{
+            user: req.user,
+            success: false,
+            message: "Old password is incorrect" 
+        });
     }
     
     userObj.password = await hashPassword(newPassword);
     await userService.saveUser(userObj);
+
+    return res.render('changePassword',{
+        user: req.user,
+        success: true,
+        message: "Change password successfully" 
+    });
     
-    // res.status(200).send("Success");
-    res.redirect('changePassword');
-    
-   } catch (e) {
-       return res.status(500)
+   } catch (err) {
+       console.log(err);
+       
+       return res.render('changePassword',{
+            user: req.user,
+            success: false,
+            message: `Error: ${err.message}`
+       });
    }
 };
 
 
 
-export {register,registerUser,logoutUser,getForgotPasswordPage,getResetPasswordPage,forgotPassword,resetPassWord,editInformation,updateInformation, editAddress, updateAddress, changePassword };
+export {register,registerUser,logoutUser,getForgotPasswordPage,getResetPasswordPage,forgotPassword,resetPassWord,editInformation,updateInformation, changePassword };
 
 
 
