@@ -16,7 +16,15 @@ document.getElementById("registerForm").addEventListener("submit", async functio
             },
             body: JSON.stringify(formData)
         });
-        window.location.href = "/user/login";
+        if(response.ok){
+            window.location.href = "/user/login";
+        }
+        else {
+            const data = await response.json();
+            const message=data.message;
+            document.getElementById("error-message").innerHTML=message;
+            document.getElementById("error-message").classList.remove("hidden");
+        }
     } 
     catch (error) {
         console.error("Error:", error);

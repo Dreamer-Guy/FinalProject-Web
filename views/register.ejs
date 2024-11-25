@@ -7,9 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account - Ecommerce Tailwind</title>
 
-    <link rel="shortcut icon" href="../assets/images/favicon/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/assets/images/favicon/favicon.ico" type="image/x-icon">
 
-    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -127,8 +127,13 @@
             <p class="text-gray-600 mb-6 text-sm">
                 Register for new cosutumer
             </p>
+            <div 
+            class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 hidden"
+            id="error-message">
+                
+            </div>
             <form id="registerForm"
-            action="/user/registeruser" method="post" autocomplete="off">
+                action="/user/registeruser" method="post" autocomplete="off">
                 <div class="space-y-2">
                     <div>
                         <label for="name" class="text-gray-600 mb-2 block">Full Name</label>

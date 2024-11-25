@@ -45,7 +45,16 @@ const handleSendEmail = async (userId, userEmail) => {
 }
 
 const registerUser=async(req,res)=>{
-    const {fullName,userName,password}=req.body;
+    const {fullName,userName,password,confirm}=req.body;
+    if(!fullName || !userName || !password || !confirm){
+        return res.status(400).send({message:"Miss required information"});
+    }
+    if(await userService.isUserExistByUserName(userName)){
+        return res.status(400).send({message:"User name is already taken"});
+    }
+    if(password!==confirm){
+        return res.status(400).send({message:"Password and confirm password are not the same"});
+    }
     const user={
         fullName,
         userName,

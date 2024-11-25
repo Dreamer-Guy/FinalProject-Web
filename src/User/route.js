@@ -69,10 +69,25 @@ userRouter.post("/loginUser",passportLocal.authenticate('local'), async (req, re
         });
         await addressService.saveAddress(defaultAddress);
     }
-    
-    
     return res.json({message:"Login Success"});
 });
+
+// userRouter.post("/loginUser",(req,res,next)=>{
+//     passportLocal.authenticate('local', (err, user, info) => {
+//         if (err) {
+//             return res.status(500).json({ error: 'Internal server error' });
+//         }
+//         if (!user) {
+//             return res.status(401).json({ message: info.message }); 
+//         }
+//         req.logIn(user, (err) => {
+//             if (err) {
+//                 return res.status(500).json({ error: 'Bad credentials' });
+//             }
+//             return res.status(200).json({ message: 'Login successful', user });
+//         });
+//     })(req, res, next);
+// });
 
 userRouter.get("/auth/google",googlePassPort.authenticate('google'),(req, res) => {
     return res.json({message:"Login Success"});
