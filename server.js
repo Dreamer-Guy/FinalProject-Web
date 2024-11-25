@@ -12,6 +12,7 @@ import homeRouter from './src/HomePage/controller.js';
 import reviewRouter from './src/Review/route.js';
 import cartRouter from "./src/Cart/route.js";
 import orderRouter from './src/Order/route.js';
+import addressRouter from './src/Address/route.js';
 
 const app = express();
 const PORT = 3000;
@@ -42,6 +43,7 @@ app.use("/", homeRouter);
 app.use("/productDetails", productDetailsRouter);
 app.use("/products", productRouter);
 app.use("/user", userRouter);
+app.use("/addresses", addressRouter);
 app.use("/reviews", reviewRouter);
 app.use("/carts", cartRouter);
 app.use("/orders", orderRouter);

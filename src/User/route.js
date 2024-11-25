@@ -1,13 +1,13 @@
 import expresss from "express";
 import {register,registerUser,logoutUser,getForgotPasswordPage,getResetPasswordPage,forgotPassword,
-resetPassWord,editInformation,updateInformation, editAddress, updateAddress,changePassword} 
+resetPassWord,editInformation,updateInformation,changePassword} 
 from "./controller.js";
 import passportLocal from "../middleWare/PassPort.js";
 import googlePassPort from "../middleWare/googlePassport.js";
 const userRouter = expresss.Router();
 import multer from "multer";
 import path from 'path';
-import Address from "../Model/Address.js";
+
 
 const storageConfig = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -29,14 +29,6 @@ userRouter.get("/changePassword", (req, res) => {
 });
 userRouter.put("/changePassword", changePassword);
 //=======================================================  
-
-
-
-
-//=======================================================
-userRouter.get("/manageAddress", editAddress);
-
-userRouter.put('/:id', updateAddress);
 
 
 userRouter.get("/profile", editInformation)
