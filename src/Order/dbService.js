@@ -16,7 +16,20 @@ const orderService={
     },
     saveOrder:async(order)=>{
         return await order.save();
-    }
+    },
+    getOrdersInTimeRange:async(startDate,endDate)=>{
+        const orders=await Order.find({
+            createdAt:{
+                $gte:startDate,
+                $lt:endDate
+            }
+        }).lean();
+        return orders;
+    },
+    getAllOrders:async()=>{
+        const orders=await Order.find().lean();
+        return orders;
+    },
 };
 
 export default orderService;

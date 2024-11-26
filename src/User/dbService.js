@@ -35,6 +35,14 @@ const userService={
     updateUser: (id,user)=>{
         return User.updateOne({_id:id},user)
     },
+    getAllUsers: async () => {
+        const users=await User.find().lean();
+        return users;
+    },
+    getTopUsers:async(limit)=>{
+        const users=await User.find().sort({totalOrder:-1}).limit(limit).lean();
+        return users;
+    }
 }
 
 export default userService;
