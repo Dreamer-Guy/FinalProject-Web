@@ -35,7 +35,7 @@ const productService = {
     },
     
     getTopProducts: async (top) => {
-        const products = await Product.find().sort({ rating: -1 }).limit(top);
+        const products = await Product.find().sort({ rating: -1 }).limit(top).lean();
         return products;
     },
 };

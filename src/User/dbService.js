@@ -39,6 +39,10 @@ const userService={
         const users=await User.find().lean();
         return users;
     },
+    getTopUsers:async(limit)=>{
+        const users=await User.find().sort({totalOrder:-1}).limit(limit).lean();
+        return users;
+    }
 }
 
 export default userService;

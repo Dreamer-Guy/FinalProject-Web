@@ -2,8 +2,10 @@ import serviceFactory from "../../Factory/serviceFactory.js";
 
 const orderService=serviceFactory.getOrderService();
 const userService=serviceFactory.getUserService();
+const productService=serviceFactory.getProductSerVice();
 
 const COUNT_TIME_RANGE=3;
+const COUNT_TOP_PRODUCT=5;
 
 const daysOfMonth=[31,28,31,30,31,30,31,31,30,31,30,31];
 
@@ -43,52 +45,6 @@ const getStartDayCaseYear=(today)=>{
     return new Date(today.getFullYear()-COUNT_TIME_RANGE+1,0,1);
 }
 
-const getDayRange=(startDate,endDate)=>{
-    const timeRanges=[];
-    let day=startDate.getDay();
-    let month=startDate.getMonth();
-    let year=startDate.getFullYear();
-    for(const i=0;i<COUNT_TIME_RANGE-1;i++){
-        timeRanges.push(new Date(year,month,day));
-        day++;
-        if(day>daysOfMonth[month]){
-            day=1;
-            month++;
-            if(month>11){
-                month=0;
-                year++;
-            }
-        }
-    }
-    timeRanges.push(endDate);
-    return timeRanges;
-};
-
-const getMonthRange=(startDate,endDate)=>{
-    const timeRanges=[];
-    let month=startDate.getMonth();
-    let year=startDate.getFullYear();
-    for(const i=0;i<COUNT_TIME_RANGE-1;i++){
-        timeRanges.push(new Date(year,month,1));
-        year=year+(month+1)/12;
-        month=(month+1)%12;
-    }
-    timeRanges.push(endDate);
-    return timeRanges;
-};
-
-const getYearRange=(startDate,endDate)=>{
-    const timeRanges=[];
-    let year=startDate.getFullYear();
-    for(let i=0;i<COUNT_TIME_RANGE-1;i++){
-        timeRanges.push(new Date(year,0,1));
-        year++;
-    }
-    timeRanges.push(endDate);
-    return timeRanges;
-};
-
-
 const getRevenueProductByOrders=(orders)=>{
     const items=orders.map(order=>order.items).flat();
     const productRevenue=items.reduce((acc,item)=>{
@@ -107,37 +63,21 @@ const getRevenueProductByOrders=(orders)=>{
         }
         return acc;
     },{}); 
-    return productRevenue;
+    const productsReVenueArray=[];
+    for(const key in productRevenue){
+        productsReVenueArray.push({
+            ...productRevenue[key],
+            _id:key.toString(),
+        });
+    }
+    return productsReVenueArray;
 }
 
-const topRevenueProductInDay=async(req,res)=>{
-    updateDaysOfMonth();
-    const today=new Date();
-    const startDate=getStartDayCaseDay(today);
-    const endDate=new Date(today.getFullYear(),today.getMonth(),today.getDay());
-    const orders=await orderService.getOrdersInTimeRange(startDate,endDate);
-    const productRevenue=getRevenueProductByOrders(orders);
-    
-};
-
-const topRevenueProductInMonth=async(req,res)=>{
-    updateDaysOfMonth();
-    const today=new Date();
-    const startDate=getStartDayCaseMonth(today);
-    const endDate=new Date(today.getFullYear(),today.getMonth(),today.getDay());
-    const orders=await orderService.getOrdersInTimeRange(startDate,endDate);
-    const productRevenue=getRevenueProductByOrders(orders);
+const getTopPurchasedProductsFromOrders=(orders,limit)=>{
+    const products=getRevenueProductByOrders(orders);
+    const sortedProducts=[...products].sort((a, b) => b.total - a.total);
+    return sortedProducts.slice(0,limit);
 }
-
-const topRevenueProductInYear=async(req,res)=>{
-    updateDaysOfMonth();
-    const today=new Date();
-    const startDate=getStartDayCaseYear(today);
-    const endDate=new Date(today.getFullYear(),today.getMonth(),today.getDay());
-    const orders=await orderService.getOrdersInTimeRange(startDate,endDate);
-    const productRevenue=getRevenueProductByOrders(orders);
-}
-
 
 const getXAxisCaseYear=(startDate)=>{
     const timeRanges=[];
@@ -243,7 +183,8 @@ const getYAxisRevenue=async(timeRanges)=>{
 const getDashBoardPage=async(req,res)=>{
     const orders=await orderService.getAllOrders();
     const users=await userService.getAllUsers();
-    console.log(users.length); 
+    const topRatingProducts=await productService.getTopProducts(COUNT_TOP_PRODUCT);
+    const topPurchasedProducts=getTopPurchasedProductsFromOrders(orders,COUNT_TOP_PRODUCT);
     updateDaysOfMonth();
     const today=new Date();
     const startDateCaseYear=getStartDayCaseYear(today);
@@ -268,7 +209,8 @@ const getDashBoardPage=async(req,res)=>{
         yAxisRevenueYear,
         orders,
         users,
-
+        topRatingProducts,
+        topPurchasedProducts,
     });
 };
 
