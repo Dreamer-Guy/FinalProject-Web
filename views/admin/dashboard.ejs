@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/assets/css/main.css">
     <title>Dashboard</title>
 </head>
 <body class="text-gray-800 font-inter">
@@ -30,10 +30,12 @@
                 </a>
                 <ul class="pl-7 mt-2 hidden group-[.selected]:block">
                     <li class="mb-4">
-                        <a href="#" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Active order</a>
+                        <a href="#" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Active order</a>
                     </li> 
                     <li class="mb-4">
-                        <a href="#" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Completed order</a>
+                        <a href="#" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Completed order</a>
                     </li> 
                     <li class="mb-4">
                         <a href="#" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Canceled order</a>
@@ -297,8 +299,8 @@
                 <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
                     <div class="flex justify-between mb-6">
                         <div>
-                            <div class="text-2xl font-semibold mb-1">10</div>
-                            <div class="text-sm font-medium text-gray-400">Active orders</div>
+                            <div class="text-2xl font-semibold mb-1"><span>Total: </span><%=orders.length%></div>
+                            <div class="text-sm font-medium text-gray-400">Paid Orders</div>
                         </div>
                         <div class="dropdown">
                             <button type="button" class="dropdown-toggle text-gray-400 hover:text-gray-600"><i class="ri-more-fill"></i></button>
@@ -316,22 +318,24 @@
                         </div>
                     </div>
                     <div class="flex items-center">
+                        <%const paidRate=Math.floor(orders.filter(order=>order.checkoutStatus.toLowerCase()==='paid').length/orders.length*100)%>
                         <div class="w-full bg-gray-100 rounded-full h-4">
-                            <div class="h-full bg-blue-500 rounded-full p-1" style="width: 60%;">
+                            <div class="h-full bg-blue-500 rounded-full p-1" style="width: <%= paidRate %>%;">
                                 <div class="w-2 h-2 rounded-full bg-white ml-auto"></div>
                             </div>
                         </div>
-                        <span class="text-sm font-medium text-gray-600 ml-4">60%</span>
+                        <span class="text-sm font-medium text-gray-600 ml-4">
+                            <%=paidRate%>%</span>
                     </div>
                 </div>
                 <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
                     <div class="flex justify-between mb-4">
                         <div>
                             <div class="flex items-center mb-1">
-                                <div class="text-2xl font-semibold">324</div>
+                                <div class="text-2xl font-semibold"><span>Total: </span> <%=users.length%></div>
                                 <div class="p-1 rounded bg-emerald-500/10 text-emerald-500 text-[12px] font-semibold leading-none ml-2">+30%</div>
                             </div>
-                            <div class="text-sm font-medium text-gray-400">Visitors</div>
+                            <div class="text-sm font-medium text-gray-400">Users</div>
                         </div>
                         <div class="dropdown">
                             <button type="button" class="dropdown-toggle text-gray-400 hover:text-gray-600"><i class="ri-more-fill"></i></button>
@@ -349,17 +353,21 @@
                         </div>
                     </div>
                     <div class="flex items-center">
-                        <img src="https://placehold.co/32x32" alt="" class="w-8 h-8 rounded-full object-cover block">
-                        <img src="https://placehold.co/32x32" alt="" class="w-8 h-8 rounded-full object-cover block -ml-3">
-                        <img src="https://placehold.co/32x32" alt="" class="w-8 h-8 rounded-full object-cover block -ml-3">
-                        <img src="https://placehold.co/32x32" alt="" class="w-8 h-8 rounded-full object-cover block -ml-3">
-                        <img src="https://placehold.co/32x32" alt="" class="w-8 h-8 rounded-full object-cover block -ml-3">
+                        <!--fuck here-->
+                        <%const activeUserRate=Math.floor(users.filter(user=>user.status.toLowerCase()==='active').length/users.length*100)%>
+                        <div class="w-full bg-gray-100 rounded-full h-4">
+                            <div class="h-full bg-blue-500 rounded-full p-1" style="width: <%= activeUserRate %>%;">
+                                <div class="w-2 h-2 rounded-full bg-white ml-auto"></div>
+                            </div>
+                        </div>
+                        <span class="text-sm font-medium text-gray-600 ml-4">
+                            <%=activeUserRate%>%</span>
                     </div>
                 </div>
                 <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
                     <div class="flex justify-between mb-6">
                         <div>
-                            <div class="text-2xl font-semibold mb-1"><span class="text-base font-normal text-gray-400 align-top">&dollar;</span>2,345</div>
+                            <div class="text-2xl font-semibold flex flex-row items-center mb-1"><span class="text-base font-normal text-gray-400 align-top">&dollar;</span><%=orders.reduce((acc,order)=>acc+=order.total,0)%></div>
                             <div class="text-sm font-medium text-gray-400">Active orders</div>
                         </div>
                         <div class="dropdown">
@@ -934,7 +942,8 @@
                         </div>
                     </div>
                     <div>
-                        <canvas id="order-chart"></canvas>
+                        <!--fuck-->
+                        <canvas id="yearRevenueChart"></canvas>
                     </div>
                 </div>
                 <div class="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md">
@@ -1113,9 +1122,14 @@
         </div>
     </main>
     <!-- end: Main -->
-
+    <script>
+        const xAxisCaseYear="<%= xAxisCaseYear %>";
+        const yAxisRevenueYear="<%= yAxisRevenueYear %>";
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="dist/js/script.js"></script>
+    <script src="/js/admin/dashboard/index.js"></script>
+    <script src="/js/admin/common.js"></script>
 </body>
 </html>
