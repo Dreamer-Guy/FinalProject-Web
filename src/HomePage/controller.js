@@ -2,6 +2,7 @@ import serviceFactory from "../Factory/serviceFactory.js";
 import express from "express";
 
 const productService = serviceFactory.getProductSerVice();
+const cartService = serviceFactory.getCartService();
 
 const TOP_PRODUCT_COUNT=4;
 
@@ -28,10 +29,12 @@ homeRouter.get("/",async(req,res)=>{
     const populatedProducts = products.map((product) => (populateProduct(product)));
     const topProducts=await productService.getTopProducts(TOP_PRODUCT_COUNT);
     const populatedTopProducts = topProducts.map((product) => (populateProduct(product)));
+    const productsInCart = await cartService.coutProductInCart(user?user._id:null);
     res.render("home",{
         user,
         products:populatedProducts,
         topProducts:populatedTopProducts,
+        cartNumber:productsInCart
     });
 });
 

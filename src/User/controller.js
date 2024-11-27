@@ -139,6 +139,7 @@ const resetPassWord = async (req, res) => {
 
 const editInformation =async(req,res)=>{
     const userObj=await userService.getUserById(req.user._id)
+    const productsInCart = await cartService.coutProductInCart(userObj._id);
     const user = {
         _id:userObj._id,
         fullName: userObj.fullName,
@@ -146,7 +147,10 @@ const editInformation =async(req,res)=>{
         birthDay:userObj.birthDate? userObj.birthDate.toISOString().split('T')[0] : "",
         email:userObj.email
     }
-    res.render('profile',{user})
+    res.render('profile',{
+        user: user,
+        cartNumber: productsInCart
+    })
 }
 const updateInformation=async(req,res,next)=>{
     let user={}
@@ -168,7 +172,7 @@ const changPasswordPage = async (req, res) => {
         user: user,
         success: true,
         message: "",
-        producstInCart
+        cartNumber: producstInCart
     });
 }
 const changePassword = async (req, res) => {

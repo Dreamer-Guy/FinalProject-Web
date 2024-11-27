@@ -3,7 +3,8 @@ import serviceFactory from "../Factory/serviceFactory.js";
 import {generateRatingStars} from "../utils/viewEngine.js";
 const productDetailService=serviceFactory.getProductDetailsSerVice();
 const productService=serviceFactory.getProductSerVice();
-const reviewService=serviceFactory.getReviewService();  
+const reviewService=serviceFactory.getReviewService(); 
+const cartService=serviceFactory.getCartService(); 
 const populateProduct=(product)=>{
     const populatedProduct={
         productId: product._id,
@@ -65,13 +66,16 @@ const getProductDetailsByID=async(req,res)=>{
         const rawReviews=await reviewService.getReviewsByProductId(id);
         //tech-debt:check reviews
         const populatedReviews = rawReviews.map((review)=>populateReview(review));
+        const productsInCart = await cartService.coutProductInCart(user._id);
         if(productDetails){
             return res.render('productDetails',{product,
                 productDetails:populatedProductDetails,
                 relatedProducts,
                 reviews:populatedReviews,
                 user:user,
-                generateRatingStars});
+                generateRatingStars,
+                cartNumber:productsInCart,
+            });
         }else{
             return res.json({
                 data:null,

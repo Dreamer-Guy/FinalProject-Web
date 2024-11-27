@@ -142,7 +142,7 @@ const getCartPage=async (req,res) => {
     res.render('cart',{
         user,
         cart,
-        productsInCart
+        cartNumber: productsInCart
     });
 };
 
