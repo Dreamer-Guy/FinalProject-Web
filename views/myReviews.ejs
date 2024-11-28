@@ -209,47 +209,62 @@
         <!-- ./sidebar -->
 
         <!-- info -->
-        <form id="profileForm" method="POST" action="/user/<%= user._id %>?_method=PUT"" class="col-span-9 shadow rounded px-6 pt-5 pb-7" enctype="multipart/form-data">
-            <h4 class="text-lg font-medium capitalize mb-4">
-                Profile information
-            </h4>
-            <div class="space-y-4 grid grid-cols-2 gap-6">
-                <div class="grid grid-cols-1 gap-y-4">
-                    <div class="">
-                        <div>
-                            <label for="first">Fullname</label>
-                            <input type="text" name="fullName"  id="fullname" class="input-box" value="<%= user.fullName %>">
-                            <p id="fullname-error" class="text-red-600"></p>
+        <div class="flex flex-col col-span-9 self-center shadow rounded px-6 ">
+            <ul class="">
+                <% if(reviews.length>0){%>
+                <% reviews.forEach(review=>{%>
+                <li class="">
+                    <a href="/productDetails/get/<%=review.product._id%>" class="flex items-center p-2 border-2 border-gray-400 rounded-lg my-2 bg-red-100">
+                        <img src="<%=review.product.image%>" class="mr-10 rounded-full w-20 h-20">
+                        <div class="flex-1">
+                            <h3 class="text-xl"><%=review.product.name%></h3>
+                            <div class="">
+                                <% for(let i=0;i<5;i++)
+                                {%>
+                                    <%if(i<review.rating){%>
+                                <label for="" class="text-2xl text-yellow-400 cursor-pointer">
+                                    <i class="fa-solid fa-star"></i>
+                                </label>
+                                <%}
+                                else{%>
+                                    <label for="" class="text-2xl text-yellow-400 cursor-pointer">
+                                        <i class="fa-regular fa-star"></i>
+                                    </label>
+                                <%}%>
+                                <%}%>
+                            </div>
+                            <p class=""><%=review.comment%></p>
                         </div>
-                    </div>
-                    <div class="">
-                        <div>
-                            <label for="birthday">Birthday</label>
-                            <input type="date" name="birthDate" id="birthday" class="input-box" value="<%= user.birthDay %>">
-                        </div>
-                    </div>
-                    <div class="">
-                        <div>
-                            <label for="email">Email Address</label>
-                            <input type="email" name="email" id="email" class="input-box" value="<%= user.email %>">
-                            <p id="email-error" class="text-red-600"></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex justify-center items-center flex-col">
-                <img id="imageDisplay" src="<%= user.avatar %>" alt="" class="h-52 w-52 rounded-full mb-10 border border-gray-200 p-1 object-cover" >
-                <label for="inputImage" class="bg-slate-400 px-3 py-1 rounded-md">Choose avatar</label>
-                <input id="inputImage" class="hidden" type="file" name="avatar">
-                </div>
+                        <span class="self-start block">
+                             Date: <%=review.createdAt%>
+                        </span>
+                    </a>
+                </li><%})%><%}
+                else{%>
+                    <p class="text-center block text-xl">You have not rated any products yet</p>
+                <%}%>
+            </ul>
+            <div class="flex my-6 self-center">
+                <% if (page > 1) { %> 
+                    <a class="mx-1 block py-2 px-3 border-2 border-gray-100" href="/reviews/myreviews?page=<%= page - 1 %>">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </a>
+                    <a class="mx-1 block py-2 px-3 border-2 border-gray-100" href="/reviews/myreviews?page=1">Start</a>
+                <% } %>
+                
+                <% let startPage = Math.max(1, page - 2); %>
+                <% let endPage = Math.min(totalPages, page + 2); %>
+                <% for (let i = startPage; i <= endPage; i++) { %>
+                    <a  href="/reviews/myreviews?page=<%= i %>" class="mx-1 block py-2 px-3 border-2  <%= i === page ? 'text-white bg-red-500' : '' %>"> <%= i %></a>
+                <% } %>
+                
+                <% if (page < totalPages) { %>
+                    <a class="mx-1 block py-2 px-3 border-2 border-gray-100" href="/reviews/myreviews?page=<%= totalPages %>">End</a>
+                    <a class="mx-1 block py-2 px-3 border-2 border-gray-100" href="/reviews/myreviews?page=<%= page + 1 %>"><i class="fa-solid fa-chevron-right"></i></a>
+                <% } %>                
             </div>
-            <div class="mt-4">
-                <button type="submit"
-                    class="py-3 px-4 text-center text-white bg-primary border border-primary rounded-md hover:bg-transparent hover:text-primary transition font-medium">save
-                    changes</button>
-            </div>
-        </form>
+        </div>
         <!-- ./info -->
-
     </div>
     <!-- ./wrapper -->
 

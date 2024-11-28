@@ -1,7 +1,6 @@
 import serviceFactory from '../Factory/serviceFactory.js';
-
-
 const reviewService = serviceFactory.getReviewService();
+const userService =serviceFactory.getUserService();
 
 const getReviewProperties = (req) => {
     const {productId,user,rating,comment} = req.body;
@@ -15,12 +14,11 @@ const isValid = ({productId,user,rating,comment}) => {
     return missData && ratingInRange;
 };
 const getFormatedDate=(date)=>{
-    console.log("fuck")
-    const yyyy = date.getFullYear();
-    const mm = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-    const dd = String(today.getDate()).padStart(2, '0');
-    const formattedDate = `${yyyy}-${mm}-${dd}`;    
-    return formattedDate;
+    const d = new Date(date); 
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0'); 
+    const year = d.getFullYear();
+    return `${day}/${month}/${year}`;
 };
 
 const populateReview=(review)=>{
@@ -56,5 +54,37 @@ const addReview = async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 };
+const populateUserReview =(review)=>{
+    const populateReview ={
+        reviewId:review._id,
+        product:{
+            _id:review.productId._id,
+            name:review.productId.name,
+            image:review.productId.image
+        },
+        rating:review.rating,
+        comment:review.comment,
+        createdAt:getFormatedDate(review.createdAt)
+    }
+    return populateReview
+}
+const getUserReviews=async(req,res)=>{
+    try{
+        const page =parseInt(req.query.page)||1
+        const limit =5
+        const skip= (page-1)*limit
+        const userId =req.user._id
+        const user =await userService.getUserById(userId)
+        const rawReviews = await reviewService.getFilterReviewsByUserId(userId,skip,limit)
+        const totalReview =await reviewService.getAmountReviewsByUserId(userId)
+        const totalPages = Math.ceil(totalReview/limit)
+        const reviews=rawReviews.map(review=>populateUserReview(review))
+        
+        res.render('myReviews',{user,reviews,page,totalPages})
+    }
+    catch(error){
+        res.status(400).json({message:error.message})
+    }
+}
 
-export {addReview};
+export {addReview,getUserReviews};

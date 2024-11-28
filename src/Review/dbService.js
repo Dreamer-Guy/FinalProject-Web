@@ -18,6 +18,18 @@ const reviewService = {
         .lean();
         return reviews;
     },
+    async getReviewsByUserId(id){
+        const reviews = await Review.find({user:id}).populate('productId','name image')
+        return reviews
+    },
+    async getFilterReviewsByUserId(id,skip,limit){
+        const reviews = await Review.find({user:id}).skip(skip).limit(limit).populate('productId','name image').sort({createdAt:-1})
+        return reviews
+    },
+    async getAmountReviewsByUserId(id){
+        const total=await Review.countDocuments({user:id})
+        return total
+    },
     async getReviewById(id) {
         const review = await Review.findById(id);
         return review;
