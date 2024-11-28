@@ -1,6 +1,6 @@
 import expresss from "express";
 import {register,registerUser,logoutUser,getForgotPasswordPage,getResetPasswordPage,forgotPassword,
-resetPassWord,editInformation,updateInformation,changePassword} 
+resetPassWord,editInformation,updateInformation,changPasswordPage,changePassword,accountPage} 
 from "./controller.js";
 import passportLocal from "../middleWare/PassPort.js";
 import googlePassPort from "../middleWare/googlePassport.js";
@@ -9,6 +9,7 @@ import multer from "multer";
 import path from 'path';
 import serviceFactory from "../Factory/serviceFactory.js";
 import Address from "../Model/Address.js";
+import mockCartService from "../Cart/mockService.js";
 
 const storageConfig = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -20,26 +21,15 @@ const storageConfig = multer.diskStorage({
 });
 const upload = multer({ storage: storageConfig });
 const addressService=serviceFactory.getAddressService();
+const cartService = serviceFactory.getCartService();
 
 // Change Password  
-userRouter.get("/changePassword", (req, res) => {
-    const user=req.user;
-    res.render("changePassword", {
-        user,
-        success: null,
-        message: ""
-    });
-});
+userRouter.get("/changePassword", changPasswordPage);
 userRouter.put("/changePassword", changePassword);
 
 
-userRouter.get("/profile", editInformation)
-userRouter.get("/account", (req, res) => {
-    const user=req.user;
-    res.render("account",{
-        user,
-    });
-});
+userRouter.get("/profile", editInformation);
+userRouter.get("/account", accountPage);
 userRouter.put('/:id', upload.single('avatar'), updateInformation)
 
 
@@ -56,6 +46,7 @@ userRouter.get("/login", (req, res) => {
 userRouter.post("/loginUser",passportLocal.authenticate('local'), async (req, res) => {
     const userId = req.user._id;
     let address = await addressService.getAddressByUserId(userId);
+    let cart = await cartService.getCartByUserId(userId);
     if(!address){
         const defaultAddress = new Address({
             userId: userId,
@@ -67,6 +58,12 @@ userRouter.post("/loginUser",passportLocal.authenticate('local'), async (req, re
         });
         await addressService.saveAddress(defaultAddress);
     }
+    
+    if(!cart){
+        const newCart = await cartService.createCart(userId, []);
+        await cartService.saveCart(newCart);
+    }
+    
     return res.json({message:"Login Success"});
 });
 
@@ -94,6 +91,7 @@ userRouter.get("/auth/google/callback",googlePassPort.authenticate('google',
     async (req, res) => {
         const userId = req.user._id;
         const address = await addressService.getAddressByUserId(userId);
+        const cart = await cartService.getCartByUserId(userId);
         if(!address){
             const defaultAddress = new Address({
                 userId: userId,
@@ -105,7 +103,12 @@ userRouter.get("/auth/google/callback",googlePassPort.authenticate('google',
             });
             
             await addressService.saveAddress(defaultAddress);
-        }    
+        }
+        
+        if(!cart){
+            const newCart = await cartService.createCart(userId, []);
+            await cartService.saveCart(newCart);
+        }
         
         return res.redirect('/products/get');
 });

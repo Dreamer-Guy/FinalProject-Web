@@ -24,9 +24,21 @@ const cartService={
     deleteCart:async (userId) => {
         const cart=await Cart.findOneAndDelete({userId});
         return cart;
-    }
+    },
 
-    
+    coutProductInCart: async (userId) => {
+        try {
+            const cart = await Cart.findOne({userId}).lean();
+            if (!cart) {
+                return 0;
+            }
+            return cart.items.length;
+        }
+        catch (e){
+            console.log(e);
+            return 0;
+        }
+    }
 };
 
 

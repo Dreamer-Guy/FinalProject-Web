@@ -2,6 +2,7 @@ import serviceFactory from "../Factory/serviceFactory.js"
 import {generateRatingStars} from "../utils/viewEngine.js";
 import Product from "../Model/Product.js";
 const productService = serviceFactory.getProductSerVice();
+const cartService = serviceFactory.getCartService();
 
 const ROW_PER_PAGE=6;
 
@@ -91,12 +92,15 @@ const fetchAllFilteredProducts = async (req, res) => {
             products=products.slice((page-1)*rowsPerPage,page*rowsPerPage);
         }
         const populateProducts = products.map((product) => (populateProduct(product)));
+        const productsInCart = await cartService.coutProductInCart(user?user._id:null);
         return res.render('products', {
             products:populateProducts,
             totalProducts,
             rowsPerPage,
             user,
-            generateRatingStars});
+            generateRatingStars,
+            cartNumber: productsInCart
+        });
     }
     catch (e) {
         return res.json({

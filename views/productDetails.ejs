@@ -41,14 +41,14 @@
             </div>
                 <% if(user){%>
                     <div class="flex items-center space-x-4">
-                        <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
+                        <a href="/carts/get" class="text-center text-gray-700 hover:text-primary transition relative">
                             <div class="text-2xl">
                                 <i class="fa-solid fa-bag-shopping"></i>
                             </div>
                             <div class="text-xs leading-3">Cart</div>
                             <div
                                 class="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
-                                2</div>
+                                <%=cartNumber%></div>
                         </a>
                         <a href="/user/account" class="text-center text-gray-700 hover:text-primary transition relative">
                             <div class="text-2xl">
@@ -276,7 +276,7 @@
                     class="w-full border border-gray-300 rounded-md p-3 mt-2"/>
                 <button 
                     onclick="handleAddReview()"
-                    class="bg-black text-white py-3 px-8 rounded-md hover:text-blue-500 transition mt-2"
+                    class="bg-blue-500 text-white py-3 px-8 rounded-md hover:text-black transition mt-2"
                     id="add-review">Add review</button>
             </div>
         <% } %>
@@ -285,7 +285,7 @@
     <!-- Related product -->
     <div class="container pb-16">
         <h2 class="text-2xl font-medium text-gray-800 uppercase mb-6">Related products</h2>
-        <div class="flex flex-col md:flex-row justify-center gap-6">
+        <div class="flex flex-col md:flex-row justify-center items-center gap-6">
             <% relatedProducts.forEach(product => { %>
                 <div class="bg-white shadow rounded overflow-hidden group 
                 flex flex-col justify-between max-w-[250px]">
@@ -325,7 +325,7 @@
     </div>
     <!-- footer -->
     <footer class="bg-white pt-16 pb-12 border-t border-gray-100">
-        <div class="container grid grid-cols-3">
+        <div class="container grid grid-cols-1 md:grid-cols-3">
             <div class="col-span-1 space-y-8 mr-2">
                 <img src="../assets/images/logo.svg" alt="logo" class="w-30">
                 <div class="mr-2">
@@ -346,7 +346,7 @@
                 </div>
             </div>
 
-            <div class="col-span-2 grid grid-cols-2 gap-8">
+            <div class="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="grid grid-cols-2 gap-8">
                     <div>
                         <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Solutions</h3>

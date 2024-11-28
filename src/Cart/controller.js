@@ -1,3 +1,4 @@
+import { json } from "express";
 import serviceFactory from "../Factory/serviceFactory.js";
 import checkNumber from "../utils/checkNumber.js";
 
@@ -136,9 +137,15 @@ const getCartPage=async (req,res) => {
     //     return res.redirect('/user/login');
     // }
     const cart=await cartService.getCartByUserId(user._id)||{userId:user._id,items:[]};
+    const productsInCart = await cartService.coutProductInCart(user._id);
+    
     res.render('cart',{
         user,
-        cart});
+        cart,
+        cartNumber: productsInCart
+    });
 };
+
+
 
 export {getCartPage,addCartItems,updateCartItems,deleteCartItems};

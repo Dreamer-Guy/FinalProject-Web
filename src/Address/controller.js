@@ -3,7 +3,7 @@ import serviceFactory from "../Factory/serviceFactory.js";
 
 
 const addressService=serviceFactory.getAddressService();
-const userService=serviceFactory.getUserService();
+const cartService=serviceFactory.getCartService();
 
 
 const isAddressChanged = (oldAddress, newAddress) => {
@@ -18,12 +18,14 @@ const editAddress = async (req, res) => {
     try{
         const userId = req.user._id;
         const address = await addressService.getAddressByUserId(userId);
+        const productsInCart = await cartService.coutProductInCart(userId);
         
         res.render('manageAddress', {
             address: address || {}, 
             user: req.user,
             error: null,
-            message: ""
+            message: "",
+            cartNumber: productsInCart
         });  
     } catch (err) {
         console.log(err);
@@ -32,7 +34,8 @@ const editAddress = async (req, res) => {
             address: {},
             user: req.user,
             error: err,
-            message: `Error: ${err.message}`
+            message: `Error: ${err.message}`,
+            cartNumber: 0
         });
     }
 }
@@ -40,6 +43,7 @@ const editAddress = async (req, res) => {
 const updateAddress = async (req, res) => {
     try{
         const userId = req.user._id;
+        const productsInCart = await cartService.coutProductInCart(userId);
         const { street, city, postalCode, phone, notes } = req.body;
         
         let address = await addressService.getAddressByUserId(userId);
@@ -77,7 +81,8 @@ const updateAddress = async (req, res) => {
             address: address || {}, 
             user: req.user,
             error: null,
-            message: message || ""
+            message: message || "",
+            cartNumber: productsInCart
         });
     } catch (err) {
         console.log(err);
@@ -86,7 +91,8 @@ const updateAddress = async (req, res) => {
             address: {},
             user: req.user,
             error: err,
-            message: `Error: ${err.message}`
+            message: `Error: ${err.message}`,
+            cartNumber: 0
         });
     }
 }

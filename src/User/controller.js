@@ -14,8 +14,12 @@ import { get } from "http";
 import { render } from "ejs";
 import { error } from "console";
 
+import mockCartService from "../Cart/mockService.js";
+
 const userService=serviceFactory.getUserService();
 const addressService=serviceFactory.getAddressService();
+const cartService=serviceFactory.getCartService();
+
 const forgotPasswordTokenService=serviceFactory.getForgotPasswordTokenService();
 
 const generateGetPasswordLink = (queryData) => {
@@ -85,7 +89,7 @@ const getResetPasswordPage=async(req,res)=>{
     res.render('resetPassword');
 };
 
-const forgotPassword = async (req, res) => {
+const forgotPassword = async (req, res) => {    
     try {
         const { email } = req.query;
         if (!email) {
@@ -135,6 +139,7 @@ const resetPassWord = async (req, res) => {
 
 const editInformation =async(req,res)=>{
     const userObj=await userService.getUserById(req.user._id)
+    const productsInCart = await cartService.coutProductInCart(userObj._id);
     const user = {
         _id:userObj._id,
         fullName: userObj.fullName,
@@ -142,7 +147,10 @@ const editInformation =async(req,res)=>{
         birthDay:userObj.birthDate? userObj.birthDate.toISOString().split('T')[0] : "",
         email:userObj.email
     }
-    res.render('profile',{user})
+    res.render('profile',{
+        user: user,
+        cartNumber: productsInCart
+    })
 }
 const updateInformation=async(req,res,next)=>{
     let user={}
@@ -157,20 +165,22 @@ const updateInformation=async(req,res,next)=>{
     res.redirect('/user/profile')
 }
 
+const changPasswordPage = async (req, res) => {
+    const user = req.user;
+    const producstInCart = await cartService.coutProductInCart(user._id);
+    res.render('changePassword', {
+        user: user,
+        success: true,
+        message: "",
+        cartNumber: producstInCart
+    });
+}
 const changePassword = async (req, res) => {
    try {
     const {oldPassword,newPassword, confirmNewPassword}=req.body;
     const user = req.user._id;
-    
-    if(newPassword !== confirmNewPassword){
-        return res.render('changePassword',{
-            user: req.user,
-            success: false,
-            message: "New password and confirm new password are not the same"       
-        });
-    }
-    
     const userObj = await userService.getUserById(user);
+    
     if(!userObj){
         return res.render('changePassword',{
             user: req.user,
@@ -184,6 +194,14 @@ const changePassword = async (req, res) => {
             user: req.user,
             success: false,
             message: "Old password is incorrect" 
+        });
+    }
+    
+    if(newPassword !== confirmNewPassword){
+        return res.render('changePassword',{
+            user: req.user,
+            success: false,
+            message: "New password and confirm new password are not the same"       
         });
     }
     
@@ -207,9 +225,16 @@ const changePassword = async (req, res) => {
    }
 };
 
+const accountPage = async (req, res) => {
+    const user = req.user;
+    const productsInCart = await cartService.coutProductInCart(user._id);
+    res.render("account",{
+        user,
+        productsInCart,
+    });
+}
 
-
-export {register,registerUser,logoutUser,getForgotPasswordPage,getResetPasswordPage,forgotPassword,resetPassWord,editInformation,updateInformation, changePassword };
+export {register,registerUser,logoutUser,getForgotPasswordPage,getResetPasswordPage,forgotPassword,resetPassWord,editInformation,updateInformation,changPasswordPage,changePassword,accountPage };
 
 
 

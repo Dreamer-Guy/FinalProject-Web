@@ -58,23 +58,27 @@ const getOrderData=(user,cart,address)=>{
 
 const getOrderViewPage=async(req,res)=>{
     const user=req.user||{_id:"673acf13fbb04dec26fc84c6"};
+    const productsInCart = await cartService.coutProductInCart(user._id);
     const rawOrders=await orderService.getOrdersByUserId(user._id);
     const orders=rawOrders.map(order=>populateOrder(order));
     const totalOrders=orders.length;
     return res.render("order",{
         user:user,
         orders:orders,
+        cartNumber: productsInCart,
     });
 }
 
 const getOrderDetailsPage=async(req,res)=>{
     const user=req.user||{_id:"673acf13fbb04dec26fc84c6"};
+    const productsInCart = await cartService.coutProductInCart(user._id);
     const orderId=req.params.id;
     const order=await orderService.getOrderById(orderId);
     const populatedOrder=populateOrder(order);
     return res.render("orderDetails",{
         user:user,
         order:populatedOrder,
+        cartNumber: productsInCart,
     });
 };
 
