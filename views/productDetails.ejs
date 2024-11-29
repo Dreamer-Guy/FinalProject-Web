@@ -226,29 +226,64 @@
     <div class="container pb-16">
         <div>
             <h2 class="text-2xl font-medium text-gray-800 uppercase mb-6">Review</h2>
-        <% reviews.forEach(review => { %>    
-            <div class="flex flex-row justify-start items-center gap-4">
-                <div class="w-[50px] h-[50px]">
-                    <img 
-                    class="w-full h-full object-cover rounded-full"
-                    src="https://github.com/octocat.png?s=200" alt="doing" />
-                </div>
-                <div>
-                    <div class="flex flex-row gap-6">
-                        <h3 class="font-bold"><%=review.user.fullName%></h3>
-                        <p class="opacity-50 text-blue-400"><%=review.createdAt%></p>
-                    </div>
-                    <div>
-                        <div class="flex gap-1 text-sm text-yellow-400">
-                            <%-generateRatingStars(review.rating) %>
+            <% if(reviews.length<=0){ %>
+                <p class="text-gray-600">No review yet</p>
+            <% } else { %>
+                <% const COUNT_SHOW_REVIEW = 3; %>
+                <% for (let i = 0; i < reviews.length && i < COUNT_SHOW_REVIEW ; i++) { %>    
+                    <div class="flex flex-row justify-start items-center gap-4 class">
+                        <div class="w-[50px] h-[50px]">
+                            <img 
+                            class="w-full h-full object-cover rounded-full"
+                            src="https://github.com/octocat.png?s=200" alt="doing" />
+                        </div>
+                        <div>
+                            <div class="flex flex-row gap-6">
+                                <h3 class="font-bold"><%= reviews[i].user.fullName %></h3>
+                                <p class="opacity-50 text-blue-400"><%= reviews[i].createdAt %></p>
+                            </div>
+                            <div>
+                                <div class="flex gap-1 text-sm text-yellow-400">
+                                    <%- generateRatingStars(reviews[i].rating) %>
+                                </div>
+                            </div>
+                            <div>
+                                <p><%= reviews[i].comment %></p>
+                            </div>
                         </div>
                     </div>
-                    <div>
-                        <p><%=review.comment%></p>
+                <% } %>      
+                <span id="points">...There are <span class="font-semibold"><%=reviews.length-COUNT_SHOW_REVIEW%></span> more review(s)</span>
+                <% for (let i = 0 + COUNT_SHOW_REVIEW; i < reviews.length && i; i++) { %>    
+                    <div class="flex flex-row justify-start items-center gap-4 hidden review-display-more">
+                        <div class="w-[50px] h-[50px]">
+                            <img 
+                            class="w-full h-full object-cover rounded-full"
+                            src="https://github.com/octocat.png?s=200" alt="doing" />
+                        </div>
+                        <div>
+                            <div class="flex flex-row gap-6">
+                                <h3 class="font-bold"><%= reviews[i].user.fullName %></h3>
+                                <p class="opacity-50 text-blue-400"><%= reviews[i].createdAt %></p>
+                            </div>
+                            <div>
+                                <div class="flex gap-1 text-sm text-yellow-400">
+                                    <%- generateRatingStars(reviews[i].rating) %>
+                                </div>
+                            </div>
+                            <div>
+                                <p><%= reviews[i].comment %></p>
+                            </div>
+                        </div>
                     </div>
+                <% } %> 
+                <div>
+                    <button
+                    class="border border-gray-300 rounded-md p-2 mt-2 hover:bg-gray-100 transition"
+                    id="show-more-button" 
+                    onclick="toggleShow()">Show More</button>  
                 </div>
-            </div>
-        <% }) %>
+            <% } %>
         </div>
         <% if(user){%>
             <div>
@@ -327,7 +362,7 @@
     <footer class="bg-white pt-16 pb-12 border-t border-gray-100">
         <div class="container grid grid-cols-1 md:grid-cols-3">
             <div class="col-span-1 space-y-8 mr-2">
-                <img src="../assets/images/logo.svg" alt="logo" class="w-30">
+                <img src="/assets/images/logo.svg" alt="logo" class="w-30">
                 <div class="mr-2">
                     <p class="text-gray-500">
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, hic?
@@ -409,6 +444,7 @@
     </script>
     <script src="/js/common/util.js"></script>
     <script src="/js/productDetails/productDetails.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </body>
 
 </html>

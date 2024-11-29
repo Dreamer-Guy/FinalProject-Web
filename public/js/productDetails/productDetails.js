@@ -30,13 +30,13 @@ const generateRatingStars=(rating)=>{
     return stars;
 }
 
-function handleRating(rating) { // Visually set stars up to the selected rating
+const handleRating=(rating) =>{ 
     data.rating=rating;
     const input_stars=document.getElementById("input-starsRating");
     input_stars.innerHTML=generateRatingStars(rating);
 }
 
-async function handleAddReview(){
+const handleAddReview=async()=>{
     const comment=document.getElementById("comment").value;
     data.comment=comment;
     const url=window.location.href;
@@ -82,3 +82,19 @@ const decodeEJSData=()=>{
 
 
 decodeEJSData();
+
+
+const toggleShow=()=>{
+    const showMoreView=$(".review-display-more");
+    const points=$("#points");
+    const showMoreButton=$("#show-more-button");
+    console.log(showMoreButton,points,showMoreView);
+    showMoreView.toggleClass("hidden");
+    points.toggleClass("hidden");
+    if(showMoreButton.text().toLowerCase()==="show more"){
+        showMoreButton.text("Show less");
+    }
+    else{
+        showMoreButton.text("Show more");
+    }
+}
