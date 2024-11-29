@@ -2,7 +2,7 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import passport from "passport";
 import dotenv from "dotenv";
 import serviceFactory from "../Factory/serviceFactory.js";
-import { hashPassword, comparePlainAndHashed } from "../utils/hashAndCompare.js";
+import { hashPassword, comparePlainAndHashed } from "../Utils/hashAndCompare.js";
 const userService = serviceFactory.getUserService();
 
 dotenv.config();

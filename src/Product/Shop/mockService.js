@@ -1,4 +1,4 @@
-import Product from "../Model/Product.js";
+import Product from "../../Model/Product.js";
 
 const mockProducts = [
     {

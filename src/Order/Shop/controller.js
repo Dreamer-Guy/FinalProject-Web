@@ -1,5 +1,5 @@
 import { get } from "mongoose";
-import serviceFactory from "../Factory/serviceFactory.js";
+import serviceFactory from "../../Factory/serviceFactory.js";
 
 const orderService=serviceFactory.getOrderService();
 const cartService=serviceFactory.getCartService();

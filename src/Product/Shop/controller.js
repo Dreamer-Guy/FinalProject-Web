@@ -1,6 +1,6 @@
-import serviceFactory from "../Factory/serviceFactory.js"
-import {generateRatingStars} from "../utils/viewEngine.js";
-import Product from "../Model/Product.js";
+import serviceFactory from "../../Factory/serviceFactory.js"
+import {generateRatingStars} from "../../Utils/viewEngine.js";
+import Product from "../../Model/Product.js";
 const productService = serviceFactory.getProductSerVice();
 const cartService = serviceFactory.getCartService();
 

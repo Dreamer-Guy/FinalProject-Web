@@ -1,5 +1,5 @@
-import Address from "../Model/Address.js"
-import serviceFactory from "../Factory/serviceFactory.js";
+import Address from "../../Model/Address.js"
+import serviceFactory from "../../Factory/serviceFactory.js";
 
 
 const addressService=serviceFactory.getAddressService();

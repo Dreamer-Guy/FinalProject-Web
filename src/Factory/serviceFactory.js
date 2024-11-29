@@ -1,5 +1,5 @@
-import mockProductService from "../Product/mockService.js";
-import mockProductDetailsService from "../ProductDetails/mockService.js";
+import mockProductService from "../Product/Shop/mockService.js";
+import mockProductDetailsService from "../ProductDetails/Shop/mockService.js";
 import dbProductService from "../Product/dbService.js";
 import dbProductDetailsService from "../ProductDetails/dbService.js";
 import dbUserService from "../User/dbService.js";
@@ -7,7 +7,7 @@ import dbReviewService from "../Review/dbService.js";
 import dbCartService from "../Cart/dbService.js";
 import dbOrderService from "../Order/dbService.js";
 import dbAddressService from "../Address/dbService.js";
-import dbForgotPasswordService from "../ForgotPasswordToken/dbService.js";
+import dbForgotPasswordService from "../UtilServices/dbServiceForgotPassowordToken.js";
 
 const productService=dbProductService;
 const productDetailsServce=dbProductDetailsService;

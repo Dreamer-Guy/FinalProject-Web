@@ -1,4 +1,4 @@
-import serviceFactory from '../Factory/serviceFactory.js';
+import serviceFactory from '../../Factory/serviceFactory.js';
 const reviewService = serviceFactory.getReviewService();
 const userService =serviceFactory.getUserService();
 

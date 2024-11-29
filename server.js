@@ -5,17 +5,17 @@ import passport from './src/middleWare/PassPort.js';
 import methodOverride  from 'method-override'
 import mongoose from './src/Config/mongooseDB.js';
 
-import productRouter from "./src/Product/route.js";
-import productDetailsRouter from "./src/ProductDetails/route.js";
-import userRouter from './src/User/route.js';
-import homeRouter from './src/HomePage/controller.js';
-import reviewRouter from './src/Review/route.js';
-import cartRouter from "./src/Cart/route.js";
-import orderRouter from './src/Order/route.js';
-import addressRouter from './src/Address/route.js';
+import productRouter from "./src/Product/Shop/route.js";
+import productDetailsRouter from "./src/ProductDetails/Shop/route.js";
+import userRouter from './src/User/Shop/route.js';
+import homeRouter from './src/HomePage/Shop/route.js';
+import reviewRouter from './src/Review/Shop/route.js';
+import cartRouter from "./src/Cart/Shop/route.js";
+import orderRouter from './src/Order/Shop/route.js';
+import addressRouter from './src/Address/Shop/route.js';
 
-import adminDashBoardRouter from './src/Admin/route/dashboardRoute.js';
-import adminRevenueRouter from './src/Admin/route/revenueRoute.js';
+import adminDashBoardRouter from "./src/HomePage/Admin/dashboardRoute.js";
+import adminRevenueRouter from  "./src/Revenue/Admin/revenueRoute.js";
 
 const app = express();
 const PORT = 3000;

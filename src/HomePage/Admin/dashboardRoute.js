@@ -1,5 +1,5 @@
 import { getDashBoardPage } 
-from "../controller/dashboardController.js";
+from "./dashboardController.js";
 import express from "express";
 
 const adminDashBoardRouter = express.Router();

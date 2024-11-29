@@ -1,7 +1,7 @@
 import express from "express";
 import {fetchAllFilteredProducts,apiGetAllFilteredProducts,searchProducts}
 from "./controller.js";
-import passportLocal from "../middleWare/PassPort.js";
+import passportLocal from "../../middleWare/PassPort.js";
 
 
 const shoppingProductRouter=express.Router();

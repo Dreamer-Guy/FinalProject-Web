@@ -43,7 +43,7 @@ const createToastElement=(msg,type)=>{
 };
 
 
-const showToast=(msg,type='default')=>{
+const showToast=(msg,type='default',time=3000)=>{
     const toast=createToastElement(msg,type);
     document.body.appendChild(toast);
     toast.classList.remove("opacity-0", "pointer-events-none");
@@ -52,5 +52,5 @@ const showToast=(msg,type='default')=>{
         toast.classList.add("opacity-0", "pointer-events-none");
         toast.classList.remove("opacity-100");
         toast.remove();
-    }, 2000); 
+    }, time); 
 }

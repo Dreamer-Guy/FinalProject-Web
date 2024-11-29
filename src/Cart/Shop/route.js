@@ -1,7 +1,7 @@
 import express from "express";
 import { getCartPage,addCartItems,updateCartItems,deleteCartItems} 
 from "./controller.js";
-import isUserLogin from "../middleWare/isUserLogin.js";
+import isUserLogin from "../../middleWare/isUserLogin.js";
 
 const cartRouter=express.Router();
 

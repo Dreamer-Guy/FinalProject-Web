@@ -40,9 +40,12 @@ const handleResetPasswordRequest=async()=>{
         });
         hideSpinnerLoading();
         if(res.ok){
+            const TOAST_TIME=1500;
             const data=await res.json();
-            showToast(data.message,'default');
-            return;
+            showToast(data.message,'default',TOAST_TIME);
+            setTimeout(()=>{
+                window.location.href='/user/login';
+            },TOAST_TIME);
         }
         else{
             const data=await res.json();

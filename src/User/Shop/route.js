@@ -1,15 +1,14 @@
 import expresss from "express";
-import {register,registerUser,logoutUser,getForgotPasswordPage,getResetPasswordPage,forgotPassword,
-resetPassWord,editInformation,updateInformation,changPasswordPage,changePassword,accountPage} 
+import {getRegisterPage,registerUser,logoutUser,getForgotPasswordPage,getResetPasswordPage,forgotPassword,
+resetPassWord,editInformation,updateInformation,changPasswordPage,changePassword,getAccountPage} 
 from "./controller.js";
-import passportLocal from "../middleWare/PassPort.js";
-import googlePassPort from "../middleWare/googlePassport.js";
+import passportLocal from "../../middleWare/PassPort.js";
+import googlePassPort from "../../middleWare/googlePassport.js";
 const userRouter = expresss.Router();
 import multer from "multer";
 import path from 'path';
-import serviceFactory from "../Factory/serviceFactory.js";
-import Address from "../Model/Address.js";
-import mockCartService from "../Cart/mockService.js";
+import serviceFactory from "../../Factory/serviceFactory.js";
+import Address from "../../Model/Address.js";
 
 const storageConfig = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -29,7 +28,7 @@ userRouter.put("/changePassword", changePassword);
 
 
 userRouter.get("/profile", editInformation);
-userRouter.get("/account", accountPage);
+userRouter.get("/account", getAccountPage);
 userRouter.put('/:id', upload.single('avatar'), updateInformation)
 
 
@@ -74,7 +73,7 @@ userRouter.get("/isLogin",(req, res) => {
 });
 
 userRouter.get("/logout",logoutUser);
-userRouter.get("/register",register);
+userRouter.get("/register",getRegisterPage);
 userRouter.post("/registeruser",registerUser);
 
 userRouter.get("/forgot/get",getForgotPasswordPage);

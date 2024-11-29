@@ -1,20 +1,12 @@
-import serviceFactory from "../Factory/serviceFactory.js";
-import { hashPassword ,comparePlainAndHashed} from "../utils/hashAndCompare.js";
-import sendEmail from "../utils/sendEmail.js";
+import serviceFactory from "../../Factory/serviceFactory.js";
+import { hashPassword ,comparePlainAndHashed} from "../../Utils/hashAndCompare.js";
+import sendEmail from "../../Utils/sendEmail.js";
 import dotenv from 'dotenv';
 import { randomBytes } from 'crypto';
-import uploadImage from "../utils/uploadImage.js"
+import uploadImage from "../../Utils/uploadImage.js"
 import fs from 'fs-extra';
 import { console } from "inspector";
 dotenv.config();
-
-import Address from "../Model/Address.js";
-import mongoose from "mongoose";
-import { get } from "http";
-import { render } from "ejs";
-import { error } from "console";
-
-import mockCartService from "../Cart/mockService.js";
 
 const userService=serviceFactory.getUserService();
 const addressService=serviceFactory.getAddressService();
@@ -74,7 +66,7 @@ const logoutUser=async(req,res)=>{
     res.redirect('/products/get');
 }
 
-const register=async(req,res)=>{
+const getRegisterPage=async(req,res)=>{
     const user=req.user;
     res.render('register',{
         user,
@@ -242,7 +234,7 @@ const changePassword = async (req, res) => {
    }
 };
 
-const accountPage = async (req, res) => {
+const getAccountPage = async (req, res) => {
     const user = req.user;
     const productsInCart = await cartService.coutProductInCart(user._id);
     res.render("account",{
@@ -251,7 +243,9 @@ const accountPage = async (req, res) => {
     });
 }
 
-export {register,registerUser,logoutUser,getForgotPasswordPage,getResetPasswordPage,forgotPassword,resetPassWord,editInformation,updateInformation,changPasswordPage,changePassword,accountPage };
+export {
+    getRegisterPage,registerUser,logoutUser,getForgotPasswordPage,getResetPasswordPage,forgotPassword,
+    resetPassWord,editInformation,updateInformation,changPasswordPage,changePassword,getAccountPage};
 
 
 

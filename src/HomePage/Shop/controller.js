@@ -1,5 +1,4 @@
-import serviceFactory from "../Factory/serviceFactory.js";
-import express from "express";
+import serviceFactory from "../../Factory/serviceFactory.js";
 
 const productService = serviceFactory.getProductSerVice();
 const cartService = serviceFactory.getCartService();
@@ -21,9 +20,7 @@ const populateProduct=(product)=>{
     return populatedProduct;
 }
 
-const homeRouter=express.Router();
-
-homeRouter.get("/",async(req,res)=>{
+const getHomePage=async(req,res)=>{
     const user=req.user||null;
     const products=await productService.getProducts([],[],null,null);
     const populatedProducts = products.map((product) => (populateProduct(product)));
@@ -36,6 +33,7 @@ homeRouter.get("/",async(req,res)=>{
         topProducts:populatedTopProducts,
         cartNumber:productsInCart
     });
-});
+}
 
-export default homeRouter;
+
+export {getHomePage};

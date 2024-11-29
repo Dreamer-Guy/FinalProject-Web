@@ -1,5 +1,5 @@
 import {getRevenueInTimePage,getRevenueByTopProductsPage} 
-from "../controller/revenueController.js";
+from "./revenueController.js";
 
 import express from "express";
 
