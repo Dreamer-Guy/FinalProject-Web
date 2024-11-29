@@ -100,7 +100,7 @@ const forgotPassword = async (req, res) => {
             return res.status(400).send("User not found"); 1
         }
         await handleSendEmail(user._id, user.email);
-        return res.status(400).send({
+        return res.status(200).send({
             message: "We have sent to your email"
         });
     }
