@@ -150,19 +150,23 @@
 
             <div class="mt-6 bg-white shadow rounded p-4 divide-y divide-gray-200 space-y-4 text-gray-600">
                 <div class="space-y-1 pl-8">
-                    <a href="/user/account" class="relative hover:text-primary block capitalize transition font-medium">
+                    <a id="account" href="/user/account" 
+                        class="account block font-medium capitalize transition">
                         <span class="absolute -left-8 top-0 text-base">
                             <i class="fa-regular fa-address-card"></i>
-                        </span>         
+                        </span>
                         Manage account
                     </a>
-                    <a href="/user/profile" class="relative hover:text-primary block font-medium capitalize transition">
+                    <a id="profile" href="/user/profile" 
+                        class="profile relative hover:text-primary block capitalize transition">
                         Profile information
                     </a>
-                    <a href="/addresses/get" class="relative hover:text-primary block capitalize transition">
+                    <a id="addresses" href="/addresses/get" 
+                    class="addresses relative hover:text-primary block capitalize transition">
                         Manage addresses
                     </a>
-                    <a href="/user/changePassword" class="relative hover:text-primary block capitalize transition">
+                    <a id="passwords" href="/user/changePassword" 
+                        class="passwords relative hover:text-primary block capitalize transition">
                         Change password
                     </a>
                 </div>
@@ -170,7 +174,7 @@
                 <div class="space-y-1 pl-8 pt-4">
                     <a id="orders" 
                     href="/orders/get" 
-                    class="relative text-primary block font-medium capitalize transition">
+                    class="orders relative hover:text-primary block font-medium capitalize transition">
                         <span class="absolute -left-8 top-0 text-base">
                             <i class="fa-solid fa-box-archive"></i>
                         </span>
@@ -178,16 +182,14 @@
                     </a>
                     <a id="reviews" 
                     href="/reviews/myreviews" 
-                    class="relative hover:text-primary block capitalize transition">
+                    class="reviews relative hover:text-primary block capitalize transition">
                         My reviews
                     </a>
                 </div>
-
-                
-
                 <div class="space-y-1 pl-8 pt-4">
-                    <a  id="carts"
-                        href="/carts/get" class="relative hover:text-primary block font-medium capitalize transition">
+                    <a id="carts" 
+                    href="/carts/get" 
+                    class="carts relative text-primary block font-medium capitalize transition">
                         <span class="absolute -left-8 top-0 text-base">
                             <i class="fa-regular fa-heart"></i>
                         </span>
@@ -215,18 +217,20 @@
             </button>
         </div>
         <!-- ./diaglog -->
-        <div id="profile-dialog"
+        <div
+            onclick="handleCloseDialog('profile-dialog')" 
+            id="profile-dialog"
             class="fixed inset-0 bg-black bg-opacity-50 flex hidden z-50">
-            <div class="w-1/2 bg-white">
+            <div class="w-2/3 bg-white">
                 <div class="flex flex-row justify-between items-start bg-white p-2">
                     <div class="px-4 py-3 shadow flex items-center gap-4">
                         <div class="flex-shrink-0">
-                            <img src="../assets/images/avatar.png" alt="profile"
+                            <img src="<%=user.avatar%>" alt="profile"
                                 class="rounded-full w-14 h-14 border border-gray-200 p-1 object-cover">
                         </div>
                         <div class="flex-grow">
                             <p class="text-gray-600">Hello,</p>
-                            <h4 class="text-gray-800 font-medium"><%=user.fullName%>></h4>
+                            <h4 class="text-gray-800 font-medium"><%=user.fullName%></h4>
                         </div>
                     </div>
                     <div class="flex justify-center items-center 
@@ -240,41 +244,48 @@
     
                 <div class="mt-6 bg-white shadow rounded p-4 divide-y divide-gray-200 space-y-4 text-gray-600">
                     <div class="space-y-1 pl-8">
-                        <a href="/user/account" class="block font-medium capitalize transition">
+                        <a href="/user/account" 
+                            class="account block font-medium capitalize transition">
                             <span class="absolute -left-8 top-0 text-base">
                                 <i class="fa-regular fa-address-card"></i>
                             </span>
                             Manage account
                         </a>
-                        <a href="/user/profile" class="relative hover:text-primary block capitalize transition">
+                        <a href="/user/profile" 
+                            class="profile relative hover:text-primary block capitalize transition">
                             Profile information
                         </a>
-                        <a href="/user/mangeAddress" class="relative hover:text-primary block capitalize transition">
+                        <a href="/addresses/get" 
+                            class="addresses relative hover:text-primary block capitalize transition">
                             Manage addresses
                         </a>
-                        <a href="/user/changePassword" class="relative hover:text-primary block capitalize transition">
+                        <a href="/user/changePassword" 
+                            class="passwords relative hover:text-primary block capitalize transition">
                             Change password
                         </a>
                     </div>
     
                     <div class="space-y-1 pl-8 pt-4">
-                        <a href="#" class="relative hover:text-primary block font-medium capitalize transition">
+                        <a href="/orders/get" 
+                            class="orders relative hover:text-primary block font-medium capitalize transition">
                             <span class="absolute -left-8 top-0 text-base">
                                 <i class="fa-solid fa-box-archive"></i>
                             </span>
                             My order history
                         </a>
-                        <a href="#" class="relative hover:text-primary block capitalize transition">
+                        <a href="/reviews/myreviews" 
+                            class="reviews relative hover:text-primary block capitalize transition">
                             My reviews
                         </a>
                     </div>
     
                     <div class="space-y-1 pl-8 pt-4">
-                        <a href="/carts/get" class="relative text-primary block font-medium capitalize transition">
+                        <a href="/carts/get" 
+                            class="carts relative text-primary block font-medium capitalize transition">
                             <span class="absolute -left-8 top-0 text-base">
                                 <i class="fa-regular fa-heart"></i>
                             </span>
-                            My Cart                    
+                            My Cart
                         </a>
                     </div>
     
@@ -443,6 +454,8 @@
     </div>
     <!-- ./copyright -->
     <script src="/js/order/order.js"></script>
+    <script src="/js/common/profile/updateProfileStatus.js"></script>
+    <script src="/js/common/profile/dialog.js"></script>
 </body>
 
 </html>

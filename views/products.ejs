@@ -47,6 +47,7 @@
                             </div>
                             <div class="text-xs leading-3">Cart</div>
                             <div
+                                id="cart-number"
                                 class="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
                                 <%=cartNumber%></div>
                         </a>
@@ -453,10 +454,10 @@
                                     <div class="text-xs text-gray-500 ml-3">(150)</div>
                                 </div>
                             </div>
-                            <a href="#"
+                            <button onclick="handleAddToCart('<%= product.productId %>',1)"
                                 class="block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition">
                                 Add to cart
-                            </a>
+                            </button>
                         </div>
                     </div>
                     <% }) %>
@@ -590,8 +591,12 @@
     <!-- ./copyright -->
     <script src="/js/common/util.js"></script>
     <script src="/js/products/query.js"></script>
+    <script src="/js/products/cart.js"></script>
+    <script src="/js/common/toast.js"></script>
+    <script src="/js/common/showSpinnerLoading.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
     <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 
 </html>

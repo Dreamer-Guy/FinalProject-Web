@@ -5,19 +5,19 @@ import checkNumber from "../utils/checkNumber.js";
 const cartService=serviceFactory.getCartService();
 const productService=serviceFactory.getProductSerVice();
 
+const OK_STATUS=200;
 const BAD_REQUEST_STATUS=400;
 const INTERNAL_SERVER_ERROR_STATUS=500;
 const deleteCart=async (req,res) => {
     try{
-        const user=req.user||{_id:"67380ab3237e6632c360a430"};
-        // if(!user){
-        //     return res.redirect('/user/login');
-        // }
+        const user=req.user;
         await cartService.deleteCart(user._id);
-        return res.status(200).json({message:"Cart deleted successfully"});
+        return res.status(OK_STATUS).json({message:"Cart deleted successfully"});
     }
     catch(e){
-        return res.status(500).json({message:e.message});
+        return res.status(INTERNAL_SERVER_ERROR_STATUS).send({
+            message:e.message,
+        })
     }
             
 };
@@ -54,10 +54,7 @@ const isDeleteCartItemsValid=(req)=>{
 
 const addCartItems=async(req,res)=>{
     try{
-        const user=req.user||{_id:"67384e211363879faca0ed81"};
-        // if(!user){
-        //     return res.redirect('/user/login');
-        // }
+        const user=req.user;
         if(!isAddCartItemsValid(req)){
             return res.status(BAD_REQUEST_STATUS).json({message:"Invalid request"});
         };
@@ -70,7 +67,7 @@ const addCartItems=async(req,res)=>{
             cart=await cartService.createCart(user._id,[]);
             await cartService.saveCart(cart);
         }
-        const indexItem=cart.items.findIndex(item=>item.productId.toString()===productId);
+        const indexItem=cart.items.findIndex(item=>item.productId._id.toString()===productId);
         if(indexItem===-1){
             cart.items.push({productId,quantity});
         }
@@ -78,7 +75,10 @@ const addCartItems=async(req,res)=>{
             cart.items[indexItem].quantity+=quantity;
         }
         await cartService.updateCart(user._id,cart.items);
-        return res.json({message:"Item added to cart successfully"});
+        return res.status(OK_STATUS)
+        .send({
+            message:"Item added to cart successfully",
+            cartNumber:cart.items.length,});
     }
     catch(e){
         return res.status(INTERNAL_SERVER_ERROR_STATUS).json({message:e.message});
@@ -87,10 +87,7 @@ const addCartItems=async(req,res)=>{
 
 const updateCartItems=async(req,res)=>{
     try{
-        const user=req.user||{_id:"67384e211363879faca0ed81"};
-        // if(!user){
-        //     return res.redirect('/user/login');
-        // }
+        const user=req.user;
         if(!isUpdateCartItemsValid(req)){
             return res.status(BAD_REQUEST_STATUS).json({message:"Invalid request"});
         };
@@ -106,16 +103,13 @@ const updateCartItems=async(req,res)=>{
         return res.json({message:"Cart updated successfully"});
     }
     catch(e){
-        return res.status(500).json({message:e.message});
+        return res.status(INTERNAL_SERVER_ERROR_STATUS).json({message:e.message});
     }
 }
 
 const deleteCartItems=async (req,res) => {
     try{
-        const user=req.user||{_id:"67384e211363879faca0ed81"};
-        // if(!user){
-        //     return res.redirect('/user/login');
-        // }
+        const user=req.user;
         if(!isDeleteCartItemsValid(req)){
             return res.status(BAD_REQUEST_STATUS).json({message:"Invalid request"});
         }
@@ -132,13 +126,12 @@ const deleteCartItems=async (req,res) => {
 
 
 const getCartPage=async (req,res) => {
-    const user=req.user||{_id:"67384e211363879faca0ed81"};
-    // if(!user){
-    //     return res.redirect('/user/login');
-    // }
-    const cart=await cartService.getCartByUserId(user._id)||{userId:user._id,items:[]};
+    const user=req.user;
+    if(!user){
+        return res.redirect('/user/login');
+    }
+    const cart=await cartService.getCartByUserId(user._id)||{userId:user._id,items:[]}; 
     const productsInCart = await cartService.coutProductInCart(user._id);
-    
     res.render('cart',{
         user,
         cart,

@@ -111,26 +111,41 @@ const forgotPassword = async (req, res) => {
 
 const resetPassWord = async (req, res) => {
     try {
-        const { email, token,newPassword } = req.body;
-        if (!email || !token || newPassword.trim().length===0) {
-            return res.status(400).send("Bad request");
+        const { email, token,newPassword,confirmPassword } = req.body;
+        if (!email || !token || newPassword.trim().length===0 || confirmPassword.trim().length===0) {
+            return res.status(400).send({
+                message:"Miss required information",
+            });
+        }
+        if(newPassword!==confirmPassword){
+            return res.status(400).send({
+                message:"Password and confirm password are not the same",
+            });
         }
         const user = await userService.getUserByEmail(email);
         if (!user) {
-            return res.status(400).send("Bad request");
+            return res.status(400).send({
+                message:"User not found",
+            });
         }
         const forgotPasswordToken = await forgotPasswordTokenService.getTokenByUserId(user._id);
         if (!forgotPasswordToken) {
-            return res.status(400).send("Bad request");
+            return res.status(400).send({
+                message:"This link is expried, please resend request",
+            });
         }
         if (!await comparePlainAndHashed(token, forgotPasswordToken.token)) {
-            return res.status(400).send("Bad request");
+            return res.status(400).send({
+                message:"Unauthorized request",
+            });
         }
         const hashedPassword = await hashPassword(newPassword);
         user.password = hashedPassword;
         await userService.saveUser(user);
         await forgotPasswordTokenService.findAndDeleteByUserId(user._id);
-        return res.status(200).send("Success");
+        return res.status(200).send({
+            message:"Reset password successfully",
+        });
     }
     catch (e) {
         return res.status(500);
@@ -180,12 +195,13 @@ const changePassword = async (req, res) => {
     const {oldPassword,newPassword, confirmNewPassword}=req.body;
     const user = req.user._id;
     const userObj = await userService.getUserById(user);
-    
+    const producstInCart = await cartService.coutProductInCart(user._id);
     if(!userObj){
         return res.render('changePassword',{
-            user: req.user,
+            user: user,
             success: false,
-            message: "User not found"       
+            message: "User not found",
+            cartNumber:producstInCart,       
         });
     }
     
@@ -193,7 +209,8 @@ const changePassword = async (req, res) => {
         return res.render('changePassword',{
             user: req.user,
             success: false,
-            message: "Old password is incorrect" 
+            message: "Old password is incorrect",
+            cartNumber:producstInCart, 
         });
     }
     
@@ -201,17 +218,16 @@ const changePassword = async (req, res) => {
         return res.render('changePassword',{
             user: req.user,
             success: false,
-            message: "New password and confirm new password are not the same"       
+            message: "New password and confirm new password are not the same",
+            cartNumber:producstInCart,       
         });
     }
     
     userObj.password = await hashPassword(newPassword);
     await userService.saveUser(userObj);
 
-    return res.render('changePassword',{
-        user: req.user,
-        success: true,
-        message: "Change password successfully" 
+    return res.render('login',{
+        user: null,
     });
     
    } catch (err) {
@@ -220,7 +236,8 @@ const changePassword = async (req, res) => {
        return res.render('changePassword',{
             user: req.user,
             success: false,
-            message: `Error: ${err.message}`
+            message: `Error: ${err.message}`,
+            cartNumber:0,
        });
    }
 };
