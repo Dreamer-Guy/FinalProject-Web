@@ -5,6 +5,7 @@ const map={
     'addresses':'addresses',
     'orders':'orders',
     'carts':'carts',
+    'reviews':'reviews',
 }
 
 

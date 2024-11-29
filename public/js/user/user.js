@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('profileForm').addEventListener('submit', function (e) {
       let hasError = false;
-  
       const fullname = document.getElementById('fullname');
       const email = document.getElementById('email');
       
