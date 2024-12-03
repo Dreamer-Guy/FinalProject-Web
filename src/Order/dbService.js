@@ -14,7 +14,7 @@ const orderService={
         const order=new Order(orderData);
         return order;
     },
-    saveOrder:async(order)=>{
+    save:async(order)=>{
         return await order.save();
     },
     getOrdersInTimeRange:async(startDate,endDate)=>{

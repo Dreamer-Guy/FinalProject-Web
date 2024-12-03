@@ -47,3 +47,29 @@ const handleCloseDialog=(id)=>{
 const handleOpenDialog=(id)=>{
     document.getElementById(id).classList.remove('hidden');
 };
+
+const placeOrder=async()=>{
+    try{
+        showSpinnerLoading();
+        const res=await fetch('/orders/create',{
+            method:"POST",
+            headers:{
+                'Content-Type':'application/json'
+            },
+        });
+        hideSpinnerLoading();
+        if(res.ok){
+            showToast('Order placed successfully','success');
+            setTimeout(()=>{
+                window.location.href="/orders/get";
+            },1500);
+        }
+        else{
+            const data=await res.json();
+            showToast(data.message,'warning');
+        }
+    }
+    catch(e){
+        console.log(e.message);
+    }
+};
