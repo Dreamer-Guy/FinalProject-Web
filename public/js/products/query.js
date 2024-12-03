@@ -113,9 +113,7 @@ async function handleFilters(type,value,value2_optional){
     if(type!=='page'){
         setCurrentPage(1);
     }
-    console.log(filters);
     const queryParams= new URLSearchParams(filters).toString();
-    console.log(queryParams.toString());
     try{
         const data=await fetch(`/products/api/get?${queryParams.toString()}`)
         .then(response => response.json());

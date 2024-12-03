@@ -132,8 +132,8 @@ const productService = {
                                     { description:{ $regex: searchTerm, $options: 'i' }}
                                 ]
                             },
-                            categories.length > 0 ? { 'category.name': { $in: categories } } : {},
-                            brands.length > 0 ? { 'brand.name': { $in: brands } } : {},
+                            categories.length > 0 ? { 'category.name': { $in: categories.map(c => new RegExp(c, 'i')) } } : {},
+                            brands.length > 0 ? { 'brand.name': { $in: brands.map(b => new RegExp(b, 'i')) } } : {},
                             {
                                 $or: priceConditions
                             }
