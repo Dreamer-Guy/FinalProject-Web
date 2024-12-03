@@ -381,7 +381,10 @@
                 <div class="flex justify-between text-gray-800 font-medium py-3 uppercas">
                     <p class="font-semibold">Total</p>
                     <p><span class="font-semibold">$</span>
-                        <%= cart.items.reduce((acc,item)=>(item.productId.salePrice>0?acc+=item.productId.salePrice:acc+=item.productId.price),0)%></p>
+                        <%= cart.items.reduce((acc,item)=>
+                            (item.productId.salePrice>0
+                                ?acc+=(item.productId.salePrice*item.quantity)
+                                :acc+=(item.productId.price*item.quantity)),0)%></p>
                 </div>
     
                 <div class="flex items-center mb-4 mt-2">
