@@ -453,6 +453,7 @@ const mockProducts = [
 const mockProductDetails = [
     {
         productId: null,
+        type: "Phone",
         weight: "194g",
         internalMemory: "128GB",
         chip: "Apple A13 Bionic",
@@ -462,6 +463,7 @@ const mockProductDetails = [
     },
     {
         productId: "64a0c88a57f1c78d1b634a10",
+        type: "Phone",
         weight: "227g",
         internalMemory: "256GB",
         chip: "Apple A18 Pro 6 nhân",
@@ -471,6 +473,7 @@ const mockProductDetails = [
     },
     {
         productId: "64a0c88a57f1c78d1b634a10",
+        type: "Phone",
         weight: "217g",
         internalMemory: "128GB",
         chip: "MediaTek Dimensity 6100+",
@@ -480,6 +483,7 @@ const mockProductDetails = [
     },
     {
         productId: "64a0c88a57f1c78d1b634a10",
+        type: "Phone",
         weight: "245g",
         internalMemory: "512GB",
         chip: "Sanpdragon 8 Gen 2 8 nhân",
@@ -489,6 +493,7 @@ const mockProductDetails = [
     },
     {
         productId: "64a0c88a57f1c78d1b634a10",
+        type: "Phone",
         weight: "285g",
         internalMemory: "256GB",
         chip: "MediaTek Dimensity 7300 Energy 5G 8 nhân",
@@ -499,6 +504,7 @@ const mockProductDetails = [
     {
         productId: "67135ef9a844ab7ea1b00755",
         weight: "1.63kg",
+        type: "Laptop",
         CPU: "AMD Ryzen 5 - 7520U",
         RAM: "16GB",
         storage: "512GB SSD",
@@ -508,6 +514,7 @@ const mockProductDetails = [
     {
         productId: "67135ef9a844ab7ea1b00755",
         weight: "1.29kg",
+        type: "Laptop",
         CPU: "Apple M1",
         RAM: "8GB",
         storage: "256GB SSD",
@@ -517,6 +524,7 @@ const mockProductDetails = [
     {
         productId: "67135ef9a844ab7ea1b00755",
         weight: "1.7kg",
+        type: "Laptop",
         CPU: "AMD Ryzen 7 - 5700U",
         RAM: "8GB",
         storage: "512GB SSD",
@@ -526,6 +534,7 @@ const mockProductDetails = [
     {
         productId: "67135ef9a844ab7ea1b00755",
         weight: "1.24kg",
+        type: "Laptop",
         CPU: "Apple M2",
         RAM: "8GB",
         storage: "256GB SSD",
@@ -535,6 +544,7 @@ const mockProductDetails = [
     {
         productId: "67135ef9a844ab7ea1b00755",
         weight: "2.29kg",
+        type: "Laptop",
         CPU: "Intel Core i5 Alder Lake - 12450H",
         RAM: "16GB",
         storage: "512GB SSD",
@@ -544,6 +554,7 @@ const mockProductDetails = [
     {
         productId: "64a0c88a57f1c78d1b634a12",
         weight: "44.52g",
+        type: "Watch",
         batteryCapacity: "230mAh",
         screenSize: "1.95 inches",
         operatingSystem: "Không công bố"
@@ -551,6 +562,7 @@ const mockProductDetails = [
     {
         productId: "64a0c88a57f1c78d1b634a12",
         weight: "41.67g",
+        type: "Watch",
         batteryCapacity: "289mAh",
         screenSize: "1.83 inches",
         operatingSystem: "Không công bố"
@@ -558,6 +570,7 @@ const mockProductDetails = [
     {
         productId: "64a0c88a57f1c78d1b634a12",
         weight: "61.8g",
+        type: "Watch",
         batteryCapacity: "36-72 giờ",
         screenSize: "1.92 inches",
         operatingSystem: "WatchOS"
@@ -565,6 +578,7 @@ const mockProductDetails = [
     {
         productId: "64a0c88a57f1c78d1b634a12",
         weight: "38.7g",
+        type: "Watch",
         batteryCapacity: "18-36 giờ",
         screenSize: "1.9 inches",
         operatingSystem: "WatchOS"
@@ -572,6 +586,7 @@ const mockProductDetails = [
     {
         productId: "64a0c88a57f1c78d1b634a12",
         weight: "26.6g",
+        type: "Watch",
         batteryCapacity: "247mAh",
         screenSize: "1.2 inches",
         operatingSystem: "WearOS"
@@ -579,6 +594,7 @@ const mockProductDetails = [
     {
         productId: "67135f33a844ab7ea1b0075b",
         weight: "190g",
+        type: "Camera",
         batteryCapacity: "1770mAh",
         cameraType: "Action Camera",
         cameraSensor: "CMOS",
@@ -589,6 +605,7 @@ const mockProductDetails = [
     {
         productId: "67135f33a844ab7ea1b0075b",
         weight: "180g",
+        type: "Camera",
         batteryCapacity: "1800mAh",
         cameraType: "360° Action Camera",
         cameraSensor: "Dual 48MP sensors (1/2 inch)",
@@ -599,6 +616,7 @@ const mockProductDetails = [
     {
         productId: "67135f33a844ab7ea1b0075b",
         weight: "190g",
+        type: "Camera",
         batteryCapacity: "1900mAh",
         cameraType: "Action Camera",
         cameraSensor: "CMOS",
@@ -609,6 +627,7 @@ const mockProductDetails = [
     {
         productId: "67135f33a844ab7ea1b0075b",
         weight: "246g",
+        type: "Camera",
         batteryCapacity: "2250mAh",
         cameraType: "Flycam",
         cameraSensor: "CMOS 1/2.3",
@@ -619,6 +638,7 @@ const mockProductDetails = [
     {
         productId: "67135f33a844ab7ea1b0075b",
         weight: "154g",
+        type: "Camera",
         batteryCapacity: "1300mAh",
         cameraType: "Action Camera",
         cameraSensor: "CMOS",
@@ -629,6 +649,7 @@ const mockProductDetails = [
     {
         // https://fptshop.com.vn/tivi/smart-tivi-samsung-uhd-4k-65-inch-ua65au7700
         productId: "64a0c88a57f1c78d1b634a11",
+        type: "Television",
         weight: "20.9kg",
         screenSize: "65 inches",
         screenType: "UHD",
@@ -640,6 +661,7 @@ const mockProductDetails = [
     {
         // https://fptshop.com.vn/tivi/tivi-xiaomi-a-pro-55-inch
         productId: "64a0c88a57f1c78d1b634a11",
+        type: "Television",
         weight: "11.23kg",
         screenSize: "55 inches",
         screenType: "UHD",
@@ -651,6 +673,7 @@ const mockProductDetails = [
     {
         // https://fptshop.com.vn/tivi/casper-goolgle-tivi-hd-32-inch-32hg5200
         productId: "64a0c88a57f1c78d1b634a11",
+        type: "Television",
         weight: "3.8kg",
         screenSize: "32 inches",
         screenType: "HD",
@@ -662,6 +685,7 @@ const mockProductDetails = [
     {
         // https://fptshop.com.vn/tivi/xiaomi-google-tivi-4k-55-inch-a-55-2025-l55ma-asea
         productId: "64a0c88a57f1c78d1b634a11",
+        type: "Television",
         weight: "14kg",
         screenSize: "55 inches",
         screenType: "LED",
@@ -673,6 +697,7 @@ const mockProductDetails = [
     {
         // https://fptshop.com.vn/tivi/casper-google-tivi-qled-4k-55-inch-55qg8000
         productId: "64a0c88a57f1c78d1b634a11",
+        type: "Television",
         weight: "13.4kg",
         screenSize: "65 inches",
         screenType: "QLED",
@@ -1537,7 +1562,7 @@ const mockProductPropertyValues = [
 const mockUsers=[
     {
         fullName: "vinh nguyen",
-        userName: "vinh nguyenGoogle",
+        userName: "vinh123 nguyenGoogle",
         email: "vinh01515@gmail.com",
         password: "$2a$10$B3brr0sjJnx4PYIbZo1ASu0U23nHkNkweRlO8LLRFWFJGjMMZHyFi",
         avatar: "https://lh3.googleusercontent.com/a/ACg8ocLM8bNJw0NiUYgSnFdZ-jIUnxDKfQ…",
