@@ -1,20 +1,10 @@
-import serviceFactory from "../../Factory/serviceFactory.js"
-import {generateRatingStars} from "../../Utils/viewEngine.js";
-import Product from "../../Model/Product.js";
+import serviceFactory from "../../Factory/serviceFactory.js";
+
 const productService = serviceFactory.getProductSerVice();
 const cartService = serviceFactory.getCartService();
-
+const brandService = serviceFactory.getBrandService();
+const categoryService = serviceFactory.getCategoryService();
 const ROW_PER_PAGE=6;
-
-const formatQueryParams = async(filters, sort) => {
-    //const {page,rowPerPage}=req.query;
-    const sortField = sort?.field?.toLowerCase() || 'price';
-    const sortOrder = sort?.order?.toLowerCase() === 'desc' ? -1 : 1;
-    const brands = filters?.brands?.map((brand) => (brand.toLowerCase())) || [];
-    const types = filters?.types?.map((type) => (type.toLowerCase())) || [];
-    return {brands,types,sortField,sortOrder};
-    //return {brands,types,sortField,sortOrder,page,rowPAg};
-}
 
 const formatSortParam=(req)=>{
     const sort=req.query.sort||"price-asc";
@@ -28,10 +18,12 @@ const formatSortParam=(req)=>{
 
 const formatFilterParam=(req)=>{
     const brandsEncoded=req.query.brand||"";
-    const typesEncoded=req.query.type||"";
-    const brands=brandsEncoded?decodeURIComponent(brandsEncoded).split(','):[];
-    const types=typesEncoded?decodeURIComponent(typesEncoded).split(','):[];
-    return {brands,types};    
+    const categoriesEncoded=req.query.category||"";
+    const brands=brandsEncoded?decodeURIComponent(brandsEncoded).split(',')
+    .map(brand=>brand.toLowerCase()):[];
+    const categories=categoriesEncoded?decodeURIComponent(categoriesEncoded).split(',')
+    .mape(category=>category.toLowerCase()):[];
+    return {brands,categories};    
 }
 
 const formatPriceParam=(req)=>{
@@ -50,40 +42,30 @@ const formatPriceParam=(req)=>{
 };
 const getQueryParams=(req)=>{
     const {page,rowPerPage}=req.query;
-    const {brands,types}=formatFilterParam(req);
+    const {brands,categories}=formatFilterParam(req);
     const {sortField,sortOrder}=formatSortParam(req);
     const {minPrice,maxPrice}=formatPriceParam(req);
 
-    return {brands,types,sortField,sortOrder,page,rowPerPage,minPrice,maxPrice};
+    return {brands,categories,sortField,sortOrder,page,rowPerPage,minPrice,maxPrice};
 }
-
-const populateProduct=(product)=>{
-    const populatedProduct={
-        productId: product._id,
-        type: product.type,
-        name: product.name,
-        price: product.price,
-        salePrice: product.salePrice,
-        brand: product.brand,
-        totalStock: product.totalStock,
-        image: product.image,
-        rating: product.rating,
-    };
-    return populatedProduct;
-}
-
-
 //controller
 
-const fetchAllFilteredProducts = async (req, res) => {
+const getProductsPage = async (req, res) => {
     try {
         const user = req.user||null;
-        const {brands,types,
+        const {brands,categories,
             sortField,sortOrder,
             page=1,rowsPerPage=ROW_PER_PAGE,
             minPrice,maxPrice}=getQueryParams(req);
         const {onSales}=req.query;
-        let products = await productService.getProducts({ brands, types, sortField, sortOrder,minPrice,maxPrice });
+        const {search}=req.query;
+        let products=[];
+        if(search && search.trim().length>0){
+            products=await productService.getProductsBySearch({search,brands, categories, sortField, sortOrder,minPrice,maxPrice });
+        }
+        else{
+            products = await productService.getProducts({ brands, categories, sortField, sortOrder,minPrice,maxPrice });
+        }
         if(onSales==='true'){
             products=products.filter((product)=>product.salePrice>0);
         }
@@ -91,15 +73,15 @@ const fetchAllFilteredProducts = async (req, res) => {
         if(page && rowsPerPage){
             products=products.slice((page-1)*rowsPerPage,page*rowsPerPage);
         }
-        const populateProducts = products.map((product) => (populateProduct(product)));
         const productsInCart = await cartService.coutProductInCart(user?user._id:null);
         return res.render('products', {
-            products:populateProducts,
+            products:products,
             totalProducts,
             rowsPerPage,
             user,
-            generateRatingStars,
-            cartNumber: productsInCart
+            cartNumber: productsInCart,
+            brands: await brandService.getAll(),
+            categories: await categoryService.getAll(),
         });
     }
     catch (e) {
@@ -109,19 +91,32 @@ const fetchAllFilteredProducts = async (req, res) => {
     }
 };
 
-const apiGetAllFilteredProducts = async (req, res) => {
+const apiGetProducts=async (req, res) => {
     try {
-        const {brands,types,sortField,sortOrder,page=1,rowsPerPage=ROW_PER_PAGE}=getQueryParams(req);
-        let products = await productService.getProducts({ brands, types, sortField, sortOrder });
+        const user = req.user||null;
+        const {brands,categories,
+            sortField,sortOrder,
+            page=1,rowsPerPage=ROW_PER_PAGE,
+            minPrice,maxPrice}=getQueryParams(req);
+        const {onSales}=req.query;
+        const {search}=req.query;
+        let products=[];
+        if(search && search.trim().length>0){
+            products=await productService.getProductsBySearch({search,brands, categories, sortField, sortOrder,minPrice,maxPrice });
+        }
+        else{
+            products = await productService.getProducts({ brands, categories, sortField, sortOrder,minPrice,maxPrice });
+        }
+        if(onSales==='true'){
+            products=products.filter((product)=>product.salePrice>0);
+        }
         const totalProducts=products.length;
         if(page && rowsPerPage){
             products=products.slice((page-1)*rowsPerPage,page*rowsPerPage);
         }
-        const populateProducts = products.map((product) => (populateProduct(product)));
-        return res.send({
-            products:populateProducts,
+        return res.ok().send({
             totalProducts,
-            rowsPerPage,
+            products,
         });
     }
     catch (e) {
@@ -130,27 +125,4 @@ const apiGetAllFilteredProducts = async (req, res) => {
         });
     }
 };
-
-const searchProducts = async (req, res) => {
-    try {
-        const user = req.user;
-        const { search } = req.query;
-        const decodedSearch=decodeURIComponent(search);
-        const rawProducts = await productService.getProductsBySearch(decodedSearch);
-        const populatedProducts = rawProducts.map((product) => (populateProduct(product)));
-        const totalProducts=populatedProducts.length;
-        return res.render('products', {
-            products:populatedProducts,
-            totalProducts,
-            rowsPerPage:ROW_PER_PAGE,
-            user,
-            generateRatingStars});
-    }
-    catch (e) {
-        return res.status(500).send({
-            status: "error",
-            msg: "server err",
-        });
-    }
-};
-export { fetchAllFilteredProducts,apiGetAllFilteredProducts,searchProducts};
+export { getProductsPage,apiGetProducts};

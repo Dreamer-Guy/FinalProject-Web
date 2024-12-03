@@ -1,4 +1,3 @@
-import { status } from "migrate-mongo";
 import mongoose from "mongoose";
 
 // const options={discriminatorKey:'role'};

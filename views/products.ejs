@@ -326,33 +326,31 @@
                 <div>
                     <h3 class="text-xl text-gray-800 mb-3 uppercase font-medium">Types</h3>
                     <div class="space-y-2">
-                        <% const types=["laptop","phone","television","watch","camera"]; %>
-                            <% types.forEach((type, index)=> { %>
-                                <div onclick="handleFilters('type','<%=types[index]%>')" class="flex items-center">
-                                    <input type="checkbox" name="cat-<%= index + 1 %>" id="cat-<%= index + 1 %>"
-                                        class="text-primary focus:ring-0 rounded-sm cursor-pointer" value="<%= type %>">
-                                    <label for="cat-<%= index + 1 %>" class="text-gray-600 ml-3 cursor-pointer">
-                                        <%= type.charAt(0).toUpperCase() + type.slice(1) %>
-                                    </label>
-                                </div>
-                                <% }); %>
+                        <% categories.forEach((type, index)=> { %>
+                            <div onclick="handleFilters('category','<%=categories[index]%>')" class="flex items-center">
+                                <input type="checkbox" name="cat-<%= index + 1 %>" id="cat-<%= index + 1 %>"
+                                    class="text-primary focus:ring-0 rounded-sm cursor-pointer" value="<%= category %>">
+                                <label for="cat-<%= index + 1 %>" class="text-gray-600 ml-3 cursor-pointer">
+                                    <%= category.charAt(0).toUpperCase() + category.slice(1) %>
+                                </label>
+                            </div>
+                            <% }); %>
                     </div>
                 </div>
 
                 <div class="pt-4">
                     <h3 class="text-xl text-gray-800 mb-3 uppercase font-medium">Brands</h3>
                     <div class="space-y-2">
-                        <% const brands=["Apple","SamSung","ASUS","Acer","Legion"]; %>
-                            <% brands.forEach((brand, index)=> { %>
-                                <div onclick="handleFilters('brand','<%=brands[index]%>')" class="flex items-center">
-                                    <input type="checkbox" name="cat-<%= index + 1 %>" id="cat-<%= index + 1 %>"
-                                        class="text-primary focus:ring-0 rounded-sm cursor-pointer"
-                                        value="<%= brand.toLowerCase() %>">
-                                    <label for="cat-<%= index + 1 %>" class="text-gray-600 ml-3 cursor-pointer">
-                                        <%= brand.charAt(0).toUpperCase() + brand.slice(1) %>
-                                    </label>
-                                </div>
-                                <% }); %>
+                        <% brands.forEach((brand, index)=> { %>
+                            <div onclick="handleFilters('brand','<%=brands[index]%>')" class="flex items-center">
+                                <input type="checkbox" name="cat-<%= index + 1 %>" id="cat-<%= index + 1 %>"
+                                    class="text-primary focus:ring-0 rounded-sm cursor-pointer"
+                                    value="<%= brand.toLowerCase() %>">
+                                <label for="cat-<%= index + 1 %>" class="text-gray-600 ml-3 cursor-pointer">
+                                    <%= brand.charAt(0).toUpperCase() + brand.slice(1) %>
+                                </label>
+                            </div>
+                        <% }); %>
                     </div>
                 </div>
 
@@ -424,8 +422,8 @@
                         <div>
                             <div class="relative">
                                 <img src="<%= product.image %>" alt="<%= product.name %>" class="product-img cursor-pointer"
-                                    productId="<%= product.id %>"
-                                    onclick="window.location.href='/productDetails/get/<%=product.productId%>'">
+                                    productId="<%= product._id %>"
+                                    onclick="window.location.href='/productDetails/get/<%=product._id%>'">
                             </div>
                         </div>
                         <div>
@@ -454,7 +452,7 @@
                                     <div class="text-xs text-gray-500 ml-3">(150)</div>
                                 </div>
                             </div>
-                            <button onclick="handleAddToCart('<%= product.productId %>',1)"
+                            <button onclick="handleAddToCart('<%= product._id %>',1)"
                                 class="block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition">
                                 Add to cart
                             </button>
@@ -463,7 +461,7 @@
                     <% }) %>
             </div>
             <!-- paging-->
-            <div class="bg-white py-10 text-center dark:bg-dark">
+            <div class="bg-white py-10 text-center dark:bg-dark paging-container">
                 <% const quantity=Math.ceil(totalProducts / rowsPerPage); %>
                     <ul class="flex items-center justify-center gap-2">
                         <li>
