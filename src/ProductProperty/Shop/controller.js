@@ -41,7 +41,6 @@ const getProductDetailsPageByID=async(req,res)=>{
                 value:"No details",
             }
         ];
-        console.log(productDetails);
         const product=await productService.getProductById(id);
         const relatedProducts=await productService.getRelatedProductsByProductId(product._id,5)||[];
         const rawReviews=await reviewService.getReviewsByProductId(id);
