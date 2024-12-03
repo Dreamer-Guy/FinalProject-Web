@@ -361,7 +361,7 @@
                             <% for (let i=0; i < prices.length - 1; i +=1) { %>
                                 <div onclick="handleFilters('price',`<%= prices[i] %>`,`<%= prices[i+1] %>`)" class="flex items-center">
                                     <input 
-                                        type="radio" 
+                                        type="checkbox" 
                                         name="price-filter" 
                                         id="price-<%= prices[i]%>:<%= prices[i+1] %>"
                                         class="text-primary focus:ring-0 rounded-sm cursor-pointer"

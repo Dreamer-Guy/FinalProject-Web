@@ -11,8 +11,7 @@ let filters={
     sort:'price-asc',
     page:1,
     rowPerPage:6,
-    minPrice:0,
-    maxPrice:Number.MAX_VALUE,
+    priceRange:[],
     onSales:false,//true or false
 };
 
@@ -63,13 +62,13 @@ function setSort(value){
 }
 
 function setPrice(min,max){
-    if(Number(min)===filters.minPrice && filters.maxPrice===Number(max)){
-        filters.minPrice=null;
-        filters.maxPrice=null;
-        return;
+    const index=filters.priceRange.findIndex((price)=>price===`${min}-${max}`);
+    if(index===-1){
+        filters.priceRange.push(`${min}-${max}`);
     }
-    filters.minPrice=min;
-    filters.maxPrice=max;
+    else{
+        filters.priceRange.splice(index,1);
+    }
 }
 
 function setOnSales(){
@@ -114,6 +113,7 @@ async function handleFilters(type,value,value2_optional){
     if(type!=='page'){
         setCurrentPage(1);
     }
+    console.log(filters);
     const queryParams= new URLSearchParams(filters).toString();
     console.log(queryParams.toString());
     try{

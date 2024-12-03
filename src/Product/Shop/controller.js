@@ -29,22 +29,21 @@ const formatFilterParam=(req)=>{
 const formatPriceParam=(req)=>{
     const DEFAULT_MIN_PRICE=0;
     const DEFAULT_MAX_PRICE=Number.MAX_VALUE;
-    const flag_nullString=isNaN(req.query?.minPrice)||isNaN(req.query?.maxPrice)?true:false;
-    const badQueryParams=flag_nullString;
-    if(badQueryParams){
-        return {minPrice:DEFAULT_MIN_PRICE,maxPrice:DEFAULT_MAX_PRICE};
-    }
-    const minPrice=Number(req.query.minPrice);
-    const maxPrice=Number(req.query.maxPrice);
-    return {minPrice,maxPrice};
+    const priceRangQuery=req.query.priceRange||`${DEFAULT_MIN_PRICE}-${DEFAULT_MAX_PRICE}`;
+    const priceRange=priceRangQuery.split(',')||[];
+    const formatedPriceRange=priceRange.map(price=>{
+        const [minPrice,maxPrice]=price.split('-');
+        return {minPrice:Number(minPrice),maxPrice:Number(maxPrice)};
+    });
+    return formatedPriceRange;
 };
 const getQueryParams=(req)=>{
     const {page=1,rowPerPage=ROW_PER_PAGE}=req.query;
     const {brands,categories}=formatFilterParam(req);
     const {sortField,sortOrder}=formatSortParam(req);
-    const {minPrice,maxPrice}=formatPriceParam(req);
+    const priceRange=formatPriceParam(req);
 
-    return {brands,categories,sortField,sortOrder,page:Number(page),rowPerPage:Number(rowPerPage),minPrice,maxPrice};
+    return {brands,categories,sortField,sortOrder,page:Number(page),rowPerPage:Number(rowPerPage),priceRange};
 }
 //controller
 
@@ -54,15 +53,15 @@ const getProductsPage = async (req, res) => {
         const {brands,categories,
             sortField,sortOrder,
             page=1,rowsPerPage=ROW_PER_PAGE,
-            minPrice,maxPrice}=getQueryParams(req);
+            priceRange=[]}=getQueryParams(req);
         const {onSales}=req.query;
         const {search}=req.query;
         let products=[];
         if(search && search.trim().length>0){
-            products=await productService.getProductsBySearch({search,brands, categories, sortField, sortOrder,minPrice,maxPrice });
+            products=await productService.getProductsBySearch({search,brands, categories, sortField, sortOrder,priceRange });
         }
         else{
-            products = await productService.getProducts({ brands, categories, sortField, sortOrder,minPrice,maxPrice });
+            products = await productService.getProducts({ brands, categories, sortField, sortOrder,priceRange });
         }
         if(onSales==='true'){
             products=products.filter((product)=>product.salePrice>0);
@@ -95,15 +94,15 @@ const apiGetProducts=async (req, res) => {
         const {brands,categories,
             sortField,sortOrder,
             page,rowsPerPage=ROW_PER_PAGE,
-            minPrice,maxPrice}=getQueryParams(req);
+            priceRange=[]}=getQueryParams(req);
         const {onSales}=req.query;
         const {search}=req.query;
         let products=[];
         if(search && search.trim().length>0){
-            products=await productService.getProductsBySearch(search,{brands, categories, sortField, sortOrder,minPrice,maxPrice });
+            products=await productService.getProductsBySearch(search,{brands, categories, sortField, sortOrder,priceRange });
         }
         else{
-            products = await productService.getProducts({ brands, categories, sortField, sortOrder,minPrice,maxPrice });
+            products = await productService.getProducts({ brands, categories, sortField, sortOrder,priceRange });
         }
         if(onSales==='true'){
             products=products.filter((product)=>product.salePrice>0);

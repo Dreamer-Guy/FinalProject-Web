@@ -1,7 +1,7 @@
 const config = {
   mongodb: {
-    url: "mongodb+srv://vinh01515:YrQQXix0hXIPZLD2@cluster0.c6dwy.mongodb.net",
-    databaseName: "doanDB",
+    url: "mongodb+srv://thanhvinh2400:Ed4DnAKsvTWn32vw@mydatabase.huvya.mongodb.net",
+    databaseName: "MyShop-Demo",
     options: {
       // connectTimeoutMS: 3600000, // Optional: increase connection timeout
       // socketTimeoutMS: 3600000,  // Optional: increase socket timeout
