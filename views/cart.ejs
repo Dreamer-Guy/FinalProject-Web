@@ -307,17 +307,17 @@
         <div class="w-full md:w-3/4 flex flex-col gap-5">
             <% cart.items.forEach((item,index)=>{ %>
                 <div class="w-full flex flex-col md:flex-row items-center justify-between border gap-3 md:gap-6 p-4 border-gray-200 rounded">
-                    <div class="w-full md:w-2/6 flex flex-row justify-between items-center gap-3">
-                        <div class="">
+                    <div class="w-full md:w-3/5 flex flex-row justify-between items-center gap-3 break-words">
+                        <div class="w-1/5">
                             <img src="<%=item.productId.image%>" alt="product 6" class="w-[60px] h-[60px] object-cover">
                         </div>
-                        <div class="flex flex-col justify-center items-end gap-1">
-                            <h2 class="text-gray-800 text-lg font-medium uppercase"><%= item.productId.name %></h2>
+                        <div class="w-4/5 flex flex-col justify-center items-end gap-1">
+                            <h2 class="text-gray-800 text-lg font-medium uppercase break-words break-all"><%= item.productId.name %></h2>
                             <p class="text-gray-500 text-sm">Availability: <span class="text-green-600"><%=item.productId.totalStock %></span></p>
                         </div>
                     </div>
         
-                    <div class="w-full md:w-4/6 flex flex-row gap-4 justify-center md:justify-end items-center">
+                    <div class="w-full md:w-2/5 flex flex-row gap-4 justify-center md:justify-end items-center">
                         <div class="flex flex-row justify-center gap-4">
                             <% if(item.productId.salePrice>0){%>
                                 <div class="text-primary text-lg font-semibold">$<%= item.productId.salePrice %></div>
@@ -483,6 +483,8 @@
     <!-- ./copyright -->
     <script src="/js/cart/cart.js"></script>
     <script src="/js/common/profile/updateProfileStatus.js"></script>
+    <script src="/js/common/showSpinnerLoading.js"></script>
+    <script src="/js/common/toast.js"></script>
 </body>
 
 </html>

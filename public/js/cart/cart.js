@@ -1,5 +1,6 @@
 const updateCartItems=async (productId,quantity) => {
     try{
+        showSpinnerLoading();
         const res=await fetch('/carts/updateItems',{
             method:"POST",
             headers:{
@@ -7,12 +8,17 @@ const updateCartItems=async (productId,quantity) => {
             },
             body:JSON.stringify({productId,quantity})
         });
+        hideSpinnerLoading();
         if(res.ok){
             window.location.href="/carts/get";
         }
+        else{
+            const data=await res.json();
+            showToast(data.message,'warning');
+        }
     }
     catch(e){
-
+        console.log(e.message);
     }
 };
 

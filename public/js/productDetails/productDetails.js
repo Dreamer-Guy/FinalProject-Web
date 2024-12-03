@@ -98,3 +98,49 @@ const toggleShow=()=>{
         showMoreButton.text("Show more");
     }
 }
+
+const handleChangeQuantity=(quantity)=>{
+    const currentQuantity=Number($("#quantity").val());
+    if(currentQuantity===1 && Number(quantity)<0){
+        return;
+    }
+    if(currentQuantity===totalStock && Number(quantity)>0){
+        showToast("Can't not add, no more product in stock",'warning');
+        $("#quantity").val(totalStock);
+        return;
+    }
+    const newValue=currentQuantity+Number(quantity);
+    $("#quantity").val(newValue);
+};
+
+const handleAddToCart = async (productId,quantityOpt) => {
+    try{
+        let quantity=1;
+        if(!isNaN(quantityOpt)){
+            quantity=quantityOpt;
+        }
+        quantity=Number($("#quantity").val());
+        showSpinnerLoading();
+        const res=await fetch('/carts/addItems',{
+            method:"POST",
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({productId,quantity})
+        });
+        hideSpinnerLoading();
+        const data=await res.json();
+        if(res.ok){
+            showToast('Item added to cart successfully','default');
+            const cartNumber=$('#cart-number');
+            cartNumber.text(data.cartNumber);
+        }
+        else{
+            showToast(data.message,'warning');
+        }
+    }
+    catch(e){
+        console.log(e);
+        showToast(e.message,'warning');
+    }
+};

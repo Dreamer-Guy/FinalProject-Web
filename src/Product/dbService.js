@@ -44,7 +44,7 @@ const productService = {
         await Product.findByIdAndDelete(productId);
     },
 
-    getRelatedProductsByProductId: async (productId) => {
+    getRelatedProductsByProductId: async (productId,limit=5) => {
         const product = await Product.findById(productId)
             .populate('brand_id')  
             .populate('category_id')  
@@ -92,7 +92,7 @@ const productService = {
             }
         ]);
         
-        return products;
+        return products.slice(0,limit);
     },
     
     getProductsBySearch: async (searchTerm,
