@@ -1,3 +1,4 @@
+
 const DEFAULT_MIN_PRICE=0;
 const DEFAULT_MAX_PRICE=200;
 const DEFAULT_ONSALES=false;
@@ -11,7 +12,7 @@ let filters={
     page:1,
     rowPerPage:6,
     minPrice:0,
-    maxPrice:200,
+    maxPrice:Number.MAX_VALUE,
     onSales:false,//true or false
 };
 
@@ -97,7 +98,7 @@ async function handleFilters(type,value,value2_optional){
         setSort(value);
     }
     if(type==='page'){
-        setCurrentPage(value);
+        setCurrentPage(Number(value));
     }
     if(type==='price'){
        
@@ -107,10 +108,14 @@ async function handleFilters(type,value,value2_optional){
         setOnSales();
     }
     if(type==='search'){
+        value=$('#search').val();
         setSearch(value);
     }
+    if(type!=='page'){
+        setCurrentPage(1);
+    }
     const queryParams= new URLSearchParams(filters).toString();
-    window.location.href=`/products/get?${queryParams}`;
+    console.log(queryParams.toString());
     try{
         const data=await fetch(`/products/api/get?${queryParams.toString()}`)
         .then(response => response.json());
@@ -124,9 +129,9 @@ async function handleFilters(type,value,value2_optional){
             productDiv.innerHTML = `
                 <div>
                     <div class="relative">
-                        <img src="<%= product.image %>" alt="<%= product.name %>" class="product-img cursor-pointer"
+                        <img src="${product.image}" alt="${product.name}" class="product-img cursor-pointer"
                             productId="<%= product._id %>"
-                            onclick="window.location.href='/productDetails/get/<%=product._id%>'">
+                            onclick="window.location.href='/productDetails/get/${product._id}'">
                     </div>
                 </div>
                 <div>
@@ -134,28 +139,28 @@ async function handleFilters(type,value,value2_optional){
                         <a href="#">
                             <h4
                                 class="uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition">
-                                <%= product.name %>
+                                ${product.name}
                             </h4>
                         </a>
                         <div class="flex items-baseline mb-1 space-x-2">
-                            <% if(product.salePrice> 0) { %>
-                                <div class="text-xl text-primary font-semibold">$<%= product.salePrice %>
+                            ${product.salePrice>0?
+                                `<div class="text-xl text-primary font-semibold">$${product.salePrice}
                                 </div>
-                                <div class="text-xl text-gray-500 line-through">$<%= product.price %>
+                                <div class="text-xl text-gray-500 line-through">$${product.price}
                                 </div>
-                                <% } else { %>
-                                    <div class="text-xl text-gray-500 font-semibold">$<%= product.price %>
-                                    </div>
-                                    <% } %>
+                                `
+                                :`<div class="text-xl text-gray-500 font-semibold">$${product.price}
+                                </div>`
+                            }
                         </div>
                         <div class="flex items-center">
                             <div class="flex gap-1 text-sm text-yellow-400">
-                                <%-generateRatingStars(Math.floor(product.rating))%>
+                                ${generateRatingStars(Math.floor(product.rating))}
                             </div>
                             <div class="text-xs text-gray-500 ml-3">(150)</div>
                         </div>
                     </div>
-                    <button onclick="handleAddToCart('<%= product._id %>',1)"
+                    <button onclick="handleAddToCart('${product._id}',1)"
                         class="block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition">
                         Add to cart
                     </button>
@@ -202,15 +207,22 @@ async function handleFilters(type,value,value2_optional){
 }
 
 const getPageButton=(i)=>{
-    
     return `
     <li>
         <button onclick="handleFilters('page','${i + 1}')" id="page-${i + 1}" class="flex h-10 min-w-10 items-center justify-center rounded-lg border 
-        border-stroke bg-white px-2 text-base font-medium text-dark hover:bg-gray-1 
-        dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10">
+        border-stroke bg-blue-100 px-2 text-base font-medium text-dark hover:bg-gray-1 
+        dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10
+        ${i+1===currentPage?'bg-blue-500':''}">
             ${i + 1}
         </button>
     </li>
     `;
 };
+
+
+document.querySelector('#search').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        handleFilters('search');
+    }
+});
 

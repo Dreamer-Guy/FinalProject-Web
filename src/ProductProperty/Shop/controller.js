@@ -42,7 +42,7 @@ const getProductDetailsPageByID=async(req,res)=>{
             }
         ];
         const product=await productService.getProductById(id);
-        const rawRelatedProducts=await productService.getRelatedProducts(product)||[];
+        const rawRelatedProducts=await productService.getRelatedProductsByProductId(product)||[];
         const relatedProducts=rawRelatedProducts.map((product)=>populateProduct(product));
         const rawReviews=await reviewService.getReviewsByProductId(id);
         //tech-debt:check reviews

@@ -1,5 +1,5 @@
 import mongoose, { mongo } from "mongoose";
-import Product from "../models/Product.js";
+import Product from "../Model/Product.js";
 
 
 const productService = {
@@ -25,8 +25,9 @@ const productService = {
             .byBrand(brands)
             .byPrice(minPrice,maxPrice)
             .sort({ [sortField]: sortOrder })
-            .exec();
-        return products.filter(product=>product.category!==null&&product.brand!==null);
+            .lean();
+        const t=products.filter(product=>product.category_id&&product.brand_id);
+        return products.filter(product=>product.category_id&&product.brand_id);
     },
     
     getProductById: async (productId) => {
@@ -95,7 +96,7 @@ const productService = {
     },
     
     getProductsBySearch: async (searchTerm,
-        { brands, categories, sortField='price', sortOrder=1,minPrice=0,maxPrice=Number.MAX_VALUE }) => {
+        { brands=[], categories=[], sortField='price', sortOrder=1,minPrice=0,maxPrice=Number.MAX_VALUE }) => {
             const products = await Product.aggregate([
                 {
                     $lookup:{

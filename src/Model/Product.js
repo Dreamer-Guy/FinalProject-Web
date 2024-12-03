@@ -62,7 +62,7 @@ productSchema.query.byBrand = function (brands=[]) {
 };
 
 productSchema.query.byPrice=function(minPrice,maxPrice){
-    if(!minPrice || !maxPrice) return this;
+    if (minPrice == null || maxPrice == null) return this; 
     return this.where({price:{$gte:minPrice,$lte:maxPrice}});
 }
 
