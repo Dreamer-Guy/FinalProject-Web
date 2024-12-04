@@ -4,11 +4,14 @@ resetPassWord,editInformation,updateInformation,changPasswordPage,changePassword
 from "./controller.js";
 import passportLocal from "../../middleWare/PassPort.js";
 import googlePassPort from "../../middleWare/googlePassport.js";
-const userRouter = expresss.Router();
 import multer from "multer";
 import path from 'path';
 import serviceFactory from "../../Factory/serviceFactory.js";
 import Address from "../../Model/Address.js";
+import isUserLoginAndRedirect from "../../middleWare/isUserLoginAndRedirect.js";
+const userRouter = expresss.Router();
+
+
 
 const storageConfig = multer.diskStorage({
     destination: (req, file, cb) => {

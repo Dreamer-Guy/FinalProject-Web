@@ -6,7 +6,6 @@ import methodOverride  from 'method-override'
 import mongoose from './src/Config/mongooseDB.js';
 
 import productRouter from "./src/Product/Shop/route.js";
-//import productDetailsRouter from "./src/ProductDetails/Shop/route.js";
 import productDetailsRouter from './src/ProductProperty/Shop/route.js';
 import userRouter from './src/User/Shop/route.js';
 import homeRouter from './src/HomePage/Shop/route.js';
@@ -14,6 +13,8 @@ import reviewRouter from './src/Review/Shop/route.js';
 import cartRouter from "./src/Cart/Shop/route.js";
 import orderRouter from './src/Order/Shop/route.js';
 import addressRouter from './src/Address/Shop/route.js';
+
+import isUserLoginAndRedirect from './src/middleWare/isUserLoginAndRedirect.js';
 
 import adminDashBoardRouter from "./src/HomePage/Admin/dashboardRoute.js";
 import adminRevenueRouter from  "./src/Revenue/Admin/revenueRoute.js";
@@ -47,6 +48,10 @@ app.use("/", homeRouter);
 app.use("/productDetails", productDetailsRouter);
 app.use("/products", productRouter);
 app.use("/user", userRouter);
+
+
+app.use(isUserLoginAndRedirect);
+
 app.use("/addresses", addressRouter);
 app.use("/reviews", reviewRouter);
 app.use("/carts", cartRouter);

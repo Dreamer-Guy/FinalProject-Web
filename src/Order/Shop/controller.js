@@ -14,7 +14,8 @@ const addressService=serviceFactory.getAddressService();
 const ROW_PER_PAGE=2;
 
 const formatDate=(date)=>{
-    return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
+    const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+    return formattedDate;
 }
 const populateOrder=(order)=>{
     const populatedOrder={
