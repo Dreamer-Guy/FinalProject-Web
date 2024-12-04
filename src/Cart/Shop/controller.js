@@ -74,8 +74,12 @@ const addCartItems=async(req,res)=>{
             return res.status(BAD_REQUEST_STATUS).json({message:"Invalid request"});
         };
         const {productId,quantity}=req.body;
-        if(!await productService.getProductById(productId)){
+        const product=await productService.getProductById(productId);
+        if(!product){
             return res.status(BAD_REQUEST_STATUS).json({message:"Invalid product id"});
+        };
+        if(product.totalStock<quantity){
+            return res.status(BAD_REQUEST_STATUS).json({message:"Not enough stock"});
         };
         let cart=await cartService.getCartByUserId(user._id);
         if(!cart){

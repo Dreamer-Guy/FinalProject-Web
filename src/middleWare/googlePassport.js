@@ -19,6 +19,9 @@ const googleStrategyConfig = new GoogleStrategy({
         //password: profile.id;
         // avatar: profile.photos[0].value;
         // email: profile.emails[0].value;
+        if(await userService.isUserExistByEmail(profile.emails[0].value) && !await userService.isUserExistByUserName(profile.emails[0].value+profile.id)){
+            return cb(null, null,{message:"Email already exists"});
+        }
         if(await userService.isUserExistByUserName(profile.emails[0].value+profile.id)){
             const user=await userService.getUserByUserName(profile.emails[0].value+profile.id);
             return cb(null, user);

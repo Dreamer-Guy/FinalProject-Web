@@ -152,9 +152,13 @@
             <div class="space-y-2">
                 <p class="text-gray-800 font-semibold space-x-2">
                     <span>Availability: </span>
-                    <span class="text-green-600">
-                        <%= product.totalStock %>
-                    </span>
+                    <% if(product.totalStock > 0) { %>
+                            <span class="text-green-600">
+                                <%= product.totalStock %>
+                            </span>
+                    <% } else { %>
+                            <span class="text-red-600">Out of stock</span>
+                    <% } %>
                 </p>
                 <p class="space-x-2">
                     <span class="text-gray-800 font-semibold">Brand: </span>

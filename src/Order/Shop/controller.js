@@ -1,6 +1,11 @@
 import { get } from "mongoose";
 import serviceFactory from "../../Factory/serviceFactory.js";
 import Category from "../../Model/Category.js";
+import productService from "../../Product/dbService.js";
+
+const BAD_REQUEST_STATUS=400;
+const OK_STATUS=200;
+
 
 const orderService=serviceFactory.getOrderService();
 const cartService=serviceFactory.getCartService();
@@ -89,12 +94,15 @@ const createOrder=async(req,res)=>{
     const cart=await cartService.getCartByUserId(user._id);
     const address=await addressService.getAddressByUserId(user._id);
     if(!address || !cart){
-        return res.status(400).json({message:"Resource not found"});
+        return res.status(BAD_REQUEST_STATUS).json({message:"Resource not found"});
     }
     const orderData=getOrderData(user,cart,address);
     const order=await orderService.createOrder(orderData);
-    await orderService.save(order);
+    await productService.updateQuantityAfterMakingOrder(order);
+    const savedOrder=await orderService.save(order);
     await cartService.deleteCartByUserId(user._id);
-    return res.json(order);
+    return res.status(OK_STATUS).send({
+        order:savedOrder,
+    });
 };
 export {getOrderViewPage,getOrderDetailsPage,createOrder};

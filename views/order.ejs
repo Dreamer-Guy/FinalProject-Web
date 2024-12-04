@@ -329,10 +329,16 @@
                                 <div class="w-3/4 flex flex-row justify-between items-center flex-wrap">
                                     <div class="w-1/4 break-words flex justify-center 
                                         items-center"><%=order.createdAt%></div>
+                                    <div class="w-1/4 break-words flex justify-center items-center">
+                                        <span class="rounded-md p-2 border <%= order.checkoutStatus.toLowerCase()==='unpaid'?'bg-red-500 border-red-500':'bg-green-500 border-green-400'%>">
+                                            <%= order.checkoutStatus.charAt(0).toUpperCase() + order.checkoutStatus.slice(1).toLowerCase() %></span>
+                                    </div>
+                                          
                                     <div class="w-1/4 break-words flex justify-center 
-                                        items-center"><%=order.checkoutStatus%></div>
-                                    <div class="w-1/4 break-words flex justify-center 
-                                        items-center"><%=order.orderStatus%></div>
+                                        items-center">
+                                        <span class="rounded-md p-2 border <%= order.orderStatus.toLowerCase()==='pending'?'bg-yellow-200':'bg-blue-400'%>">
+                                            <%=order.orderStatus%></span>
+                                    </div>
                                     <div class="w-1/4 break-words flex justify-center 
                                         items-center">$<%=order.total%></div>
                                 </div>
@@ -351,8 +357,10 @@
                                 </div>
                                 <div><span class="text-lg font-semibold">Date:</span> <%=order.createdAt%></div>
                                 <div class="flex flex-row justify-between items-center gap-3">
-                                    <div><span class="text-lg font-semibold">Payment:</span> <%=order.checkoutStatus%></div>
-                                    <div><span class="text-lg font-semibold">Status:</span> <%=order.orderStatus%></div>
+                                    <div><span class="text-lg font-semibold">Payment:</span> 
+                                        <span class="rounded-md p-1 border <%= order.checkoutStatus.toLowerCase()==='unpaid'?'bg-red-500 border-red-500':'bg-green-500 border-green-400'%>"><%=order.checkoutStatus%></span></div>
+                                    <div><span class="text-lg font-semibold">Status:</span> 
+                                        <span class="rounded-md p-1 border <%= order.orderStatus.toLowerCase()==='pending'?'bg-yellow-200':'bg-blue-400'%>"><%=order.orderStatus%></span></div>
                                 </div>
                             </div>
                         <% }); %>

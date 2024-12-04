@@ -52,6 +52,10 @@ const handleLogin = async () => {
     }
 };
 
+const googleLogin=async()=>{
+    window.location.href="/user/auth/google";
+}
+
 
 document.getElementById('userName').value = localStorage.getItem('username') || '';
 document.getElementById('password').value = localStorage.getItem('password') || ''; 

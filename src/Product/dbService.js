@@ -151,6 +151,15 @@ const productService = {
         const products = await Product.find().sort({ rating: -1 }).limit(top);
         return products;
     },
+
+    //allow users concurrently make orders even out of stock, then let admin decided choose which orders to fulfill
+    updateQuantityAfterMakingOrder: async (order) => {
+        order.items.forEach(async (item) => {
+            const product = await Product.findById(item.productId);
+            product.totalStock=product.totalStock>=item.quantity?product.totalStock-item.quantity:0;
+            await product.save();
+        });
+    },
 };
 
 export default productService;
