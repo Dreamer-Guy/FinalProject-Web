@@ -66,6 +66,18 @@ const mockBrands = [
         name: 'Iphone',
         createdAt: new Date('2024-11-30T06:45:33.946Z'),
     },
+    {
+        name: 'Asus',
+        createdAt: new Date('2024-11-30T06:45:33.946Z'),
+    },
+    {
+        name: 'Apple',
+        createdAt: new Date('2024-11-30T06:45:33.946Z'),
+    },
+    {
+        name: 'Xiaomi',
+        createdAt: new Date('2024-11-30T06:45:33.946Z'),
+    },
 ];
 
 
@@ -132,7 +144,7 @@ const mockProducts = [
         createdAt: new Date('2022-05-01T00:00:00Z')
     },
     {
-        name: 'Realme 13+ 5G 8GB/256GB',
+        name: 'Samsung 13+ 5G 8GB/256GB',
         price: 299,
         salePrice: 249,
         totalStock: 40,
@@ -192,11 +204,11 @@ const mockProducts = [
         createdAt: new Date('2022-05-01T00:00:00Z')
     },
     {
-        name: 'Laptop Dell Inspiron 15 3520 i5 1235U/16GB/512GB/120Hz/OfficeHS/KYHD/Win11',
+        name: 'Laptop Acer Inspiron 15 3520 i5 1235U/16GB/512GB/120Hz/OfficeHS/KYHD/Win11',
         price: 799,
         salePrice: 699,
         totalStock: 70,
-        image: 'https://cdn.tgdd.vn/Products/Images/44/321192/Slider/vi-vn-dell-inspiron-15-3520-i5-25p231-slider-1.jpg',
+        image: 'https://cdn.tgdd.vn/Products/Images/44/326876/acer-aspire-lite-14-51m-36pn-i3-nxktwsv001-thumb-600x600.jpg',
         rating: 4.3,
         description: 'Affordable laptop with gaming capabilities',
         status: 'On stock',
@@ -207,11 +219,11 @@ const mockProducts = [
         createdAt: new Date('2022-05-01T00:00:00Z')
     },
     {
-        name: 'Laptop HP Gaming VICTUS 15 fa1139TX i5 12450H/16GB/512GB/4GB RTX2050/144Hz/Win11 (8Y6W3PA)',
+        name: 'Laptop Acer Gaming VICTUS 15 fa1139TX i5 12450H/16GB/512GB/4GB RTX2050/144Hz/Win11 (8Y6W3PA)',
         price: 1999,
         salePrice: 1899,
         totalStock: 35,
-        image: 'https://cdn.tgdd.vn/Products/Images/44/318163/Slider/vi-vn-hp-victus-15-fa1139tx-i5-8y6w3pa-slider-1.jpg',
+        image: 'https://cdn.tgdd.vn/Products/Images/44/304543/acer-aspire-3-a315-59-5283-i5-nxk6tsv00b-thumb-600x600.jpg',
         rating: 4.9,
         description: 'Best-in-class picture quality with OLED',
         status: 'On stock',
@@ -237,11 +249,11 @@ const mockProducts = [
         createdAt: new Date('2022-05-01T00:00:00Z')
     },
     {
-        name: 'Xiaomi Redmi Watch 3 Active 46mm',
+        name: 'SamSung Watch 3 Active 46mm',
         price: 1999,
         salePrice: 1799,
         totalStock: 50,
-        image: 'https://cdn.tgdd.vn/Products/Images/7077/311333/Slider/vi-vn-redmi-watch-3-active-sld-1.jpg',
+        image: 'https://cdn.tgdd.vn/Products/Images/7077/327692/samsung-galaxy-watch7-40mm-kem-tn-600x600.jpg',
         rating: 4.8,
         description: 'Powerful laptop with M1 Pro chip',
         status: 'On stock',
@@ -387,7 +399,7 @@ const mockProducts = [
         createdAt: new Date('2022-05-01T00:00:00Z')
     },
     {
-        name: 'Xiaomi Google Tivi A Pro 55 Inch 4K',
+        name: 'Samsung Google Tivi A Pro 55 Inch 4K',
         price: 1999,
         salePrice: 1799,
         totalStock: 50,
@@ -402,11 +414,11 @@ const mockProducts = [
         createdAt: new Date('2022-05-01T00:00:00Z')
     },
     {
-        name: 'Casper Google Tivi HD 32 inch 32HG5200',
+        name: 'Samsung Google Tivi HD 32 inch 32HG5200',
         price: 1999,
         salePrice: 1799,
         totalStock: 50,
-        image: 'https://cdn2.fptshop.com.vn/unsafe/384x0/filters:quality(100)/2024_4_8_638481808529924616_casper-32hg5200-5.jpg',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/7/_/7_267_5.png',
         rating: 4.8,
         description: 'Powerful laptop with M1 Pro chip',
         status: 'On stock',
@@ -1825,29 +1837,43 @@ export const up = async (db, client) => {
 
     updatedProducts[0].brand_id = brandIdMap[4]._id;
     updatedProducts[1].brand_id = brandIdMap[4]._id;
+
     updatedProducts[2].brand_id = brandIdMap[0]._id;
-    updatedProducts[3].brand_id = brandIdMap[0]._id;
-    updatedProducts[4].brand_id = brandIdMap[4]._id;
-    updatedProducts[5].brand_id = brandIdMap[1]._id;
-    updatedProducts[6].brand_id = brandIdMap[1]._id;
+    updatedProducts[3].brand_id = brandIdMap[3]._id;
+
+    updatedProducts[4].brand_id = brandIdMap[0]._id;
+
+    updatedProducts[5].brand_id = brandIdMap[5]._id;
+
+    updatedProducts[6].brand_id = brandIdMap[6]._id;
+
     updatedProducts[7].brand_id = brandIdMap[2]._id;
+
     updatedProducts[8].brand_id = brandIdMap[2]._id;
-    updatedProducts[9].brand_id = brandIdMap[3]._id;
-    updatedProducts[10].brand_id = brandIdMap[4]._id;
+    updatedProducts[9].brand_id = brandIdMap[2]._id;
+
+    updatedProducts[10].brand_id = brandIdMap[0]._id;
     updatedProducts[11].brand_id = brandIdMap[0]._id;
-    updatedProducts[12].brand_id = brandIdMap[3]._id;
-    updatedProducts[13].brand_id = brandIdMap[0]._id;
-    updatedProducts[14].brand_id = brandIdMap[4]._id;
+
+    updatedProducts[12].brand_id = brandIdMap[6]._id;
+    updatedProducts[13].brand_id = brandIdMap[6]._id;
+
+    updatedProducts[14].brand_id = brandIdMap[0]._id;
     updatedProducts[15].brand_id = brandIdMap[0]._id;
-    updatedProducts[16].brand_id = brandIdMap[1]._id;
-    updatedProducts[17].brand_id = brandIdMap[1]._id;
-    updatedProducts[18].brand_id = brandIdMap[4]._id;
-    updatedProducts[19].brand_id = brandIdMap[0]._id;
+
+    updatedProducts[16].brand_id = brandIdMap[3]._id;
+    updatedProducts[17].brand_id = brandIdMap[3]._id;
+
+    updatedProducts[18].brand_id = brandIdMap[1]._id;
+
+    updatedProducts[19].brand_id = brandIdMap[6]._id;
+
     updatedProducts[20].brand_id = brandIdMap[0]._id;
-    updatedProducts[21].brand_id = brandIdMap[3]._id;
-    updatedProducts[22].brand_id = brandIdMap[3]._id;
-    updatedProducts[23].brand_id = brandIdMap[2]._id;
-    updatedProducts[24].brand_id = brandIdMap[2]._id;
+    updatedProducts[21].brand_id = brandIdMap[0]._id;
+    updatedProducts[22].brand_id = brandIdMap[0]._id;
+
+    updatedProducts[23].brand_id = brandIdMap[7]._id;
+    updatedProducts[24].brand_id = brandIdMap[7]._id;
 
 
     for (const product of updatedProducts) {
