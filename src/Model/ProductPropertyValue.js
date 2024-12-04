@@ -15,6 +15,6 @@ const productPropertyValueSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now },
 });
 
-const ProductPropertyValue = mongoose.model('ProductPropertyValues', productPropertyValueSchema);
+const ProductPropertyValue = mongoose.model('ProductPropertyValue', productPropertyValueSchema); // Chỉnh sửa tên model ở đây
 
 export default ProductPropertyValue;

@@ -47,6 +47,7 @@ const getProductDetailsPageByID=async(req,res)=>{
         //tech-debt:check reviews
         const populatedReviews = rawReviews.map((review)=>populateReview(review));
         const productsInCart = await cartService.coutProductInCart(user?._id||null);
+        console.log(productDetails)
         if(productDetails){
             return res.render('productDetails',{product,
                 productDetails:productDetails,
@@ -55,7 +56,8 @@ const getProductDetailsPageByID=async(req,res)=>{
                 user:user,
                 generateRatingStars,
                 cartNumber:productsInCart,
-            });
+            }
+        );
         }else{
             return res.json({
                 data:null,

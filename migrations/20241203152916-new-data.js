@@ -1893,21 +1893,29 @@ export const up = async (db, client) => {
     const productProperties = await db.collection("productproperties").insertMany(mockProductProperties);
     const propertyIdMap = productProperties.insertedIds; // Lưu _id của các productproperties
     
-
     const updatedProductPropertyValues = mockProductPropertyValues.map((detail, index) => {
         return {
             ...detail,
-            property_id: propertyIdMap[Math.floor(index / 5)],
+            property_id: index < 50?propertyIdMap[Math.floor(index/25)*5 + (index % 5)]:index<65?propertyIdMap[Math.floor(index/25)*5 + ((index+1) % 3)]:propertyIdMap[3+ Math.floor(index/95) +Math.floor((index - 5)/30)*5 +((index+1)%6) ]
         };
     });
-
+    console.log(updatedProductPropertyValues)
     updatedProductPropertyValues.forEach((item, index) => {
-        if (index < 10) {
+        //0-4
+        if (index < 25) {
             item.product_id = productIdMap[Math.floor(index / 5)];
-        } else if (index < 15) {
-            item.product_id = productIdMap[Math.floor(index / 3)];
+            //5-9
+        } else if (index < 50) {
+            item.product_id = productIdMap[Math.floor(index / 5)];
+            //10-12
+        } else if (index < 65) {
+            //13-18
+            item.product_id = productIdMap[Math.floor(index / 5)];
+        } else if (index < 95) {
+            item.product_id = productIdMap[Math.floor(index / 5)];
+            //19-24
         } else {
-            item.product_id = productIdMap[Math.floor(index / 6)];
+            item.product_id = productIdMap[Math.floor(index / 5)];
         }
     });
 
