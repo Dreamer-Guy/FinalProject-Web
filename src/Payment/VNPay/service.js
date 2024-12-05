@@ -13,11 +13,17 @@ const VNPAY_PAYMENT_RETURN_URL=process.env.VNPAY_PAYMENT_RETURN_URL
 const ORDER_SEPARATOR='-';
 
 const vnpayService={
+
+    convertUSDToVND:async(usd)=>{
+        const res=await fetch(`https://v6.exchangerate-api.com/v6/${process.env.CURRENCY_CONVERTER_API_KEY}/latest/USD`)
+        .then(response => response.json());
+        return usd*res.conversion_rates.VND;
+    },
+
     createPaymenURL:(orders)=>{
         process.env.TZ = 'Asia/Ho_Chi_Minh';
         let date = new Date();
         let createDate = moment(date).format('YYYYMMDDHHmmss');
-        
         let tmnCode =  TMN_CODE;
         let secretKey = VNPAY_SECRET;
         let vnpUrl = VNPAY_URL;
@@ -36,7 +42,8 @@ const vnpayService={
         vnp_Params['vnp_TxnRef'] = orderId;
         vnp_Params['vnp_OrderInfo'] = 'Thanh toan cho ma GD:' + orderId;
         vnp_Params['vnp_OrderType'] = 'other';
-        vnp_Params['vnp_Amount'] = orders.reduce((acc,order)=>acc+=order.total,0) * 100;
+        //techt-debt USD to VND
+        vnp_Params['vnp_Amount'] = orders.reduce((acc,order)=>acc+=order.total*22000,0) * 100;
         vnp_Params['vnp_ReturnUrl'] = returnUrl;
         vnp_Params['vnp_IpAddr'] = ipAddr;
         vnp_Params['vnp_CreateDate'] = createDate;

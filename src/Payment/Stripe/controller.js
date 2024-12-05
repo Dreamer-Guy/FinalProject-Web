@@ -28,14 +28,14 @@ const webHookHandler= async (req, res) => {
     }
 };
 
-const redirectPaymentPage = async (req, res) => {
+const getPaymentUrl = async (req, res) => {
     try {
         const {orderIds} = req.body;
         const orders = await orderService.getOrdersByIds(orderIds);
         const url= await stripeService.createPaymentUrl(orders);
-        res.redirect(url);
+        return res.send(url);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: error.message });
     }
     };
 
@@ -52,4 +52,4 @@ const getCancelPage = async (req, res) => {
 };
 
 
-export {redirectPaymentPage,getCancelPage,getSuccessPage,webHookHandler};
+export {getPaymentUrl,getCancelPage,getSuccessPage,webHookHandler};

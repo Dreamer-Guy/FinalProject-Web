@@ -303,13 +303,13 @@
         </div>
         <!-- ./diaglog -->
 
-        <!-- cart -->
-        <div class="w-full md:w-3/4 flex flex-col gap-5">
-            <div class="bg-gray-100 col-span-4 border border-gray-200 p-4 rounded">
+        <!-- orders -->
+        <div class="w-full md:w-3/4 flex flex-col items-end gap-5">
+            <div class="bg-gray-100 col-span-4 border border-gray-200 p-4 rounded w-full">
                 <h4 class="text-gray-800 text-lg mb-4 font-medium uppercase">Your Orders</h4>
                 <div class="space-y-2">
-                    <div class="hidden md:flex flex-col gap-3">
-                        <div class="flex flex-row gap-2 w-full items-center justify-between
+                    <div class="hidden md:flex flex-col items-end gap-3">
+                        <div class="w-11/12 flex flex-row gap-2 items-center justify-between
                                 bg-white border border-black rounded-md text-xl font-bold">
                             <div class="w-1/4 flex justify-center items-center">Order.No</div>
                             <div class="w-3/4 flex flex-row justify-between items-center">
@@ -321,10 +321,28 @@
                 
                         </div>
                         <% orders.forEach((order,index)=>{ %>
-                            <div
-                                onclick="handleGetOrderDetails('<%=order._id%>')" 
-                                class="flex flex-row gap-2 items-center justify-between bg-white 
-                                        border border-black rounded-lg text-sm p-2 w-full cursor-pointer">
+                            <div class="w-full flex flex-row justify-between items-center ">
+                                <div class="w-1/12 flex flex-row justify-center items-center">
+                                    <input 
+                                            type="checkbox" 
+                                            name="order" 
+                                            id="checkbox-order-<%=order._id%>" 
+                                            value="<%= order._id %>" 
+                                            class="hidden peer"
+                                            <%= order.checkoutStatus.toLowerCase()==='paid' ? 'disabled' : '' %>
+                                        />
+                                    <label
+                                            onclick="handleChooseOrders('<%=order._id%>')" 
+                                            for="checkbox-order-<%=order._id%>" 
+                                            class="w-6 h-6 rounded-full border-2 <%=order.checkoutStatus.toLowerCase()==='paid'?'hidden':''%> 
+                                            border-gray-500 bg-white cursor-pointer flex justify-center items-center peer-checked:bg-blue-400
+                                            <%= order.checkoutStatus.toLowerCase() === 'paid' ? 'pointer-events-none' : '' %>">
+                                    </label>
+                                </div>
+                                <div
+                                    onclick="handleGetOrderDetails('<%=order._id%>')" 
+                                    class="flex flex-row gap-2 items-center justify-between bg-white 
+                                        border border-black rounded-lg text-sm p-2 w-11/12 cursor-pointer">
                                 <div class="w-1/4 break-words flex justify-center items-center"><%=index+1%></div>
                                 <div class="w-3/4 flex flex-row justify-between items-center flex-wrap">
                                     <div class="w-1/4 break-words flex justify-center 
@@ -342,21 +360,41 @@
                                     <div class="w-1/4 break-words flex justify-center 
                                         items-center">$<%=order.total%></div>
                                 </div>
+                                </div>
                             </div>
                         <% }); %>
                     </div>
                     <div class="md:hidden flex flex-col gap-3">
                         <% orders.forEach((order,index)=>{ %>
-                            <div
-                                onclick="handleGetOrderDetails('<%=order._id%>')"  
-                                class="flex flex-col border border-black rounded-md p-2">
-                                <div class="flex flex-row gap-3 justify-between items-center" >
-                                    <div class="">
-                                        <span class="text-lg font-semibold">Order.No:</span> <%=index+1%></div>
-                                    <div><span class="text-lg font-semibold">Total:</span> $<%=order.total%></div> 
+                            <div class="flex flex-row gap-1">
+                                <div class="w-1/12 flex flex-row justify-center items-center">
+                                    <div class="flex flex-row justify-center items-center">
+                                        <input 
+                                            type="checkbox" 
+                                            name="order" 
+                                            id="checkbox-order-<%=order._id%>" 
+                                            value="<%= order._id %>" 
+                                            class="hidden peer"
+                                            <%= order.checkoutStatus.toLowerCase()==='paid' ? 'disabled' : '' %>
+                                        />
+                                        <label
+                                            onclick="handleChooseOrders('<%=order._id%>')" 
+                                            for="checkbox-order-<%=order._id%>" 
+                                            class="w-6 h-6 rounded-full border-2 <%=order.checkoutStatus.toLowerCase()==='paid'?'hidden':''%> 
+                                            border-gray-500 bg-white cursor-pointer flex justify-center items-center peer-checked:bg-blue-400
+                                            <%= order.checkoutStatus.toLowerCase() === 'paid' ? 'pointer-events-none' : '' %>">
+                                        </label>
+                                    </div>
                                 </div>
-                                <div><span class="text-lg font-semibold">Date:</span> <%=order.createdAt%></div>
-                                <div class="flex flex-row justify-between items-center gap-3">
+                                <div
+                                    onclick="handleGetOrderDetails('<%=order._id%>')"  
+                                    class="flex flex-col items-start border border-black rounded-md p-2 w-full gap-3">
+                                    <div class="flex flex-row gap-3 justify-between items-center w-11/12" >
+                                        <div class="">
+                                            <span class="text-lg font-semibold">Order.No:</span> <%=index+1%></div>
+                                        <div><span class="text-lg font-semibold">Total:</span> $<%=order.total%></div> 
+                                    </div>
+                                    <div><span class="text-lg font-semibold">Date:</span> <%=order.createdAt%></div>
                                     <div><span class="text-lg font-semibold">Payment:</span> 
                                         <span class="rounded-md p-1 border <%= order.checkoutStatus.toLowerCase()==='unpaid'?'bg-red-500 border-red-500':'bg-green-500 border-green-400'%>"><%=order.checkoutStatus%></span></div>
                                     <div><span class="text-lg font-semibold">Status:</span> 
@@ -373,8 +411,15 @@
                     <p>$<%=orders.reduce((acc,order)=>(acc+=order.total),0)%></p>
                 </div>    
             </div>
+            <div class="p-2">
+                <button
+                onclick="handlePay('stripe')"
+                id="btn-pay"
+                class="p-2 bg-blue-500 rounded-lg text-white hover:bg-blue-300 hover:cursor-pointer">Pay now with Stripe</button>
+            </div>
         </div>
-        <!-- ./cart -->
+        
+        <!-- ./orders -->
         
 
     </div>
@@ -456,7 +501,7 @@
         <div class="container flex items-center justify-between">
             <p class="text-white">&copy; TailCommerce - All Right Reserved</p>
             <div>
-                <img src="../assets/images/methods.png" alt="methods" class="h-5">
+                <img src="/assets/images/methods.png" alt="methods" class="h-5">
             </div>
         </div>
     </div>
@@ -464,6 +509,8 @@
     <script src="/js/order/order.js"></script>
     <script src="/js/common/profile/updateProfileStatus.js"></script>
     <script src="/js/common/profile/dialog.js"></script>
+    <script src="/js/common/showSpinnerLoading.js"></script>
+    <script src="/js/common/toast.js"></script>
 </body>
 
 </html>

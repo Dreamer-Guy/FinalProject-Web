@@ -1,11 +1,11 @@
 
 import express from "express";
-import {getPaymentPage,getvnIPNBack,getSuccessPage}
+import {getPaymentUrl,getvnIPNBack,getSuccessPage}
 from "./controller.js";
 
 const router = express.Router();
 
-router.get("/pay",getPaymentPage);
+router.post("/pay",getPaymentUrl);
 router.get("/success", getSuccessPage);
 router.get("/ipn", getvnIPNBack);
 

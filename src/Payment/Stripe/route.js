@@ -1,10 +1,11 @@
-import {redirectPaymentPage,getCancelPage,getSuccessPage,webHookHandler}
+
+import {getPaymentUrl,getCancelPage,getSuccessPage,webHookHandler}
 from "./controller.js";
 import express from "express";
 
 const router = express.Router();
 
-router.post("/pay", redirectPaymentPage);
+router.post("/pay", getPaymentUrl);
 router.get("/cancel", getCancelPage);
 router.get("/success", getSuccessPage);
 router.post("/webhook", webHookHandler);
