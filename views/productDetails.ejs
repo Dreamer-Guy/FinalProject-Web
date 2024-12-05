@@ -47,6 +47,7 @@
                             </div>
                             <div class="text-xs leading-3">Cart</div>
                             <div
+                                id="cart-number"
                                 class="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
                                 <%=cartNumber%></div>
                         </a>
@@ -151,26 +152,24 @@
             <div class="space-y-2">
                 <p class="text-gray-800 font-semibold space-x-2">
                     <span>Availability: </span>
-                    <span class="text-green-600">
-                        <%= product.totalStock %>
-                    </span>
+                    <% if(product.totalStock > 0) { %>
+                            <span class="text-green-600">
+                                <%= product.totalStock %>
+                            </span>
+                    <% } else { %>
+                            <span class="text-red-600">Out of stock</span>
+                    <% } %>
                 </p>
                 <p class="space-x-2">
                     <span class="text-gray-800 font-semibold">Brand: </span>
                     <span class="text-gray-600">
-                        <%= product.brand %>
+                        <%= product.brand_id.name %>
                     </span>
                 </p>
                 <p class="space-x-2">
-                    <span class="text-gray-800 font-semibold">Type: </span>
+                    <span class="text-gray-800 font-semibold">Cateogory: </span>
                     <span class="text-gray-600">
-                        <%= product.type %>
-                    </span>
-                </p>
-                <p class="space-x-2">
-                    <span class="text-gray-800 font-semibold">Weight: </span>
-                    <span class="text-gray-600">
-                        <%= productDetails.weight %>
+                        <%= product.category_id.name %>
                     </span>
                 </p>
             </div>
@@ -186,14 +185,21 @@
                     %>
                 </p>
             </div>
-            <div class="mt-4 flex gap-3">
-                <button id="add-to-cart"
+            <div class="mt-4 flex flex-row gap-3">
+                <div class="flex flex-row gap-3">
+                    <button
+                    onclick="handleChangeQuantity(-1)" 
+                    class="p-2 border border-black rounded-md w-10 h-10">-</button>
+                    <input type="text" value="1" class="w-12 text-center border-none " id="quantity"/>
+                    <button 
+                    onclick="handleChangeQuantity(1)"
+                    class="p-2 border border-black rounded-md w-10 h-10">+</button>
+                </div>
+                <button 
+                    onclick="handleAddToCart('<%= product._id %>')"
+                    id="add-to-cart"
                     class="bg-primary text-white py-3 px-8 rounded-md hover:bg-transparent hover:text-primary transition">
                     Add to Cart
-                </button>
-                <button id="buy-now"
-                    class="bg-secondary text-white py-3 px-8 rounded-md hover:bg-transparent hover:text-secondary transition">
-                    Buy Now
                 </button>
             </div>
         </div>
@@ -208,16 +214,12 @@
         <h3 class="text-xl border-b border-gray-200 font-roboto text-gray-800 pb-3 font-medium">Product details</h3>
         <div class="w-3/5 pt-6 flex justify-center items-center">
             <table id="product-details-table" class="table-auto border-collapse w-2/3 text-left text-gray-600 text-sm mt-6">   
-                <% for (const detail of Object.keys(productDetails)) { %>
-                    <% if (detail === 'weight' || detail === 'description' || detail === 'productId') { %>
-                        <% continue; %>
-                    <% } %>
+                <% for (const detail of productDetails) { %>
                     <tr>
-                        <th class="py-2 px-4 border border-gray-300 w-40 font-medium"><%= detail %></th>
-                        <th class="py-2 px-4 border border-gray-300 "><%= productDetails[detail] %></th>
+                        <th class="py-2 px-4 border border-gray-300 w-40 font-medium"><%= detail.property_id.name %></th>
+                        <th class="py-2 px-4 border border-gray-300 "><%= detail.value %></th>
                     </tr>
                 <% } %>
-                
             </table>
         </div>
     </div>
@@ -253,36 +255,38 @@
                         </div>
                     </div>
                 <% } %>      
-                <span id="points">...There are <span class="font-semibold"><%=reviews.length-COUNT_SHOW_REVIEW%></span> more review(s)</span>
-                <% for (let i = 0 + COUNT_SHOW_REVIEW; i < reviews.length && i; i++) { %>    
-                    <div class="flex flex-row justify-start items-center gap-4 hidden review-display-more">
-                        <div class="w-[50px] h-[50px]">
-                            <img 
-                            class="w-full h-full object-cover rounded-full"
-                            src="https://github.com/octocat.png?s=200" alt="doing" />
-                        </div>
-                        <div>
-                            <div class="flex flex-row gap-6">
-                                <h3 class="font-bold"><%= reviews[i].user.fullName %></h3>
-                                <p class="opacity-50 text-blue-400"><%= reviews[i].createdAt %></p>
+                <% if(reviews.length > COUNT_SHOW_REVIEW) { %>
+                    <span id="points">...There are <span class="font-semibold"><%=reviews.length-COUNT_SHOW_REVIEW%></span> more review(s)</span>
+                    <% for (let i = 0 + COUNT_SHOW_REVIEW; i < reviews.length && i; i++) { %>    
+                        <div class="flex flex-row justify-start items-center gap-4 hidden review-display-more">
+                            <div class="w-[50px] h-[50px]">
+                                <img 
+                                class="w-full h-full object-cover rounded-full"
+                                src="https://github.com/octocat.png?s=200" alt="doing" />
                             </div>
                             <div>
-                                <div class="flex gap-1 text-sm text-yellow-400">
-                                    <%- generateRatingStars(reviews[i].rating) %>
+                                <div class="flex flex-row gap-6">
+                                    <h3 class="font-bold"><%= reviews[i].user.fullName %></h3>
+                                    <p class="opacity-50 text-blue-400"><%= reviews[i].createdAt %></p>
+                                </div>
+                                <div>
+                                    <div class="flex gap-1 text-sm text-yellow-400">
+                                        <%- generateRatingStars(reviews[i].rating) %>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p><%= reviews[i].comment %></p>
                                 </div>
                             </div>
-                            <div>
-                                <p><%= reviews[i].comment %></p>
-                            </div>
                         </div>
-                    </div>
+                    <% } %>
+                        <div>
+                            <button
+                            class="border border-gray-300 rounded-md p-2 mt-2 hover:bg-gray-100 transition"
+                            id="show-more-button" 
+                            onclick="toggleShow()">Show More</button>  
+                        </div>
                 <% } %> 
-                <div>
-                    <button
-                    class="border border-gray-300 rounded-md p-2 mt-2 hover:bg-gray-100 transition"
-                    id="show-more-button" 
-                    onclick="toggleShow()">Show More</button>  
-                </div>
             <% } %>
         </div>
         <% if(user){%>
@@ -320,40 +324,47 @@
     <!-- Related product -->
     <div class="container pb-16">
         <h2 class="text-2xl font-medium text-gray-800 uppercase mb-6">Related products</h2>
-        <div class="flex flex-col md:flex-row justify-center items-center gap-6">
+        <div class="flex flex-col md:flex-row justify-center items-center gap-6 md:h-[420px]">
             <% relatedProducts.forEach(product => { %>
                 <div class="bg-white shadow rounded overflow-hidden group 
-                flex flex-col justify-between max-w-[250px]">
-                  <div class="relative">
-                    <img
-                    onclick="window.location.href='/productDetails/get/<%=product.productId%>'" 
-                    src="<%= product.image %>" alt="product-img" class="w-full cursor-pointer">
-                  </div>
-                  <div class="pt-4 pb-3 px-4">
-                    <a href="#">
-                      <h4 class="uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition">
-                        <%= product.name %>
-                      </h4>
-                    </a>
-                    <div class="flex items-baseline mb-1 space-x-2">
-                        <% if(product.salePrice > 0) { %>
-                            <div class="text-xl text-primary font-semibold">$<%= product.salePrice %></div>
-                            <div class="text-xl text-gray-500 line-through">$<%= product.price %></div>
-                        <% } else { %>
-                            <div class="text-xl text-gray-500 font-semibold">$<%= product.price %></div>
-                        <% } %>
+                flex flex-col justify-between max-w-[250px] h-full">
+                    <div class="flex flex-col gap-2">
+                        <div class="relative">
+                            <img
+                            onclick="window.location.href='/productDetails/get/<%=product._id%>'" 
+                            src="<%= product.image %>" alt="product-img" class="w-full h-[140px] object-cover cursor-pointer">
+                        </div>
+                        <div class="pt-4 pb-3 px-4">
+                            <a href="#">
+                                <h4 class="uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition">
+                                    <%= product.name %>
+                                </h4>
+                            </a>
+                        </div>
                     </div>
-                    <div class="flex items-center">
-                      <div class="flex gap-1 text-sm text-yellow-400">
-                        <%- generateRatingStars(Math.floor(product.rating)) %>
-                      </div>
-                      <div class="text-xs text-gray-500 ml-3">(150)</div>
+                    <div class="flex flex-col gap-1">
+                        <div class="px-2">
+                            <div class="flex items-baseline mb-1 space-x-2">
+                                <% if(product.salePrice > 0) { %>
+                                    <div class="text-xl text-primary font-semibold">$<%= product.salePrice %></div>
+                                    <div class="text-xl text-gray-500 line-through">$<%= product.price %></div>
+                                <% } else { %>
+                                    <div class="text-xl text-gray-500 font-semibold">$<%= product.price %></div>
+                                <% } %>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="flex gap-1 text-sm text-yellow-400">
+                                    <%- generateRatingStars(Math.floor(product.rating)) %>
+                                </div>
+                                <div class="text-xs text-gray-500 ml-3">(150)</div>
+                            </div>
+                        </div>
+                        <a 
+                            onclick="handleAddToCart('<%= product._id %>',1)"
+                            class="block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition">
+                            Add to cart
+                        </a>
                     </div>
-                  </div>
-                  <a href="#"
-                     class="block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition">
-                    Add to cart
-                  </a>
                 </div>
               <% }) %>              
         </div>
@@ -440,10 +451,13 @@
     </div>
     <!-- ./copyright -->
     <script>
+        const totalStock = "<%= product.totalStock %>";
         const user = "<%= JSON.stringify(user) %>"; 
     </script>
     <script src="/js/common/util.js"></script>
     <script src="/js/productDetails/productDetails.js"></script>
+    <script src="/js/common/showSpinnerLoading.js"></script>
+    <script src="/js/common/toast.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </body>
 

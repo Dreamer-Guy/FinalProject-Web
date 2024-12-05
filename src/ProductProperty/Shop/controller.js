@@ -1,35 +1,10 @@
-import { populate } from "dotenv";
 import serviceFactory from "../../Factory/serviceFactory.js";
 import {generateRatingStars} from "../../Utils/viewEngine.js";
-const productDetailService=serviceFactory.getProductDetailsSerVice();
+
 const productService=serviceFactory.getProductSerVice();
 const reviewService=serviceFactory.getReviewService(); 
 const cartService=serviceFactory.getCartService(); 
-const populateProduct=(product)=>{
-    const populatedProduct={
-        productId: product._id,
-        type: product.type,
-        name: product.name,
-        price: product.price,
-        salePrice: product.salePrice,
-        brand: product.brand,
-        totalStock: product.totalStock,
-        image: product.image,
-        rating: product.rating,
-    };
-    return populatedProduct;
-}
-
-const populateProductDetails=(productDetails)=>{
-    const populatedProductDetails={};
-    for(const key of Object.keys(productDetails)){
-        if(key==='_id'){
-            continue;
-        }
-        populatedProductDetails[key]=productDetails[key];
-    }
-    return populatedProductDetails;
-};
+const productPropertyService=serviceFactory.getProductPropertyService();
 
 const getFormatedDate=(date)=>{
     const yyyy = date.getFullYear();
@@ -54,28 +29,35 @@ const populateReview=(review)=>{
 };
 
 
-const getProductDetailsByID=async(req,res)=>{
+const getProductDetailsPageByID=async(req,res)=>{
     try{
         const user=req.user||null;
         const {id}=req.params;
-        const productDetails=await productDetailService.get(id);
-        const populatedProductDetails=populateProductDetails(productDetails);
+        const productDetails=await productPropertyService.getProductPropertiesByProductId(id)||[
+            {
+                property_id:{
+                    name:"No details",
+                },
+                value:"No details",
+            }
+        ];
         const product=await productService.getProductById(id);
-        const rawRelatedProducts=await productService.getRelatedProducts(product)||[];
-        const relatedProducts=rawRelatedProducts.map((product)=>populateProduct(product));
+        const relatedProducts=await productService.getRelatedProductsByProductId(product._id,5)||[];
         const rawReviews=await reviewService.getReviewsByProductId(id);
         //tech-debt:check reviews
         const populatedReviews = rawReviews.map((review)=>populateReview(review));
         const productsInCart = await cartService.coutProductInCart(user?._id||null);
+        console.log(productDetails)
         if(productDetails){
             return res.render('productDetails',{product,
-                productDetails:populatedProductDetails,
+                productDetails:productDetails,
                 relatedProducts,
                 reviews:populatedReviews,
                 user:user,
                 generateRatingStars,
                 cartNumber:productsInCart,
-            });
+            }
+        );
         }else{
             return res.json({
                 data:null,
@@ -89,25 +71,4 @@ const getProductDetailsByID=async(req,res)=>{
     }
 }
 
-// const getProductAllDetails=async(req,res)=>{
-//     try{
-//         const productDetails=await productDetailService.getAll();
-//         if(productDetails){
-//             return res.json({
-//                 data:productDetails,
-//             });
-//         }
-//         else{
-//             return res.json({
-//                 data:null,
-//             })
-//         }
-//     }
-//     catch(error){
-//         return res.json({
-//             data:null,
-//         });
-//     }
-// }
-
-export {getProductDetailsByID};
+export {getProductDetailsPageByID};

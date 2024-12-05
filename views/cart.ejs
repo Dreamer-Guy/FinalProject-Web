@@ -306,18 +306,20 @@
         <!-- cart -->
         <div class="w-full md:w-3/4 flex flex-col gap-5">
             <% cart.items.forEach((item,index)=>{ %>
-                <div class="w-full flex flex-col md:flex-row items-center justify-between border gap-3 md:gap-6 p-4 border-gray-200 rounded">
-                    <div class="w-full md:w-2/6 flex flex-row justify-between items-center gap-3">
-                        <div class="">
+                <div
+                    onclick="window.location.href='/productDetails/get/<%=item.productId._id%>'" 
+                    class="hover:cursor-pointer w-full flex flex-col md:flex-row items-center justify-between border gap-3 md:gap-6 p-4 border-gray-200 rounded">
+                    <div class="w-full md:w-3/5 flex flex-row justify-between items-center gap-3 break-words">
+                        <div class="w-1/5">
                             <img src="<%=item.productId.image%>" alt="product 6" class="w-[60px] h-[60px] object-cover">
                         </div>
-                        <div class="flex flex-col justify-center items-end gap-1">
-                            <h2 class="text-gray-800 text-lg font-medium uppercase"><%= item.productId.name %></h2>
+                        <div class="w-4/5 flex flex-col justify-center items-end gap-1">
+                            <h2 class="text-gray-800 text-lg font-medium uppercase break-words break-all"><%= item.productId.name %></h2>
                             <p class="text-gray-500 text-sm">Availability: <span class="text-green-600"><%=item.productId.totalStock %></span></p>
                         </div>
                     </div>
         
-                    <div class="w-full md:w-4/6 flex flex-row gap-4 justify-center md:justify-end items-center">
+                    <div class="w-full md:w-2/5 flex flex-row gap-4 justify-center md:justify-end items-center">
                         <div class="flex flex-row justify-center gap-4">
                             <% if(item.productId.salePrice>0){%>
                                 <div class="text-primary text-lg font-semibold">$<%= item.productId.salePrice %></div>
@@ -348,22 +350,22 @@
                 </div>
             <% }); %>
 
-            <div class="col-span-4 border border-gray-200 p-4 rounded">
+            <div class="col-span-4 border border-gray-200 p-4 rounded bg-gray-200">
                 <h4 class="text-gray-800 text-lg mb-4 font-medium uppercase">order summary</h4>
                 <div class="space-y-2">
                     <% cart.items.forEach((item,index)=>{ %>
-                        <div class="flex justify-between">
+                        <div class="flex justify-between bg-white border border-black rounded-md p-2 items-center">
                             <div class="w-3/6">
-                                <h5 class="text-gray-800 font-medium"><%=item.productId.name%></h5>
+                                <h5 class="text-gray-800 font-medium break-words break-all"><%=item.productId.name%></h5>
                             </div>
                             <p class="w-1/6 text-gray-600 flex flex-row justify-center">
                                 x<%= item.quantity %>
                             </p>
                             <div class="w-2/6 flex flex-row justify-end">
                                 <% if(item.productId.salePrice>0){%>
-                                    <p class="text-gray-800 font-medium">$<%= item.productId.salePrice %></p>
+                                    <p class="text-gray-800 font-medium">$<%= item.productId.salePrice*item.quantity %></p>
                                 <%}else{%>
-                                    <p class="text-gray-800 font-medium">$<%= item.productId.price %></p>
+                                    <p class="text-gray-800 font-medium">$<%= item.productId.price*item.quantity %></p>
                                 <%}%>
                             </div>
                         </div>
@@ -379,7 +381,10 @@
                 <div class="flex justify-between text-gray-800 font-medium py-3 uppercas">
                     <p class="font-semibold">Total</p>
                     <p><span class="font-semibold">$</span>
-                        <%= cart.items.reduce((acc,item)=>(item.productId.salePrice>0?acc+=item.productId.salePrice:acc+=item.productId.price),0)%></p>
+                        <%= cart.items.reduce((acc,item)=>
+                            (item.productId.salePrice>0
+                                ?acc+=(item.productId.salePrice*item.quantity)
+                                :acc+=(item.productId.price*item.quantity)),0)%></p>
                 </div>
     
                 <div class="flex items-center mb-4 mt-2">
@@ -389,9 +394,11 @@
                             class="text-primary">terms & conditions</a></label>
                 </div>
     
-                <a href="#"
+                <div 
+                    onclick="placeOrder()"
                     class="block w-full py-3 px-4 text-center text-white bg-primary border border-primary rounded-md hover:bg-transparent hover:text-primary transition font-medium">Place
-                    order</a>
+                    order
+                </div>
             </div>
         </div>
         <!-- ./cart -->
@@ -476,13 +483,15 @@
         <div class="container flex items-center justify-between">
             <p class="text-white">&copy; TailCommerce - All Right Reserved</p>
             <div>
-                <img src="../assets/images/methods.png" alt="methods" class="h-5">
+                <img src="/assets/images/methods.png" alt="methods" class="h-5">
             </div>
         </div>
     </div>
     <!-- ./copyright -->
     <script src="/js/cart/cart.js"></script>
     <script src="/js/common/profile/updateProfileStatus.js"></script>
+    <script src="/js/common/showSpinnerLoading.js"></script>
+    <script src="/js/common/toast.js"></script>
 </body>
 
 </html>

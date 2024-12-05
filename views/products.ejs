@@ -35,7 +35,7 @@
                 <input type="text" name="search" id="search"
                     class="w-full border border-primary border-r-0 pl-12 py-3 pr-3 rounded-l-md focus:outline-none"
                     placeholder="Search">
-                <button onclick="handleSearch()" class="bg-primary border border-primary text-white px-8 rounded-r-md 
+                <button onclick="handleFilters('search')" class="bg-primary border border-primary text-white px-8 rounded-r-md 
                     hover:bg-transparent hover:text-primary transition">
                     Search</button>
             </div>
@@ -326,54 +326,54 @@
                 <div>
                     <h3 class="text-xl text-gray-800 mb-3 uppercase font-medium">Types</h3>
                     <div class="space-y-2">
-                        <% const types=["laptop","phone","television","watch","camera"]; %>
-                            <% types.forEach((type, index)=> { %>
-                                <div onclick="handleFilters('type','<%=types[index]%>')" class="flex items-center">
-                                    <input type="checkbox" name="cat-<%= index + 1 %>" id="cat-<%= index + 1 %>"
-                                        class="text-primary focus:ring-0 rounded-sm cursor-pointer" value="<%= type %>">
-                                    <label for="cat-<%= index + 1 %>" class="text-gray-600 ml-3 cursor-pointer">
-                                        <%= type.charAt(0).toUpperCase() + type.slice(1) %>
-                                    </label>
-                                </div>
-                                <% }); %>
+                        <% categories.forEach((category, index)=> { %>
+                            <div onclick="handleFilters('category','<%=categories[index].name%>')" class="flex items-center">
+                                <input type="checkbox" name="cat-<%= index + 1 %>" id="cat-<%= index + 1 %>"
+                                    class="text-primary focus:ring-0 rounded-sm cursor-pointer" value="<%= category %>">
+                                <label for="cat-<%= index + 1 %>" class="text-gray-600 ml-3 cursor-pointer">
+                                    <%= category.name.charAt(0).toUpperCase() + category.name.slice(1) %>
+                                </label>
+                            </div>
+                            <% }); %>
                     </div>
                 </div>
 
                 <div class="pt-4">
                     <h3 class="text-xl text-gray-800 mb-3 uppercase font-medium">Brands</h3>
                     <div class="space-y-2">
-                        <% const brands=["Apple","SamSung","ASUS","Acer","Legion"]; %>
-                            <% brands.forEach((brand, index)=> { %>
-                                <div onclick="handleFilters('brand','<%=brands[index]%>')" class="flex items-center">
-                                    <input type="checkbox" name="cat-<%= index + 1 %>" id="cat-<%= index + 1 %>"
-                                        class="text-primary focus:ring-0 rounded-sm cursor-pointer"
-                                        value="<%= brand.toLowerCase() %>">
-                                    <label for="cat-<%= index + 1 %>" class="text-gray-600 ml-3 cursor-pointer">
-                                        <%= brand.charAt(0).toUpperCase() + brand.slice(1) %>
-                                    </label>
-                                </div>
-                                <% }); %>
+                        <% brands.forEach((brand, index)=> { %>
+                            <div onclick="handleFilters('brand','<%=brands[index].name%>')" class="flex items-center">
+                                <input type="checkbox" name="cat-<%= index + 1 %>" id="cat-<%= index + 1 %>"
+                                    class="text-primary focus:ring-0 rounded-sm cursor-pointer"
+                                    value="<%= brand.name.toLowerCase() %>">
+                                <label for="cat-<%= index + 1 %>" class="text-gray-600 ml-3 cursor-pointer">
+                                    <%= brand.name.charAt(0).toUpperCase() + brand.name.slice(1) %>
+                                </label>
+                            </div>
+                        <% }); %>
                     </div>
                 </div>
 
                 <div class="pt-4">
                     <h3 class="text-xl text-gray-800 mb-3 uppercase font-medium">Price</h3>
                     <div class="space-y-2">
-                        <% const prices=[0, 200, 450, 700]; %>
+                        <% const prices=[0, 300, 500, 700,1500]; %>
                             <% for (let i=0; i < prices.length - 1; i +=1) { %>
                                 <div onclick="handleFilters('price',`<%= prices[i] %>`,`<%= prices[i+1] %>`)" class="flex items-center">
-                                    <input type="checkbox" name="price-<%= i + 1 %>" id="price-<%= prices[i]  %>:<%= prices[i+1] %>"
+                                    <input 
+                                        type="checkbox" 
+                                        name="price-filter" 
+                                        id="price-<%= prices[i]%>:<%= prices[i+1] %>"
                                         class="text-primary focus:ring-0 rounded-sm cursor-pointer"
-                                        value="<%=prices[i]%>-<%=prices[i+1]%>">
-                                    <label for="price-<%= i + 1 %>" class="text-gray-600 ml-3 cursor-pointer">
+                                        value="<%= prices[i] %>:<%= prices[i + 1] %>">
+                                    <label for="price-<%= prices[i] %>:<%= prices[i+1] %>" class="text-gray-600 ml-3 cursor-pointer">
                                         <span>$</span>
-                                        <%= prices[i] %>
+                                        <%= prices[i] %>                                                                        
                                         <span>-</span>
                                         <%= prices[i + 1] %>
                                     </label>
                                 </div>
                         <% } %>
-
                     </div>
                 </div>
 
@@ -424,8 +424,8 @@
                         <div>
                             <div class="relative">
                                 <img src="<%= product.image %>" alt="<%= product.name %>" class="product-img cursor-pointer"
-                                    productId="<%= product.id %>"
-                                    onclick="window.location.href='/productDetails/get/<%=product.productId%>'">
+                                    productId="<%= product._id %>"
+                                    onclick="window.location.href='/productDetails/get/<%=product._id%>'">
                             </div>
                         </div>
                         <div>
@@ -449,12 +449,18 @@
                                 </div>
                                 <div class="flex items-center">
                                     <div class="flex gap-1 text-sm text-yellow-400">
-                                        <%-generateRatingStars(Math.floor(product.rating))%>
+                                    <% for (let i=0; i < 5; i++) { %>
+                                        <% if(i< Math.floor(product.rating)) {%>
+                                            <i class="fa-solid fa-star"></i>
+                                            <%} else {%>
+                                                <i class="fa-star fa-regular"></i>
+                                        <%} %>
+                                    <% } %>
                                     </div>
                                     <div class="text-xs text-gray-500 ml-3">(150)</div>
                                 </div>
                             </div>
-                            <button onclick="handleAddToCart('<%= product.productId %>',1)"
+                            <button onclick="handleAddToCart('<%= product._id %>',1)"
                                 class="block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition">
                                 Add to cart
                             </button>
@@ -463,7 +469,9 @@
                     <% }) %>
             </div>
             <!-- paging-->
-            <div class="bg-white py-10 text-center dark:bg-dark">
+            <div
+                id="paging-container" 
+                class="bg-white py-10 text-center dark:bg-dark ">
                 <% const quantity=Math.ceil(totalProducts / rowsPerPage); %>
                     <ul class="flex items-center justify-center gap-2">
                         <li>
@@ -480,14 +488,16 @@
                             </button>
                         </li>
                         <% for (let i=0; i < quantity; i++) { %>
-                            <li>
-                                <button onclick="handleFilters('page','<%= i + 1 %>')" id="page-<%= i + 1 %>" class="flex h-10 min-w-10 items-center justify-center rounded-lg border 
-                                border-stroke bg-white px-2 text-base font-medium text-dark hover:bg-gray-1 
-                                dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10">
-                                    <%= i + 1 %>
-                                </button>
-                            </li>
-                            <% } %>
+                        <li>
+                            <button onclick="handleFilters('page','<%= i + 1 %>')" id="page-<%= i + 1 %>" 
+                                class="flex h-10 min-w-10 items-center justify-center rounded-lg border 
+                                border-stroke bg-blue-100 px-2 text-base font-medium text-dark hover:bg-gray-1 
+                                dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10
+                                <%= i === 0 ? 'bg-blue-500' : '' %>">
+                                <%= i + 1 %>
+                            </button>
+                        </li>
+                        <% } %>
                                 <li>
                                     <button
                                         class="flex h-10 min-w-10 items-center justify-center rounded-lg border border-stroke bg-white px-2 text-base font-medium text-dark hover:bg-gray-1 dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10">

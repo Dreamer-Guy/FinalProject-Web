@@ -8,6 +8,21 @@ const productService=serviceFactory.getProductSerVice();
 const OK_STATUS=200;
 const BAD_REQUEST_STATUS=400;
 const INTERNAL_SERVER_ERROR_STATUS=500;
+
+const isValidQuantityToUpdate=(cart,productId,quantity)=>{
+    const index=cart.items.findIndex(item=>item.productId._id.toString()===productId);
+    if(index===-1){
+        return "Not found product";
+    }
+    const availableStock=cart.items[index].productId.totalStock;
+    if(availableStock<quantity){
+        return "Not enough stock";
+    }
+    if(quantity<=0){
+        return "Invalid quantity";
+    }
+    return null;
+};
 const deleteCart=async (req,res) => {
     try{
         const user=req.user;
@@ -59,8 +74,12 @@ const addCartItems=async(req,res)=>{
             return res.status(BAD_REQUEST_STATUS).json({message:"Invalid request"});
         };
         const {productId,quantity}=req.body;
-        if(!await productService.getProductById(productId)){
+        const product=await productService.getProductById(productId);
+        if(!product){
             return res.status(BAD_REQUEST_STATUS).json({message:"Invalid product id"});
+        };
+        if(product.totalStock<quantity){
+            return res.status(BAD_REQUEST_STATUS).json({message:"Not enough stock"});
         };
         let cart=await cartService.getCartByUserId(user._id);
         if(!cart){
@@ -92,7 +111,15 @@ const updateCartItems=async(req,res)=>{
             return res.status(BAD_REQUEST_STATUS).json({message:"Invalid request"});
         };
         const {productId,quantity}=req.body;
+        const product=await productService.getProductById(productId);
+        if(!product){
+            return res.status(BAD_REQUEST_STATUS).json({message:"Invalid product id"});
+        }
         const cart=await cartService.getCartByUserId(user._id);
+        const errorInvalidQuantity=isValidQuantityToUpdate(cart,productId,quantity);
+        if(errorInvalidQuantity){
+            return res.status(BAD_REQUEST_STATUS).json({message:errorInvalidQuantity});
+        };
         const items=cart.items.map(item=>{
             if(item.productId._id.toString()===productId){
                 item.quantity=Number(quantity);

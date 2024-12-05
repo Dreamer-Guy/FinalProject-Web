@@ -6,7 +6,7 @@ import methodOverride  from 'method-override'
 import mongoose from './src/Config/mongooseDB.js';
 
 import productRouter from "./src/Product/Shop/route.js";
-import productDetailsRouter from "./src/ProductDetails/Shop/route.js";
+import productDetailsRouter from './src/ProductProperty/Shop/route.js';
 import userRouter from './src/User/Shop/route.js';
 import homeRouter from './src/HomePage/Shop/route.js';
 import reviewRouter from './src/Review/Shop/route.js';
@@ -14,11 +14,24 @@ import cartRouter from "./src/Cart/Shop/route.js";
 import orderRouter from './src/Order/Shop/route.js';
 import addressRouter from './src/Address/Shop/route.js';
 
+import paypalPaymentRouter from "./src/Payment/PayPal/route.js";
+import vnpayPaymentRouter from "./src/Payment/VNPay/route.js";
+import stripePaymentRouter from "./src/Payment/Stripe/route.js";
+
+import isUserLoginAndRedirect from './src/middleWare/isUserLoginAndRedirect.js';
+
 import adminDashBoardRouter from "./src/HomePage/Admin/dashboardRoute.js";
 import adminRevenueRouter from  "./src/Revenue/Admin/revenueRoute.js";
 
+
+
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT||3000;
+
+app.use(
+    '/payment/stripe/webhook',
+    express.raw({ type: 'application/json' }) 
+);
 app.use(express.json());
 app.use(methodOverride('_method'))
 app.use(express.urlencoded(
@@ -42,10 +55,20 @@ app.use(express.static(path.join(process.cwd(), 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(process.cwd(), 'views'));
 
+
+
+
 app.use("/", homeRouter);
 app.use("/productDetails", productDetailsRouter);
 app.use("/products", productRouter);
 app.use("/user", userRouter);
+
+//app.use("/payment/paypal", paypalPaymentRouter); there is problem with this route
+app.use("/payment/vnpay", vnpayPaymentRouter);
+app.use("/payment/stripe", stripePaymentRouter);
+
+app.use(isUserLoginAndRedirect);
+
 app.use("/addresses", addressRouter);
 app.use("/reviews", reviewRouter);
 app.use("/carts", cartRouter);
@@ -55,6 +78,7 @@ app.use("/admin/revenue", adminRevenueRouter);
 app.use((req, res) => {
     res.status(404).render('notFound');
 }); 
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

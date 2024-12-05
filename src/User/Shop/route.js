@@ -4,11 +4,12 @@ resetPassWord,editInformation,updateInformation,changPasswordPage,changePassword
 from "./controller.js";
 import passportLocal from "../../middleWare/PassPort.js";
 import googlePassPort from "../../middleWare/googlePassport.js";
-const userRouter = expresss.Router();
 import multer from "multer";
 import path from 'path';
 import serviceFactory from "../../Factory/serviceFactory.js";
 import Address from "../../Model/Address.js";
+import isUserLoginAndRedirect from "../../middleWare/isUserLoginAndRedirect.js";
+const userRouter = expresss.Router();
 
 const storageConfig = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -18,8 +19,11 @@ const storageConfig = multer.diskStorage({
       cb(null, Date.now() + path.extname(file.originalname));
     },
 });
+
 const upload = multer({ storage: storageConfig });
+
 const addressService=serviceFactory.getAddressService();
+
 const cartService = serviceFactory.getCartService();
 
 // Change Password  
@@ -86,30 +90,37 @@ userRouter.get("/auth/google",googlePassPort.authenticate('google'),(req, res) =
 });
 
 userRouter.get("/auth/google/callback",googlePassPort.authenticate('google',
-    { failureRedirect: '/user/login' }),
+    { 
+        failureRedirect: '/user/login',
+        failureMessage: true
+    }),    
     async (req, res) => {
-        const userId = req.user._id;
-        const address = await addressService.getAddressByUserId(userId);
-        const cart = await cartService.getCartByUserId(userId);
-        if(!address){
-            const defaultAddress = new Address({
-                userId: userId,
-                street: "",
-                city: "",
-                postalCode: "",
-                phone: "",
-                notes: ""
-            });
+        try{
+            const userId = req.user._id;
+            const address = await addressService.getAddressByUserId(userId);
+            const cart = await cartService.getCartByUserId(userId);
+            if(!address){
+                const defaultAddress = new Address({
+                    userId: userId,
+                    street: "",
+                    city: "",
+                    postalCode: "",
+                    phone: "",
+                    notes: ""
+                });
+                
+                await addressService.saveAddress(defaultAddress);
+            }
             
-            await addressService.saveAddress(defaultAddress);
+            if(!cart){
+                const newCart = await cartService.createCart(userId, []);
+                await cartService.saveCart(newCart);
+            }
+            return res.redirect('/products/get');
         }
-        
-        if(!cart){
-            const newCart = await cartService.createCart(userId, []);
-            await cartService.saveCart(newCart);
+        catch(err){
+            console.log(err.message);
         }
-        
-        return res.redirect('/products/get');
 });
 
 export default userRouter;

@@ -2,7 +2,20 @@ import Cart from "../Model/Cart.js";
 
 const cartService={
     getCartByUserId:async (userId) => {
-        const cart=await Cart.findOne({userId}).populate('items.productId').lean();
+        const cart=await Cart.findOne({userId})
+        .populate({
+            path:'items.productId',
+            populate:[
+                {
+                    path:'brand_id',
+                    model:'Brand',
+                },
+                {
+                    path:'category_id',
+                    model:'Category',
+                }
+            ],
+        }).lean();
         return cart;
     },
 
@@ -21,7 +34,7 @@ const cartService={
         return cart;
     },
 
-    deleteCart:async (userId) => {
+    deleteCartByUserId:async (userId) => {
         const cart=await Cart.findOneAndDelete({userId});
         return cart;
     },

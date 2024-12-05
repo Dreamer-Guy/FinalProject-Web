@@ -1,20 +1,10 @@
-import serviceFactory from "../../Factory/serviceFactory.js"
-import {generateRatingStars} from "../../Utils/viewEngine.js";
-import Product from "../../Model/Product.js";
+import serviceFactory from "../../Factory/serviceFactory.js";
+
 const productService = serviceFactory.getProductSerVice();
 const cartService = serviceFactory.getCartService();
-
+const brandService = serviceFactory.getBrandService();
+const categoryService = serviceFactory.getCategoryService();
 const ROW_PER_PAGE=6;
-
-const formatQueryParams = async(filters, sort) => {
-    //const {page,rowPerPage}=req.query;
-    const sortField = sort?.field?.toLowerCase() || 'price';
-    const sortOrder = sort?.order?.toLowerCase() === 'desc' ? -1 : 1;
-    const brands = filters?.brands?.map((brand) => (brand.toLowerCase())) || [];
-    const types = filters?.types?.map((type) => (type.toLowerCase())) || [];
-    return {brands,types,sortField,sortOrder};
-    //return {brands,types,sortField,sortOrder,page,rowPAg};
-}
 
 const formatSortParam=(req)=>{
     const sort=req.query.sort||"price-asc";
@@ -23,67 +13,56 @@ const formatSortParam=(req)=>{
     const sortParam=sort.split('-');
     const sortField=sortParam[SORT_FIELD_INDEX];
     const sortOrder=sortParam[SORT_ORDER_INDEX];
-    return {sortField,sortOrder};
+    return {sortField,sortOrder:sortOrder==='asc'?1:-1};
 }
 
 const formatFilterParam=(req)=>{
     const brandsEncoded=req.query.brand||"";
-    const typesEncoded=req.query.type||"";
-    const brands=brandsEncoded?decodeURIComponent(brandsEncoded).split(','):[];
-    const types=typesEncoded?decodeURIComponent(typesEncoded).split(','):[];
-    return {brands,types};    
+    const categoriesEncoded=req.query.category||"";
+    const brands=brandsEncoded?decodeURIComponent(brandsEncoded).split(',')
+    .map(brand=>brand.toLowerCase()):[];
+    const categories=categoriesEncoded?decodeURIComponent(categoriesEncoded).split(',')
+    .map(category=>category.toLowerCase()):[];
+    return {brands,categories};    
 }
 
 const formatPriceParam=(req)=>{
     const DEFAULT_MIN_PRICE=0;
     const DEFAULT_MAX_PRICE=Number.MAX_VALUE;
-    const flag_null=req.query==null?true:false;
-    const flag_nullString=(req.query.minPrice==='null')||(req.query.maxPrice==='null')?true:false;
-    const badQueryParams=flag_null||flag_nullString;
-
-    if(badQueryParams){
-        return {minPrice:DEFAULT_MIN_PRICE,maxPrice:DEFAULT_MAX_PRICE};
-    }
-    const minPrice=req.query.minPrice;
-    const maxPrice=req.query.maxPrice;
-    return {minPrice,maxPrice};
+    const priceRangQuery=req.query.priceRange||`${DEFAULT_MIN_PRICE}-${DEFAULT_MAX_PRICE}`;
+    const priceRange=priceRangQuery.split(',')||[];
+    const formatedPriceRange=priceRange.map(price=>{
+        const [minPrice,maxPrice]=price.split('-');
+        return {minPrice:Number(minPrice),maxPrice:Number(maxPrice)};
+    });
+    return formatedPriceRange;
 };
 const getQueryParams=(req)=>{
-    const {page,rowPerPage}=req.query;
-    const {brands,types}=formatFilterParam(req);
+    const {page=1,rowPerPage=ROW_PER_PAGE}=req.query;
+    const {brands,categories}=formatFilterParam(req);
     const {sortField,sortOrder}=formatSortParam(req);
-    const {minPrice,maxPrice}=formatPriceParam(req);
+    const priceRange=formatPriceParam(req);
 
-    return {brands,types,sortField,sortOrder,page,rowPerPage,minPrice,maxPrice};
+    return {brands,categories,sortField,sortOrder,page:Number(page),rowPerPage:Number(rowPerPage),priceRange};
 }
-
-const populateProduct=(product)=>{
-    const populatedProduct={
-        productId: product._id,
-        type: product.type,
-        name: product.name,
-        price: product.price,
-        salePrice: product.salePrice,
-        brand: product.brand,
-        totalStock: product.totalStock,
-        image: product.image,
-        rating: product.rating,
-    };
-    return populatedProduct;
-}
-
-
 //controller
 
-const fetchAllFilteredProducts = async (req, res) => {
+const getProductsPage = async (req, res) => {
     try {
         const user = req.user||null;
-        const {brands,types,
+        const {brands,categories,
             sortField,sortOrder,
             page=1,rowsPerPage=ROW_PER_PAGE,
-            minPrice,maxPrice}=getQueryParams(req);
+            priceRange=[]}=getQueryParams(req);
         const {onSales}=req.query;
-        let products = await productService.getProducts({ brands, types, sortField, sortOrder,minPrice,maxPrice });
+        const {search}=req.query;
+        let products=[];
+        if(search && search.trim().length>0){
+            products=await productService.getProductsBySearch({search,brands, categories, sortField, sortOrder,priceRange });
+        }
+        else{
+            products = await productService.getProducts({ brands, categories, sortField, sortOrder,priceRange });
+        }
         if(onSales==='true'){
             products=products.filter((product)=>product.salePrice>0);
         }
@@ -91,15 +70,15 @@ const fetchAllFilteredProducts = async (req, res) => {
         if(page && rowsPerPage){
             products=products.slice((page-1)*rowsPerPage,page*rowsPerPage);
         }
-        const populateProducts = products.map((product) => (populateProduct(product)));
         const productsInCart = await cartService.coutProductInCart(user?user._id:null);
         return res.render('products', {
-            products:populateProducts,
+            products:products,
             totalProducts,
             rowsPerPage,
             user,
-            generateRatingStars,
-            cartNumber: productsInCart
+            cartNumber: productsInCart,
+            brands: await brandService.getAll(),
+            categories: await categoryService.getAll(),
         });
     }
     catch (e) {
@@ -109,48 +88,38 @@ const fetchAllFilteredProducts = async (req, res) => {
     }
 };
 
-const apiGetAllFilteredProducts = async (req, res) => {
+const apiGetProducts=async (req, res) => {
     try {
-        const {brands,types,sortField,sortOrder,page=1,rowsPerPage=ROW_PER_PAGE}=getQueryParams(req);
-        let products = await productService.getProducts({ brands, types, sortField, sortOrder });
+        const user = req.user||null;
+        const {brands,categories,
+            sortField,sortOrder,
+            page,rowsPerPage=ROW_PER_PAGE,
+            priceRange=[]}=getQueryParams(req);
+        const {onSales}=req.query;
+        const {search}=req.query;
+        let products=[];
+        if(search && search.trim().length>0){
+            products=await productService.getProductsBySearch(search,{brands, categories, sortField, sortOrder,priceRange });
+        }
+        else{
+            products = await productService.getProducts({ brands, categories, sortField, sortOrder,priceRange });
+        }
+        if(onSales==='true'){
+            products=products.filter((product)=>product.salePrice>0);
+        }
         const totalProducts=products.length;
         if(page && rowsPerPage){
             products=products.slice((page-1)*rowsPerPage,page*rowsPerPage);
         }
-        const populateProducts = products.map((product) => (populateProduct(product)));
         return res.send({
-            products:populateProducts,
             totalProducts,
-            rowsPerPage,
+            products,
         });
     }
     catch (e) {
         return res.json({
-            data: null,
+            data: e.message,
         });
     }
 };
-
-const searchProducts = async (req, res) => {
-    try {
-        const user = req.user;
-        const { search } = req.query;
-        const decodedSearch=decodeURIComponent(search);
-        const rawProducts = await productService.getProductsBySearch(decodedSearch);
-        const populatedProducts = rawProducts.map((product) => (populateProduct(product)));
-        const totalProducts=populatedProducts.length;
-        return res.render('products', {
-            products:populatedProducts,
-            totalProducts,
-            rowsPerPage:ROW_PER_PAGE,
-            user,
-            generateRatingStars});
-    }
-    catch (e) {
-        return res.status(500).send({
-            status: "error",
-            msg: "server err",
-        });
-    }
-};
-export { fetchAllFilteredProducts,apiGetAllFilteredProducts,searchProducts};
+export { getProductsPage,apiGetProducts};

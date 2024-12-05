@@ -14,7 +14,7 @@ const orderService={
         const order=new Order(orderData);
         return order;
     },
-    saveOrder:async(order)=>{
+    save:async(order)=>{
         return await order.save();
     },
     getOrdersInTimeRange:async(startDate,endDate)=>{
@@ -30,6 +30,23 @@ const orderService={
         const orders=await Order.find().lean();
         return orders;
     },
+    updatePaidOrderById:async(id)=>{
+        const order=await Order.findByIdAndUpdate(id,{checkoutStatus:"paid"},{new:true}).lean();
+        return order;
+    },
+    getOrdersByIds:async(ids)=>{
+        const orders=await Order.find({
+            _id:{
+                $in:ids
+            }
+        }).lean();
+        return orders;
+    },
+    fullfillOrdersByIds:async(ids)=>{
+        await ids.forEach(async(id)=>{
+            await Order.findByIdAndUpdate(id,{checkoutStatus:"paid"});
+        });
+    }
 };
 
 export default orderService;
