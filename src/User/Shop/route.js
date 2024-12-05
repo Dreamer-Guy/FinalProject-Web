@@ -11,8 +11,6 @@ import Address from "../../Model/Address.js";
 import isUserLoginAndRedirect from "../../middleWare/isUserLoginAndRedirect.js";
 const userRouter = expresss.Router();
 
-
-
 const storageConfig = multer.diskStorage({
     destination: (req, file, cb) => {
       cb(null, './uploads/');
@@ -21,8 +19,11 @@ const storageConfig = multer.diskStorage({
       cb(null, Date.now() + path.extname(file.originalname));
     },
 });
+
 const upload = multer({ storage: storageConfig });
+
 const addressService=serviceFactory.getAddressService();
+
 const cartService = serviceFactory.getCartService();
 
 // Change Password  
