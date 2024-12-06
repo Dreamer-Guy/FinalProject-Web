@@ -9,6 +9,7 @@ import dbForgotPasswordService from "../UtilServices/dbServiceForgotPassowordTok
 import dbProductPropertyService from "../ProductProperty/dbService.js";
 import dbCategoryService from "../Category/dbService.js";
 import dbBrandService from "../Brand/dbService.js";
+import dbBannerService from "../Banner/dbService.js";
 
 const productService=dbProductService;
 const userService=dbUserService;
@@ -20,6 +21,7 @@ const forgotPasswordService=dbForgotPasswordService;
 const productPropertyService=dbProductPropertyService;
 const brandService=dbBrandService;
 const categoryService=dbCategoryService;
+const bannerService=dbBannerService;
 
 const serviceFactory = {
     getProductSerVice:()=>{
@@ -51,6 +53,9 @@ const serviceFactory = {
     },
     getCategoryService:()=>{
         return categoryService;
+    },
+    getBannerService:()=>{
+        return bannerService;
     },
 };
 
