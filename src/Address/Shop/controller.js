@@ -14,7 +14,7 @@ const isAddressChanged = (oldAddress, newAddress) => {
            oldAddress.notes !== newAddress.notes;
 }
 
-const editAddress = async (req, res) => {
+const getEditAddressPage = async (req, res) => {
     try{
         const userId = req.user._id;
         const address = await addressService.getAddressByUserId(userId);
@@ -98,4 +98,4 @@ const updateAddress = async (req, res) => {
 }
 
 
-export {editAddress,updateAddress}
+export {getEditAddressPage,updateAddress}

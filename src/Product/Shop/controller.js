@@ -4,6 +4,7 @@ const productService = serviceFactory.getProductSerVice();
 const cartService = serviceFactory.getCartService();
 const brandService = serviceFactory.getBrandService();
 const categoryService = serviceFactory.getCategoryService();
+
 const ROW_PER_PAGE=6;
 
 const formatSortParam=(req)=>{

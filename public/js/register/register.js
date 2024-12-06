@@ -1,5 +1,6 @@
-document.getElementById("registerForm").addEventListener("submit", async function (event) {
-    event.preventDefault(); 
+
+const handleRegister=async(e)=>{
+    e.preventDefault();
     const formData = {
         fullName: document.getElementById("fullName").value,
         userName: document.getElementById("userName").value,
@@ -7,8 +8,8 @@ document.getElementById("registerForm").addEventListener("submit", async functio
         confirm: document.getElementById("confirm").value,
         aggrement: document.getElementById("aggrement").checked
     };
-    console.log(formData);
     try {
+        showSpinnerLoading();
         const response = await fetch("/user/registeruser", {
             method: "POST",
             headers: {
@@ -16,8 +17,12 @@ document.getElementById("registerForm").addEventListener("submit", async functio
             },
             body: JSON.stringify(formData)
         });
+        hideSpinnerLoading();
         if(response.ok){
-            window.location.href = "/user/login";
+            showToast('Register successfully','default');
+            setTimeout(() => {
+                window.location.href = "/user/login";
+            }, 1500);
         }
         else {
             const data = await response.json();
@@ -29,6 +34,9 @@ document.getElementById("registerForm").addEventListener("submit", async functio
     catch (error) {
         console.error("Error:", error);
     }
-});
+}
+
+
+
 
 console.log("Hello from register.js");

@@ -8,6 +8,10 @@ import fs from 'fs-extra';
 import { console } from "inspector";
 dotenv.config();
 
+const OK_STATUS = 200;
+const BAD_REQUEST_STATUS = 400;
+const INTERNAL_SERVER_ERROR_STATUS = 500;
+
 const userService=serviceFactory.getUserService();
 const addressService=serviceFactory.getAddressService();
 const cartService=serviceFactory.getCartService();
@@ -41,24 +45,29 @@ const handleSendEmail = async (userId, userEmail) => {
 }
 
 const registerUser=async(req,res)=>{
-    const {fullName,userName,password,confirm}=req.body;
-    if(!fullName || !userName || !password || !confirm){
-        return res.status(400).send({message:"Miss required information"});
+    try{
+        const {fullName,userName,password,confirm}=req.body;
+        if(!fullName || !userName || !password || !confirm){
+            return res.status(BAD_REQUEST_STATUS).send({message:"Miss required information"});
+        }
+        if(await userService.isUserExistByUserName(userName)){
+            return res.status(BAD_REQUEST_STATUS).send({message:"User name is already taken"});
+        }
+        if(password!==confirm){
+            return res.status(BAD_REQUEST_STATUS).send({message:"Password and confirm password are not the same"});
+        }
+        const user={
+            fullName,
+            userName,
+            password:await hashPassword(password),
+        }
+        const userObj=await userService.createUser(user);
+        await userService.saveUser(userObj);
+        return res.status(OK_STATUS).send({message:"Register successfully"});
     }
-    if(await userService.isUserExistByUserName(userName)){
-        return res.status(400).send({message:"User name is already taken"});
-    }
-    if(password!==confirm){
-        return res.status(400).send({message:"Password and confirm password are not the same"});
-    }
-    const user={
-        fullName,
-        userName,
-        password:await hashPassword(password),
-    }
-    const userObj=await userService.createUser(user);
-    await userService.saveUser(userObj);
-    res.redirect('login');
+    catch(e){
+        return res.status(INTERNAL_SERVER_ERROR_STATUS).send(e.message);
+    }  
 }
 
 const logoutUser=async(req,res)=>{
@@ -144,7 +153,7 @@ const resetPassWord = async (req, res) => {
     }
 }
 
-const editInformation =async(req,res)=>{
+const getEditInformationPage =async(req,res)=>{
     const userObj=await userService.getUserById(req.user._id)
     const productsInCart = await cartService.coutProductInCart(userObj._id);
     const user = {
@@ -160,19 +169,19 @@ const editInformation =async(req,res)=>{
     })
 }
 const updateInformation=async(req,res,next)=>{
-    let user={}
+    let user={};
     if(req.file){
-        const filePath=req.file.path
-        const downLoadUrl= await uploadImage(filePath)
-        fs.unlinkSync(filePath)
-        user.avatar=downLoadUrl
+        const filePath=req.file.path;
+        const downLoadUrl= await uploadImage(filePath);
+        fs.unlinkSync(filePath);
+        user.avatar=downLoadUrl;
     }
     user ={...user,...req.body}
-    const userObj =await userService.updateUser(req.params.id,user)
+    const userObj =await userService.updateUser(req.params.id,user);
     res.redirect('/user/profile')
 }
 
-const changPasswordPage = async (req, res) => {
+const getChangePasswordPage = async (req, res) => {
     const user = req.user;
     const producstInCart = await cartService.coutProductInCart(user._id);
     res.render('changePassword', {
@@ -244,8 +253,10 @@ const getAccountPage = async (req, res) => {
 }
 
 export {
-    getRegisterPage,registerUser,logoutUser,getForgotPasswordPage,getResetPasswordPage,forgotPassword,
-    resetPassWord,editInformation,updateInformation,changPasswordPage,changePassword,getAccountPage};
+    getRegisterPage,registerUser,logoutUser,getForgotPasswordPage,
+    getResetPasswordPage,forgotPassword,
+    resetPassWord,getEditInformationPage,updateInformation,
+    getChangePasswordPage,changePassword,getAccountPage};
 
 
 

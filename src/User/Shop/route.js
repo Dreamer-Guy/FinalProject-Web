@@ -1,37 +1,28 @@
 import expresss from "express";
-import {getRegisterPage,registerUser,logoutUser,getForgotPasswordPage,getResetPasswordPage,forgotPassword,
-resetPassWord,editInformation,updateInformation,changPasswordPage,changePassword,getAccountPage} 
+import {getRegisterPage,registerUser,logoutUser,
+    getForgotPasswordPage,getResetPasswordPage,forgotPassword,
+    resetPassWord,getEditInformationPage,updateInformation,
+    getChangePasswordPage,changePassword,getAccountPage} 
 from "./controller.js";
 import passportLocal from "../../middleWare/PassPort.js";
 import googlePassPort from "../../middleWare/googlePassport.js";
-import multer from "multer";
-import path from 'path';
+import upload from "../../Config/multer.js";
+
 import serviceFactory from "../../Factory/serviceFactory.js";
 import Address from "../../Model/Address.js";
 import isUserLoginAndRedirect from "../../middleWare/isUserLoginAndRedirect.js";
 const userRouter = expresss.Router();
-
-const storageConfig = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, './uploads/');
-    },
-    filename: (req, file, cb) => {
-      cb(null, Date.now() + path.extname(file.originalname));
-    },
-});
-
-const upload = multer({ storage: storageConfig });
 
 const addressService=serviceFactory.getAddressService();
 
 const cartService = serviceFactory.getCartService();
 
 // Change Password  
-userRouter.get("/changePassword", changPasswordPage);
+userRouter.get("/changePassword", getChangePasswordPage);
 userRouter.put("/changePassword", changePassword);
 
 
-userRouter.get("/profile", editInformation);
+userRouter.get("/profile", getEditInformationPage);
 userRouter.get("/account", getAccountPage);
 userRouter.put('/:id', upload.single('avatar'), updateInformation)
 

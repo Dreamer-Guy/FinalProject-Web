@@ -66,7 +66,7 @@ const isDeleteCartItemsValid=(req)=>{
     return true;
 };
 
-const addCartItems=async(req,res)=>{
+const addCartItem=async(req,res)=>{
     try{
         const user=req.user;
         if(!isAddCartItemsValid(req)){
@@ -103,7 +103,7 @@ const addCartItems=async(req,res)=>{
     }
 };
 
-const updateCartItems=async(req,res)=>{
+const updateCartItem=async(req,res)=>{
     try{
         const user=req.user;
         if(!isUpdateCartItemsValid(req)){
@@ -133,7 +133,7 @@ const updateCartItems=async(req,res)=>{
     }
 }
 
-const deleteCartItems=async (req,res) => {
+const deleteCartItem=async (req,res) => {
     try{
         const user=req.user;
         if(!isDeleteCartItemsValid(req)){
@@ -167,4 +167,4 @@ const getCartPage=async (req,res) => {
 
 
 
-export {getCartPage,addCartItems,updateCartItems,deleteCartItems};
+export {getCartPage,addCartItem,updateCartItem,deleteCartItem};

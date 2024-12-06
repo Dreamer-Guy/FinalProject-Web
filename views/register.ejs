@@ -169,7 +169,8 @@
                     </div>
                 </div>
                 <div class="mt-4">
-                    <button type="submit"
+                    <button 
+                        onclick="handleRegister(event)"
                         class="block w-full py-2 text-center text-white bg-primary border border-primary rounded hover:bg-transparent hover:text-primary transition uppercase font-roboto font-medium">create
                         account</button>
                 </div>
@@ -277,11 +278,13 @@
         <div class="container flex items-center justify-between">
             <p class="text-white">&copy; TailCommerce - All Right Reserved</p>
             <div>
-                <img src="../assets/images/methods.png" alt="methods" class="h-5">
+                <img src="/assets/images/methods.png" alt="methods" class="h-5">
             </div>
         </div>
     </div>
     <!-- ./copyright -->
+    <script src="/js/common/showSpinnerLoading.js"></script>
+    <script src="/js/common/toast.js"></script>
     <script src="/js/common/util.js"></script>
     <script src="/js/register/register.js"></script>
 </body>
