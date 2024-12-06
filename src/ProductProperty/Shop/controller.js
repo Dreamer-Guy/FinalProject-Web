@@ -42,17 +42,21 @@ const getProductDetailsPageByID=async(req,res)=>{
             }
         ];
         const product=await productService.getProductById(id);
-        const relatedProducts=await productService.getRelatedProductsByProductId(product._id,5)||[];
+        const COUNT_TOP_PRODUCTS=5;
+        const relatedProducts=await productService.getRelatedProductsByProductId(product._id,COUNT_TOP_PRODUCTS)||[];
         const rawReviews=await reviewService.getReviewsByProductId(id);
-        //tech-debt:check reviews
-        const populatedReviews = rawReviews.map((review)=>populateReview(review));
+        const LIMIT_REVIEWS=4;
+        const limitdReviews = rawReviews.slice(0,LIMIT_REVIEWS).map((review)=>populateReview(review));
         const productsInCart = await cartService.coutProductInCart(user?._id||null);
-        console.log(productDetails)
         if(productDetails){
-            return res.render('productDetails',{product,
+            return res.render('productDetails',{
+                product,
                 productDetails:productDetails,
                 relatedProducts,
-                reviews:populatedReviews,
+                reviews:rawReviews,
+                showingReviews:limitdReviews,
+                totalReviews:rawReviews.length,
+                reviewsPerPage:LIMIT_REVIEWS,
                 user:user,
                 generateRatingStars,
                 cartNumber:productsInCart,

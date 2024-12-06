@@ -65,12 +65,11 @@ app.use("/user", userRouter);
 
 //app.use("/payment/paypal", paypalPaymentRouter); there is problem with this route
 app.use("/payment/vnpay", vnpayPaymentRouter);
-app.use("/payment/stripe", stripePaymentRouter);
-
+app.use("/reviews", reviewRouter);
 app.use(isUserLoginAndRedirect);
 
+app.use("/payment/stripe", stripePaymentRouter);
 app.use("/addresses", addressRouter);
-app.use("/reviews", reviewRouter);
 app.use("/carts", cartRouter);
 app.use("/orders", orderRouter);
 app.use("/admin/dashboard", adminDashBoardRouter);

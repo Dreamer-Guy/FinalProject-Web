@@ -2,6 +2,14 @@ import serviceFactory from '../../Factory/serviceFactory.js';
 const reviewService = serviceFactory.getReviewService();
 const userService =serviceFactory.getUserService();
 
+const DEFAULT_PAGE=1;
+const DEFAULT_LIMIT_REVIEWS=4;
+
+
+const OK_STATUS=200;
+const BAD_REQUEST_STATUS=400;
+const INTERNAL_SERVER_ERROR_STATUS=500;
+
 const getReviewProperties = (req) => {
     const {productId,user,rating,comment} = req.body;
     return {productId,user,rating,comment};
@@ -41,17 +49,16 @@ const addReview = async (req, res) => {
     try {
         const{productId,user,rating,comment} = getReviewProperties(req);
         if(!isValid({productId,user,rating,comment})){
-            return res.status(400).json({message:"Invalid data"});
+            return res.status(BAD_REQUEST_STATUS).json({message:"Invalid data"});
         }
         const review = await reviewService.createReview({productId,user,rating:Number(rating),comment});
         await reviewService.saveReview(review);
         const rawReviews=await reviewService.getReviewsByProductId(productId);
-        //tech-debt:check reviews
         const populatedReviews = rawReviews.map((review)=>populateReview(review));
-        res.status(201).json(review);
+        return res.status(OK_STATUS).json(review);
     } 
     catch (error) {
-        res.status(400).json({ message: error.message });
+        return res.status(INTERNAL_SERVER_ERROR_STATUS).json({ message: error.message });
     }
 };
 const populateUserReview =(review)=>{
@@ -68,7 +75,9 @@ const populateUserReview =(review)=>{
     }
     return populateReview
 }
-const getUserReviews=async(req,res)=>{
+
+
+const getUserReviewsPage=async(req,res)=>{
     try{
         const page =parseInt(req.query.page)||1
         const limit =5
@@ -87,4 +96,22 @@ const getUserReviews=async(req,res)=>{
     }
 }
 
-export {addReview,getUserReviews};
+const getReviewsApi=async(req,res)=>{
+    try{
+        const {productId} = req.params;
+        const {page=DEFAULT_PAGE,limit=DEFAULT_LIMIT_REVIEWS} = req.query;
+        const rawReviews = await reviewService.getReviewsByProductId(productId);
+        const limitedReviews = rawReviews.slice((page-1)*limit,page*limit).map(review=>populateReview(review));
+        return res.status(OK_STATUS).send({
+            reviews:limitedReviews,
+            page:Number(page),
+            rowPerPage:Number(limit),
+            totalPages:Math.ceil(rawReviews.length/limit),
+        });
+    }
+    catch(error){
+        return res.status(INTERNAL_SERVER_ERROR_STATUS).json({message:error.message})
+    }
+}
+
+export {addReview,getUserReviewsPage,getReviewsApi};

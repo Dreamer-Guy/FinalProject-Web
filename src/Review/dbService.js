@@ -10,12 +10,24 @@ const reviewService = {
         return review;
     },
 
-    async getReviewsByProductId(id) {
-        const reviews = await Review.find({productId:id}).populate({
-            path: "user",
-            select: "fullName avatar",
-        })
-        .lean();
+    async getReviewsByProductId(id,skip=0,limit=0) {
+        let reviews;
+        if(skip===0 && limit===0){
+            reviews = await Review.find({productId:id}).populate({
+                path: "user",
+                select: "fullName avatar",
+            })
+            .lean();
+        }
+        else{
+            reviews = await Review.find({productId:id})
+            .skip(skip).limit(limit)
+            .populate({
+                path: "user",
+                select: "fullName avatar",
+            })
+            .lean();
+        }
         return reviews;
     },
     async getReviewsByUserId(id){
