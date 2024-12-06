@@ -6,6 +6,9 @@ import productService from "../../Product/dbService.js";
 const BAD_REQUEST_STATUS=400;
 const OK_STATUS=200;
 
+const DEFAULT_PAGE=1;
+const DEFAULT_ORDER_LIMIT=6;
+
 
 const orderService=serviceFactory.getOrderService();
 const cartService=serviceFactory.getCartService();
@@ -67,15 +70,30 @@ const getOrderViewPage=async(req,res)=>{
     const user=req.user||null;
     const productsInCart = await cartService.coutProductInCart(user._id);
     const rawOrders=await orderService.getOrdersByUserId(user._id);
-    const orders=rawOrders.map(order=>populateOrder(order));
-    const totalOrders=orders.length;
+    const totalOrders=rawOrders.length;
+    const orders=rawOrders.slice(0,DEFAULT_ORDER_LIMIT).map(order=>populateOrder(order));
     return res.render("order",{
         user:user,
         orders:orders,
         totalOrders:totalOrders,
+        rowPerPage:DEFAULT_ORDER_LIMIT,
         cartNumber: productsInCart,
     });
 }
+
+const getOrdersApi=async(req,res)=>{
+    const user=req.user||null;
+    const page=req.query.page||DEFAULT_PAGE;
+    const limit=req.query.limit||DEFAULT_ORDER_LIMIT;
+    const rawOrders=await orderService.getOrdersByUserId(user._id);
+    const totalOrders=rawOrders.length;
+    const orders=rawOrders.slice((page-1)*limit,page*limit).map(order=>populateOrder(order));
+    return res.send({
+        orders:orders,
+        totalOrders:totalOrders,
+        rowPerPage:limit,
+    });
+};
 
 const getOrderDetailsPage=async(req,res)=>{
     const user=req.user||null;
@@ -106,4 +124,4 @@ const createOrder=async(req,res)=>{
         order:savedOrder,
     });
 };
-export {getOrderViewPage,getOrderDetailsPage,createOrder};
+export {getOrderViewPage,getOrderDetailsPage,createOrder,getOrdersApi};

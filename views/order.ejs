@@ -320,51 +320,57 @@
                             </div>
                 
                         </div>
-                        <% orders.forEach((order,index)=>{ %>
-                            <div class="w-full flex flex-row justify-between items-center ">
-                                <div class="w-1/12 flex flex-row justify-center items-center">
-                                    <input 
-                                            type="checkbox" 
-                                            name="order" 
-                                            id="checkbox-order-<%=order._id%>" 
-                                            value="<%= order._id %>" 
-                                            class="hidden peer"
-                                            <%= order.checkoutStatus.toLowerCase()==='paid' ? 'disabled' : '' %>
-                                        />
-                                    <label
-                                            onclick="handleChooseOrders('<%=order._id%>')" 
-                                            for="checkbox-order-<%=order._id%>" 
-                                            class="w-6 h-6 rounded-full border-2 <%=order.checkoutStatus.toLowerCase()==='paid'?'hidden':''%> 
-                                            border-gray-500 bg-white cursor-pointer flex justify-center items-center peer-checked:bg-blue-400
-                                            <%= order.checkoutStatus.toLowerCase() === 'paid' ? 'pointer-events-none' : '' %>">
-                                    </label>
-                                </div>
-                                <div
-                                    onclick="handleGetOrderDetails('<%=order._id%>')" 
-                                    class="flex flex-row gap-2 items-center justify-between bg-white 
-                                        border border-black rounded-lg text-sm p-2 w-11/12 cursor-pointer">
-                                <div class="w-1/4 break-words flex justify-center items-center"><%=index+1%></div>
-                                <div class="w-3/4 flex flex-row justify-between items-center flex-wrap">
-                                    <div class="w-1/4 break-words flex justify-center 
-                                        items-center"><%=order.createdAt%></div>
-                                    <div class="w-1/4 break-words flex justify-center items-center">
-                                        <span class="rounded-md p-2 border <%= order.checkoutStatus.toLowerCase()==='unpaid'?'bg-red-500 border-red-500':'bg-green-500 border-green-400'%>">
-                                            <%= order.checkoutStatus.charAt(0).toUpperCase() + order.checkoutStatus.slice(1).toLowerCase() %></span>
+                        <div
+                            id="orders-container" 
+                            class="w-full flex flex-col gap-3">
+                            <% orders.forEach((order,index)=>{ %>
+                                <div class="w-full flex flex-row justify-between items-center ">
+                                    <div class="w-1/12 flex flex-row justify-center items-center">
+                                        <input 
+                                                type="checkbox" 
+                                                name="order" 
+                                                id="checkbox-order-<%=order._id%>" 
+                                                value="<%= order._id %>" 
+                                                class="hidden peer"
+                                                <%= order.checkoutStatus.toLowerCase()==='paid' ? 'disabled' : '' %>
+                                            />
+                                        <label
+                                                onclick="handleChooseOrders('<%=order._id%>')" 
+                                                for="checkbox-order-<%=order._id%>" 
+                                                class="w-6 h-6 rounded-full border-2 <%=order.checkoutStatus.toLowerCase()==='paid'?'hidden':''%> 
+                                                border-gray-500 bg-white cursor-pointer flex justify-center items-center peer-checked:bg-blue-400
+                                                <%= order.checkoutStatus.toLowerCase() === 'paid' ? 'pointer-events-none' : '' %>">
+                                        </label>
                                     </div>
-                                          
-                                    <div class="w-1/4 break-words flex justify-center 
-                                        items-center">
-                                        <span class="rounded-md p-2 border <%= order.orderStatus.toLowerCase()==='pending'?'bg-yellow-200':'bg-blue-400'%>">
-                                            <%=order.orderStatus%></span>
+                                    <div
+                                        onclick="handleGetOrderDetails('<%=order._id%>')" 
+                                        class="flex flex-row gap-2 items-center justify-between bg-white 
+                                            border border-black rounded-lg text-sm p-2 w-11/12 cursor-pointer">
+                                    <div class="w-1/4 break-words flex justify-center items-center"><%=index+1%></div>
+                                    <div class="w-3/4 flex flex-row justify-between items-center flex-wrap">
+                                        <div class="w-1/4 break-words flex justify-center 
+                                            items-center"><%=order.createdAt%></div>
+                                        <div class="w-1/4 break-words flex justify-center items-center">
+                                            <span class="rounded-md p-2 border <%= order.checkoutStatus.toLowerCase()==='unpaid'?'bg-red-500 border-red-500':'bg-green-500 border-green-400'%>">
+                                                <%= order.checkoutStatus.charAt(0).toUpperCase() + order.checkoutStatus.slice(1).toLowerCase() %></span>
+                                        </div>
+                                              
+                                        <div class="w-1/4 break-words flex justify-center 
+                                            items-center">
+                                            <span class="rounded-md p-2 border <%= order.orderStatus.toLowerCase()==='pending'?'bg-yellow-200':'bg-blue-400'%>">
+                                                <%=order.orderStatus%></span>
+                                        </div>
+                                        <div class="w-1/4 break-words flex justify-center 
+                                            items-center">$<%=order.total%></div>
                                     </div>
-                                    <div class="w-1/4 break-words flex justify-center 
-                                        items-center">$<%=order.total%></div>
+                                    </div>
                                 </div>
-                                </div>
-                            </div>
-                        <% }); %>
+                            <% }); %>
+                        </div>
                     </div>
-                    <div class="md:hidden flex flex-col gap-3">
+                    <div
+                        id="orders-container-mobile"
+                        class="md:hidden flex flex-col gap-3">
                         <% orders.forEach((order,index)=>{ %>
                             <div class="flex flex-row gap-1">
                                 <div class="w-1/12 flex flex-row justify-center items-center">
@@ -372,14 +378,14 @@
                                         <input 
                                             type="checkbox" 
                                             name="order" 
-                                            id="checkbox-order-<%=order._id%>" 
+                                            id="checkbox-order-mobile-<%=order._id%>" 
                                             value="<%= order._id %>" 
                                             class="hidden peer"
                                             <%= order.checkoutStatus.toLowerCase()==='paid' ? 'disabled' : '' %>
                                         />
                                         <label
                                             onclick="handleChooseOrders('<%=order._id%>')" 
-                                            for="checkbox-order-<%=order._id%>" 
+                                            for="checkbox-order-mobile-<%=order._id%>" 
                                             class="w-6 h-6 rounded-full border-2 <%=order.checkoutStatus.toLowerCase()==='paid'?'hidden':''%> 
                                             border-gray-500 bg-white cursor-pointer flex justify-center items-center peer-checked:bg-blue-400
                                             <%= order.checkoutStatus.toLowerCase() === 'paid' ? 'pointer-events-none' : '' %>">
@@ -406,9 +412,15 @@
                 </div>
                 
                 
-                <div class="flex justify-between text-gray-800 font-medium py-3 uppercas">
-                    <p class="font-semibold">Total</p>
-                    <p>$<%=orders.reduce((acc,order)=>(acc+=order.total),0)%></p>
+                <div class="flex flex-row gap-3 justify-center items-center text-gray-800 py-3 uppercase">
+                    <% for(let i=1;i <=Math.ceil(totalOrders/rowPerPage);i++){ %>
+                        <button
+                            id="order-btn-<%=i%>"
+                            onclick="handlePaging(<%=i%>)"
+                            class="w-10 h-10 <%=i===1?'bg-blue-300':''%> rounded-lg border border-black">
+                            <%=i%>
+                        </button>
+                    <% } %>
                 </div>    
             </div>
             <div class="p-2">
@@ -511,6 +523,7 @@
     <script src="/js/common/profile/dialog.js"></script>
     <script src="/js/common/showSpinnerLoading.js"></script>
     <script src="/js/common/toast.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </body>
 
 </html>

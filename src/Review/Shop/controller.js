@@ -1,7 +1,7 @@
 import serviceFactory from '../../Factory/serviceFactory.js';
 const reviewService = serviceFactory.getReviewService();
 const userService =serviceFactory.getUserService();
-
+const productService = serviceFactory.getProductSerVice();
 const DEFAULT_PAGE=1;
 const DEFAULT_LIMIT_REVIEWS=4;
 
@@ -51,8 +51,13 @@ const addReview = async (req, res) => {
         if(!isValid({productId,user,rating,comment})){
             return res.status(BAD_REQUEST_STATUS).json({message:"Invalid data"});
         }
+        const product=await productService.getProductById(productId);
+        if(!product){
+            return res.status(BAD_REQUEST_STATUS).json({message:"Product not found"});
+        }
         const review = await reviewService.createReview({productId,user,rating:Number(rating),comment});
         await reviewService.saveReview(review);
+        await productService.updateProductAfterReviewing(productId,rating);
         const rawReviews=await reviewService.getReviewsByProductId(productId);
         const populatedReviews = rawReviews.map((review)=>populateReview(review));
         return res.status(OK_STATUS).json(review);

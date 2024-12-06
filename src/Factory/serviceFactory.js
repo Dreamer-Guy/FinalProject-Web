@@ -25,9 +25,6 @@ const serviceFactory = {
     getProductSerVice:()=>{
         return productService;
     },
-    getProductDetailsSerVice:()=>{
-        return productDetailsServce;
-    },
     getUserService:()=>{
         return userService;
     },

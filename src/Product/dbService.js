@@ -160,6 +160,12 @@ const productService = {
             await product.save();
         });
     },
+    updateProductAfterReviewing:async(productId,rating)=>{
+        const product=await Product.findById(productId);
+        product.rating=(product.rating*product.numReviews+rating)/(product.numReviews+1);
+        product.numReviews=product.numReviews+1;
+        await product.save();
+    }
 };
 
 export default productService;
