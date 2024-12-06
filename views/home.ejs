@@ -18,6 +18,7 @@
         rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" rel="stylesheet" />    
 </head>
 
 <body>
@@ -163,6 +164,19 @@
     </div>
     <!-- ./features -->
 
+    <!--hot deals-->
+    <div class="container hidden md:block">
+        <div class="swiper w-full mx-auto">
+            <div class="swiper-wrapper">
+                <% banners.forEach((banner, index) => { %>
+                    <div class="swiper-slide flex justify-center items-center">
+                        <img src="<%= banner.image %>" alt="error" class="w-full h-[500px] object-cover md:object-fill">
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+    </div>
+    <!--hot deals-->
     <!-- types -->
     <div class="container py-16">
         <h2 class="text-2xl font-medium text-gray-800 uppercase mb-6">shop by category</h2>
@@ -333,6 +347,19 @@
     </div>
     <!-- ./copyright -->
     <script src="/js/common/util.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const swiper = new Swiper('.swiper', {
+                loop: true,
+                autoplay: {
+                    delay: 3000, 
+                    disableOnInteraction: false,
+                },
+            });
+        });
+
+    </script>
 </body>
 
 </html>
