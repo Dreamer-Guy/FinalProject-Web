@@ -6,8 +6,9 @@ const reviewService = {
         return review;
     },
     async saveReview(review) {
-        await review.save();
-        return review;
+        const saved=await review.save();
+        const populatedReview = await Review.findById(saved._id).populate('user').lean();
+        return populatedReview;
     },
 
     async getReviewsByProductId(id,skip=0,limit=0) {

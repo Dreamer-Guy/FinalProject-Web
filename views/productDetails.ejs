@@ -229,50 +229,44 @@
         <div>
             <h2 class="text-2xl font-medium text-gray-800 uppercase mb-6">Reviews</h2>
             <div class="flex flex-col md:flex-row justify-center p-4">
-                <div class="w-full md:w-1/2 flex flex-col gap-3">
+                <div class="w-full md:w-1/2 flex flex-col gap-3 pl-10">
                     <div class="w-full flex flex-col md:flex-row justify-start">
-                        <div class="w-full md:w-1/5 flex flex-row items-center gap-2">
-                            <p class="text-5xl font-bold"><%=parseFloat(product.rating.toFixed(1))%></p>
+                        <div class="w-full md:w-1/5 flex flex-row items-center  gap-2">
+                            <p id="rating-product" class="text-5xl font-bold"><%=parseFloat(product.rating.toFixed(1))%></p>
                             <p class="break-words">Out of 5 Stars</p>
                         </div>
-                            <div>
-                            <div class="flex gap-1 text-sm text-yellow-400">
-                                <% for (let i = 1; i <= 5; i++) { %>
-                                    <% if (i <= product.rating) { %>
-                                        <label for="rating<%=i%>" class="text-2xl text-yellow-400 cursor-pointer">
-                                            <i class="fa-solid fa-star"></i>
-                                        </label>
-                                    <% } else { %>
-                                        <label for="rating<%=i%>" class="text-2xl text-yellow-400 cursor-pointer">
-                                            <% if (product.rating>Math.floor(product.rating) && i==Math.floor(product.rating)+1){%>
-                                                <i class="fa-solid fa-star-half"></i>                      
-                                            <%} else { %>
-                                                <i class="fa-regular fa-star"></i>
-                                            <% } %>
-                                        </label>
-                                    <% } %>
+                        <div class="flex justify-center items-center gap-1 text-sm text-yellow-400">
+                            <% for (let i = 1; i <= 5; i++) { %>
+                                <% if (i <= product.rating) { %>
+                                    <label for="rating<%=i%>" class="text-2xl text-yellow-400 cursor-pointer">
+                                        <i class="fa-solid fa-star"></i>
+                                    </label>
+                                <% } else { %>
+                                    <label for="rating<%=i%>" class="text-2xl text-yellow-400 cursor-pointer ">
+                                        <i class="fa-regular fa-star"></i>
+                                    </label>
                                 <% } %>
-                            </div>
+                            <% } %>
                         </div>
                     </div>
                     <div class="flex flex-col gap-3">
-                        <div class="w-full flex flex-row justify-center gap-5 items-center">
+                        <div class="w-full flex flex-row justify-start gap-5 items-center">
                             <div class="border border-black w-2/3 h-8"><div class="w-full h-full bg-blue-400"></div></div>
                             <div>(<%= reviews.filter(review=>review.rating===5).length%>)</div>
                         </div>
-                        <div class="w-full flex flex-row justify-center gap-5 items-center">
+                        <div class="w-full flex flex-row justify-start gap-5 items-center">
                             <div class="border border-black w-2/3 h-8"><div class="w-4/5 h-full bg-blue-400"></div></div>
                             <div>(<%= reviews.filter(review=>review.rating===4).length%>)</div>
                         </div>
-                        <div class="w-full flex flex-row justify-center gap-5 items-center">
+                        <div class="w-full flex flex-row justify-start gap-5 items-center">
                             <div class="border border-black w-2/3 h-8"><div class="w-3/5 h-full bg-blue-400"></div></div>
                             <div>(<%= reviews.filter(review=>review.rating===3).length%>)</div>
                         </div>
-                        <div class="w-full flex flex-row justify-center gap-5 items-center">
+                        <div class="w-full flex flex-row justify-start gap-5 items-center">
                             <div class="border border-black w-2/3 h-8"><div class="w-2/5 h-full bg-blue-400"></div></div>
                             <div>(<%= reviews.filter(review=>review.rating===2).length%>)</div>
                         </div>
-                        <div class="w-full flex flex-row justify-center gap-5 items-center">
+                        <div class="w-full flex flex-row justify-start gap-5 items-center">
                             <div class="border border-black w-2/3 h-8"><div class="w-1/5 h-full bg-blue-400"></div></div>
                             <div>(<%= reviews.filter(review=>review.rating===1).length%>)</div>
                         </div>
@@ -309,7 +303,9 @@
                                     </div>
                                 <% } %>
                             </div> 
-                            <div class="flex flex-row justify-center items-center gap-2">
+                            <div
+                                id="paging-btn-container" 
+                                class="flex flex-row justify-center items-center gap-2">
                                 <% for (let i = 1; i <= Math.ceil(totalReviews/reviewsPerPage); i++) { %>
                                     <button
                                     onclick="handleReviewPaging(<%=i%>)"

@@ -1153,10 +1153,6 @@ h1, h2, h3, h4, h5, h6 {
   height: 2rem;
 }
 
-.h-80 {
-  height: 20rem;
-}
-
 .h-9 {
   height: 2.25rem;
 }
@@ -1177,6 +1173,10 @@ h1, h2, h3, h4, h5, h6 {
   height: 40px;
 }
 
+.h-\[500px\] {
+  height: 500px;
+}
+
 .h-\[50px\] {
   height: 50px;
 }
@@ -1185,32 +1185,12 @@ h1, h2, h3, h4, h5, h6 {
   height: 60px;
 }
 
-.h-auto {
-  height: auto;
-}
-
 .h-full {
   height: 100%;
 }
 
 .h-screen {
   height: 100vh;
-}
-
-.h-\[400px\] {
-  height: 400px;
-}
-
-.h-\[500px\] {
-  height: 500px;
-}
-
-.h-\[00px\] {
-  height: 00px;
-}
-
-.h-\[600px\] {
-  height: 600px;
 }
 
 .max-h-64 {
@@ -1618,6 +1598,10 @@ h1, h2, h3, h4, h5, h6 {
   align-self: center;
 }
 
+.justify-self-auto {
+  justify-self: auto;
+}
+
 .overflow-hidden {
   overflow: hidden;
 }
@@ -1992,6 +1976,11 @@ h1, h2, h3, h4, h5, h6 {
   padding: 1.5rem;
 }
 
+.px-10 {
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+}
+
 .px-2 {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
@@ -2075,11 +2064,6 @@ h1, h2, h3, h4, h5, h6 {
 .py-7 {
   padding-top: 1.75rem;
   padding-bottom: 1.75rem;
-}
-
-.px-10 {
-  padding-left: 2.5rem;
-  padding-right: 2.5rem;
 }
 
 .pb-1 {

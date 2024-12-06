@@ -95,9 +95,18 @@ const handleAddReview=async()=>{
         hideSpinnerLoading();
         if(res.ok){
             showToast('Review added successfully','default');
-            setTimeout(() => {
-                window.location.reload();
-            }, 2000);
+            const data=await res.json();
+            const {addedReview,reviews,totalReviews,rowPerPage,newProductRating}=data;
+            $('#rating-product').text(parseFloat(newProductRating.toFixed(1)))
+            if(isInTheLastPage(totalReviews,rowPerPage,currentPage)){
+                if(isThereSlotToAddReviewToCurrentPage(totalReviews,rowPerPage,currentPage)){
+                    addReviewToCurrentPage(addedReview);
+                }
+            }
+            if(isCreateNewPage(totalReviews,rowPerPage,currentPage)){
+                const nextCount=Math.ceil(totalReviews/rowPerPage);
+                addNewPageButton(addedReview,nextCount);
+            }
         }   
         else{
             showToast('There is a problem while adding new review!!!','warning');
@@ -107,6 +116,69 @@ const handleAddReview=async()=>{
         console.log(error);
     }
 }
+
+const isThereSlotToAddReviewToCurrentPage=(totalReviews,rowPerPage,currentPage)=>{
+    if(totalReviews-rowPerPage*(currentPage-1)<=rowPerPage){
+        return true;
+    }
+    return false;
+};
+
+const isInTheLastPage=(totalReviews,rowPerPage,currentPage)=>{
+    if(currentPage>=Math.ceil(totalReviews/rowPerPage)){
+        return true;
+    }
+    return false;
+};
+
+const isCreateNewPage=(totalReviews,rowPerPage,currentPage)=>{
+    if(currentPage<Math.ceil(totalReviews/rowPerPage)){
+        return true;
+    }
+    return false;
+};
+
+const addReviewToCurrentPage=(review)=>{
+    const reviewsContainer=$("#reviews-container");
+    reviewsContainer.append(
+    `
+    <div class="flex flex-row justify-start items-center gap-4 class">
+    <div class="w-[50px] h-[50px]">
+        <img 
+        class="w-full h-full object-cover rounded-full"
+        src="https://github.com/octocat.png?s=200" alt="doing" />
+    </div>
+    <div>
+        <div class="flex flex-row gap-6">
+            <h3 class="font-bold">${review.user.fullName}</h3>
+            <p class="opacity-50 text-blue-400">${review.createdAt}</p>
+        </div>
+        <div>
+            <div class="flex gap-1 text-sm text-yellow-400">
+                ${generateRatingStars(Math.floor(review.rating))}
+            </div>
+        </div>
+        <div>
+            <p${review.comment}</p>
+        </div>
+    </div>
+</div>
+    `);
+};
+
+const addNewPageButton=(review,nextCount)=>{
+    const paginationContainer=$("#paging-btn-container");
+    paginationContainer.append(
+    `
+    <button
+    onclick="handleReviewPaging(${nextCount})"
+    id="review-page-btn-${nextCount}" 
+    class="hover:cursor-pointer h-10 w-10 border border-black rounded-lg">${nextCount}</button>
+    
+    `);
+};
+
+
 
 
 const handleChangeQuantity=(quantity)=>{

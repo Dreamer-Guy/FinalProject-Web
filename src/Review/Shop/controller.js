@@ -56,11 +56,18 @@ const addReview = async (req, res) => {
             return res.status(BAD_REQUEST_STATUS).json({message:"Product not found"});
         }
         const review = await reviewService.createReview({productId,user,rating:Number(rating),comment});
-        await reviewService.saveReview(review);
-        await productService.updateProductAfterReviewing(productId,rating);
+        const savedReview=await reviewService.saveReview(review);
+        await productService.updateProductAfterReviewing(productId,Number(rating));
         const rawReviews=await reviewService.getReviewsByProductId(productId);
         const populatedReviews = rawReviews.map((review)=>populateReview(review));
-        return res.status(OK_STATUS).json(review);
+        const newProductRating= (product.rating+product.numReviews*Number(rating))/(product.numReviews+1); //Chấp nhận tính toán thuần, hơn là tốn thời gian truy xuất dtb lại, chấp nhận tỉ lệ nhỏ sai sót ở đây
+        return res.status(OK_STATUS).send({
+            addedReview:populateReview(savedReview),
+            newProductRating:newProductRating,
+            reviews:populatedReviews,
+            totalReviews:populatedReviews.length,
+            rowPerPage:DEFAULT_LIMIT_REVIEWS,
+        });
     } 
     catch (error) {
         return res.status(INTERNAL_SERVER_ERROR_STATUS).json({ message: error.message });
