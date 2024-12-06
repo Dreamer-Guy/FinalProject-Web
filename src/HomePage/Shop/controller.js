@@ -2,7 +2,7 @@ import serviceFactory from "../../Factory/serviceFactory.js";
 
 const productService = serviceFactory.getProductSerVice();
 const cartService = serviceFactory.getCartService();
-
+const bannerService= serviceFactory.getBannerService();
 const TOP_PRODUCT_COUNT=4;
 
 const populateProduct=(product)=>{
@@ -27,11 +27,13 @@ const getHomePage=async(req,res)=>{
     const topProducts=await productService.getTopProducts(TOP_PRODUCT_COUNT);
     const populatedTopProducts = topProducts.map((product) => (populateProduct(product)));
     const productsInCart = await cartService.coutProductInCart(user?user._id:null);
+    const banners=await bannerService.getAll();
     res.render("home",{
         user,
         products:populatedProducts,
         topProducts:populatedTopProducts,
-        cartNumber:productsInCart
+        cartNumber:productsInCart,
+        banners:banners,
     });
 }
 
