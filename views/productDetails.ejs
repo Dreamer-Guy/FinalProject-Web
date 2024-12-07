@@ -306,12 +306,17 @@
                             <div
                                 id="paging-btn-container" 
                                 class="flex flex-row justify-center items-center gap-2">
-                                <% for (let i = 1; i <= Math.ceil(totalReviews/reviewsPerPage); i++) { %>
+                                <% const COUNT_PAGE_SHOW=3; %>
+                                <% for (let i = 1; i <= COUNT_PAGE_SHOW && i<=Math.ceil(totalReviews/reviewsPerPage); i++) { %>
                                     <button
                                     onclick="handleReviewPaging(<%=i%>)"
                                     id="review-page-btn-<%=i%>" 
                                     class="hover:cursor-pointer h-10 w-10 border border-black rounded-lg <%=i===1?'bg-blue-300':''%>"><%=i%></button>
                                 <% } %>
+                                <button
+                                    id="last-btn"
+                                    onclick="handleReviewPaging('<%=Math.ceil(totalReviews/reviewsPerPage)%>')"
+                                    class="w-14 h-10 border text-center border-black px-2 rounded-lg <%=Math.ceil(totalReviews/reviewsPerPage)-1>1?'':'hidden'%>">Last</button>
                             </div>
                         </div>     
                     <% } %>

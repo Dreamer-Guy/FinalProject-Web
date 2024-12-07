@@ -3,6 +3,8 @@
 const orderIdsToPay=[];
 let currentPage=1;
 
+const COUNT_PAGE_SHOW=3;
+
 const handleGetOrderDetails=(id)=>{
     window.location.href=`/orders/get/${id}`;
 }
@@ -80,14 +82,30 @@ const handlePaging=async (page)=>{
             const orders=data.orders;
             const totalOrders=data.totalOrders;
             const rowPerPage=data.rowPerPage;
+            const totalPages=Math.ceil(totalOrders/rowPerPage);
             updateOrderListBigScreen(orders,totalOrders,rowPerPage);
             updateOrderListPhoneScreen(orders,totalOrders,rowPerPage);
             updateChoosenOrders();
-            for(let i=1;i<=Math.ceil(totalOrders/rowPerPage);i++){
-                document.getElementById(`order-btn-${i}`).classList.remove('bg-blue-300');
-                if(i===currentPage){
-                    document.getElementById(`order-btn-${i}`).classList.add('bg-blue-300');
+            const paginationContainer=$('#pagination-container');
+            paginationContainer.empty();
+            if(isNeedToAddFirstBtn()){
+                addFirstBtn(paginationContainer);
+            }
+            let count=currentPage-1>0?currentPage-1:1;
+            for(let i=1;i<=COUNT_PAGE_SHOW;++i){
+                if(count>totalPages){
+                    break;
                 }
+                paginationContainer.append(`
+                    <button
+                        onclick="handlePaging(${count})"
+                        id="page-btn-${count}" 
+                        class="hover:cursor-pointer h-10 w-10 border border-black rounded-lg ${count===currentPage?'bg-blue-300':''}">${count}</button>    
+                    `);
+                count+=1;
+            }
+            if(isNeedtoAddLastBtn(data.totalPages)){
+                addLastBtn(paginationContainer,Math.ceil(totalOrders/rowPerPage));
             }
         }
         else{
@@ -97,6 +115,39 @@ const handlePaging=async (page)=>{
     catch(e){
         showSpinnerLoading('There is an unexpected error happened, please try again later','warning');
     }
+};
+
+const isNeedToAddFirstBtn=()=>{
+    if(currentPage-1>1){
+        return true;
+    }
+    return false;
+};
+
+const addFirstBtn=(paginationContainer)=>{
+    paginationContainer.append(`
+        <button
+            onclick="handlePaging(1)"
+            id="review-page-btn-1" 
+            class="hover:cursor-pointer h-10 w-10 border border-black rounded-lg">First</button>    
+        `);
+};
+
+const isNeedtoAddLastBtn=(totalPages)=>{
+    if(totalPages-currentPage>1){
+        return true;
+    }
+    return false;
+};
+
+const addLastBtn=(paginationContainer,totalPages)=>{
+    paginationContainer.append(`
+        <button
+            id="last-btn"
+            onclick="handlePaging(${totalPages})"
+            id="review-page-btn-${totalPages}" 
+            class="hover:cursor-pointer h-10 w-10 border border-black rounded-lg">Last</button>    
+        `);
 };
 
 const updateOrderListBigScreen=(orders,totalOrders,rowPerPage)=>{

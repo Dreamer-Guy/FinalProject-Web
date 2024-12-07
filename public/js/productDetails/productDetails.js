@@ -1,4 +1,5 @@
 let currentPage=1;
+const COUNT_PAGE_SHOW=3;
 
 const data={
     user:{},
@@ -82,15 +83,22 @@ const handleAddReview=async()=>{
             showToast('Review added successfully','default');
             const data=await res.json();
             const {addedReview,reviews,totalReviews,rowPerPage,newProductRating}=data;
-            $('#rating-product').text(parseFloat(newProductRating.toFixed(1)))
+            const paginationContainer=$("#paging-btn-container");
+            $('#rating-product').text(parseFloat(newProductRating.toFixed(1)));
             if(isInTheLastPage(totalReviews,rowPerPage,currentPage)){
                 if(isThereSlotToAddReviewToCurrentPage(totalReviews,rowPerPage,currentPage)){
                     addReviewToCurrentPage(addedReview);
                 }
             }
             if(isCreateNewPage(totalReviews,rowPerPage,currentPage)){
-                const nextCount=Math.ceil(totalReviews/rowPerPage);
-                addNewPageButton(addedReview,nextCount);
+                const totalPages=Math.ceil(totalReviews/rowPerPage);
+                if(isNeedtoAddLastBtn(Math.ceil(totalReviews/rowPerPage)) && (totalPages-currentPage===2)){
+                    addLastBtn(paginationContainer,totalPages);
+                    return;
+                }
+                if(isNeedToAddNextPage(totalReviews,rowPerPage)){
+                    addNewPageButton(addedReview,totalPages);
+                }
             }
         }   
         else{
@@ -101,6 +109,20 @@ const handleAddReview=async()=>{
         console.log(error);
     }
 }
+
+const isLastBtnExist=(totalPages)=>{
+    if(totalPages-currentPage>1){
+        return true;
+    }
+    return false;
+};
+
+const isNeedToAddNextPage=(totalReviews,rowPerPage)=>{
+    if(Math.ceil(totalReviews/rowPerPage)-1===currentPage && totalReviews-currentPage*rowPerPage===1){
+        return true;
+    }
+    return false;
+};
 
 const isThereSlotToAddReviewToCurrentPage=(totalReviews,rowPerPage,currentPage)=>{
     if(totalReviews-rowPerPage*(currentPage-1)<=rowPerPage){
@@ -253,14 +275,26 @@ const handleReviewPaging=async(page)=>{
                 </div>     
                 `);
             });
-            for(let i=1;i<=totalPages;i++){
-                const reviewPagination=$(`#review-page-btn-${i}`);
-                if(i===currentPage){
-                    reviewPagination.addClass("bg-blue-300");
+            const paginationContainer=$("#paging-btn-container");
+            paginationContainer.empty();
+            if(isNeedToAddFirstBtn()){
+                addFirstBtn(paginationContainer);
+            }
+            let count=currentPage-1>0?currentPage-1:1;
+            for(let i=1;i<=COUNT_PAGE_SHOW;i++){
+                if(count>totalPages){
+                    break;
                 }
-                else{
-                    reviewPagination.removeClass("bg-blue-300");
-                }
+                paginationContainer.append(`
+                    <button
+                        onclick="handleReviewPaging(${count})"
+                        id="review-page-btn-${count}" 
+                        class="hover:cursor-pointer h-10 w-10 border border-black rounded-lg ${count===currentPage?'bg-blue-300':''}">${count}</button>    
+                    `);
+                count+=1;
+            }
+            if(isNeedtoAddLastBtn(totalPages)){
+                addLastBtn(paginationContainer,totalPages);
             }
         }
         else{
@@ -270,6 +304,39 @@ const handleReviewPaging=async(page)=>{
     catch(e){
         console.log(e);
     }
+};
+
+const isNeedToAddFirstBtn=()=>{
+    if(currentPage-1>1){
+        return true;
+    }
+    return false;
+};
+
+const addFirstBtn=(paginationContainer)=>{
+    paginationContainer.append(`
+        <button
+            onclick="handleReviewPaging(1)"
+            id="review-page-btn-1" 
+            class="hover:cursor-pointer h-10 w-10 border border-black rounded-lg">First</button>    
+        `);
+};
+
+const isNeedtoAddLastBtn=(totalPages)=>{
+    if(totalPages-currentPage>1){
+        return true;
+    }
+    return false;
+};
+
+const addLastBtn=(paginationContainer,totalPages)=>{
+    paginationContainer.append(`
+        <button
+            id="last-btn"
+            onclick="handleReviewPaging(${totalPages})"
+            id="review-page-btn-${totalPages}" 
+            class="hover:cursor-pointer h-10 w-10 border border-black rounded-lg">Last</button>    
+        `);
 };
 
 
