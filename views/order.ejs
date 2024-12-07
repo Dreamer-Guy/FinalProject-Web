@@ -412,8 +412,11 @@
                 </div>
                 
                 
-                <div class="flex flex-row gap-3 justify-center items-center text-gray-800 py-3 uppercase">
-                    <% for(let i=1;i <=Math.ceil(totalOrders/rowPerPage);i++){ %>
+                <div 
+                    id="pagination-container"
+                    class="flex flex-row gap-3 justify-center items-center text-gray-800 py-3 uppercase">
+                    <% const COUNT_PAGE_SHOW =3; %>
+                    <% for(let i=1;i <=Math.ceil(totalOrders/rowPerPage) && i<=COUNT_PAGE_SHOW;i++){ %>
                         <button
                             id="order-btn-<%=i%>"
                             onclick="handlePaging(<%=i%>)"
@@ -421,6 +424,10 @@
                             <%=i%>
                         </button>
                     <% } %>
+                    <button
+                        id="last-btn"
+                        onclick="handlePaging('<%=Math.ceil(totalOrders/rowPerPage)%>')"
+                        class="hover:cursor-pointer w-14 h-10 border text-center border-black px-2 rounded-lg <%=Math.ceil(totalOrders/rowPerPage)-1>1?'':'hidden'%>">Last</button>
                 </div>    
             </div>
             <div class="p-2">
