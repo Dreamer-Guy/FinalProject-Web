@@ -18,6 +18,10 @@
         rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css"
+    />
 </head>
 
 <body>
@@ -135,8 +139,24 @@
 
     <!-- Product Detail -->
     <div class="container flex flex-col md:flex-row gap-6 justify-center items-center">
-        <div class="flex justify-center items-center md:w-1/2">
+        <div class="flex flex-col justify-center items-center w-full md:w-1/2 gap-2">
             <img id="product-img" src="<%= product.image %>" alt="product" class="w-full" />
+            <div class="w-full swiper">
+                <div class="swiper-wrapper">
+                    <% alternativeImages.images.forEach(image => { %>
+                        <div class="swiper-slide h-64">
+                            <img
+                                id="alternative-<%=image%>"
+                                onclick="handleSwapImage('alternative-<%=image%>')" 
+                                src="<%=image%>" class="flex items-center justify-center 
+                                h-full object-cover cursor-pointer"></img>
+                        </div>
+                    <% }) %>
+                </div>
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-next "></div>
+                <div class="swiper-button-prev"></div>
+            </div>
         </div>
 
         <div id="product-infor">
@@ -484,6 +504,26 @@
         </div>
     </div>
     <!-- ./copyright -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+    <script>
+        const swiper = new Swiper('.swiper', {
+            loop: true, 
+            slidesPerView: 3, 
+            slidesPerGroup: 1, 
+            spaceBetween: 10, 
+            pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+            },
+            navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+            },
+            autoplay: {
+            delay: 2500, 
+            },
+        });
+    </script>
     <script>
         const totalStock = "<%= product.totalStock %>";
         const user = "<%= JSON.stringify(user) %>"; 

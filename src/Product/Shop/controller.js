@@ -46,6 +46,24 @@ const getQueryParams=(req)=>{
 
     return {brands,categories,sortField,sortOrder,page:Number(page),rowPerPage:Number(rowPerPage),priceRange};
 }
+
+const populateProduct=(product)=>{
+    return {
+        ...product,
+        brand:product.brand_id.name,
+        category:product.category_id.name,
+    }
+};
+
+const populateAggregatedProducts=(product)=>{
+    delete product.category_id;
+    delete product.brand_id;
+    return {
+        ...product,
+        brand:product.brand.name,
+        category:product.category.name,
+    }
+}
 //controller
 
 const getProductsPage = async (req, res) => {
