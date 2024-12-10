@@ -143,7 +143,7 @@
             <img id="product-img" src="<%= product.image %>" alt="product" class="w-full" />
             <div class="w-full swiper">
                 <div class="swiper-wrapper">
-                    <% alternativeImages.images.forEach(image => { %>
+                    <% alternativeImages?.images.forEach(image => { %>
                         <div class="swiper-slide h-64">
                             <img
                                 id="alternative-<%=image%>"
