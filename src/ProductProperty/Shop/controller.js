@@ -5,6 +5,7 @@ const productService=serviceFactory.getProductSerVice();
 const reviewService=serviceFactory.getReviewService(); 
 const cartService=serviceFactory.getCartService(); 
 const productPropertyService=serviceFactory.getProductPropertyService();
+const imagesProductService=serviceFactory.getImagesProductService();
 
 const getFormatedDate=(date)=>{
     const yyyy = date.getFullYear();
@@ -48,6 +49,7 @@ const getProductDetailsPageByID=async(req,res)=>{
         const LIMIT_REVIEWS=4;
         const limitdReviews = rawReviews.slice(0,LIMIT_REVIEWS).map((review)=>populateReview(review));
         const productsInCart = await cartService.coutProductInCart(user?._id||null);
+        const alternativeImages=await imagesProductService.getAllAlternativeImagesOfProduct(id);
         if(productDetails){
             return res.render('productDetails',{
                 product,
@@ -60,6 +62,7 @@ const getProductDetailsPageByID=async(req,res)=>{
                 user:user,
                 generateRatingStars,
                 cartNumber:productsInCart,
+                alternativeImages,
             }
         );
         }else{

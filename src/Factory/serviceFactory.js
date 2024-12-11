@@ -10,6 +10,7 @@ import dbProductPropertyService from "../ProductProperty/dbService.js";
 import dbCategoryService from "../Category/dbService.js";
 import dbBrandService from "../Brand/dbService.js";
 import dbBannerService from "../Banner/dbService.js";
+import dbImagesProductService from "../ImagesProduct/dbService.js";
 
 const productService=dbProductService;
 const userService=dbUserService;
@@ -57,6 +58,9 @@ const serviceFactory = {
     getBannerService:()=>{
         return bannerService;
     },
+    getImagesProductService:()=>{
+        return dbImagesProductService;
+    }
 };
 
 export default serviceFactory;

@@ -339,5 +339,11 @@ const addLastBtn=(paginationContainer,totalPages)=>{
         `);
 };
 
-
+const handleSwapImage=(id)=>{
+    const mainImage=document.getElementById("product-img");
+    const alternative=document.getElementById(id);
+    const t=mainImage.src;
+    mainImage.src=alternative.src;
+    alternative.src=t;
+}
 
