@@ -252,11 +252,42 @@ const getAccountPage = async (req, res) => {
     });
 }
 
+const getLoginPage=async(req,res)=>{
+    const user=req.user;
+    res.render('login',{
+        user,
+    });
+}
+
+const initUserDataAfterLogin=async (req, res) => {
+    const userId = req.user._id;
+    let address = await addressService.getAddressByUserId(userId);
+    let cart = await cartService.getCartByUserId(userId);
+    if(!address){
+        const defaultAddressData={
+            userId: userId,
+            street: "",
+            city: "",
+            postalCode: "",
+            phone: "",
+            notes: ""
+        }
+        const address=await addressService.createAddress(defaultAddressData);
+        await addressService.saveAddress(address);
+    }
+    if(!cart){
+        const newCart = await cartService.createCart(userId, []);
+        await cartService.saveCart(newCart);
+    }
+    return res.json({message:"Login Success"});
+};
+
 export {
     getRegisterPage,registerUser,logoutUser,getForgotPasswordPage,
     getResetPasswordPage,forgotPassword,
     resetPassWord,getEditInformationPage,updateInformation,
-    getChangePasswordPage,changePassword,getAccountPage};
+    getChangePasswordPage,changePassword,getAccountPage,
+    getLoginPage,initUserDataAfterLogin};
 
 
 

@@ -18,12 +18,8 @@ import paypalPaymentRouter from "./src/Payment/PayPal/route.js";
 import vnpayPaymentRouter from "./src/Payment/VNPay/route.js";
 import stripePaymentRouter from "./src/Payment/Stripe/route.js";
 
-import isUserLoginAndRedirect from './src/middleWare/isUserLoginAndRedirect.js';
-
 import adminDashBoardRouter from "./src/HomePage/Admin/dashboardRoute.js";
 import adminRevenueRouter from  "./src/Revenue/Admin/revenueRoute.js";
-
-
 
 const app = express();
 const PORT = process.env.PORT||3000;
@@ -32,6 +28,7 @@ app.use(
     '/payment/stripe/webhook',
     express.raw({ type: 'application/json' }) 
 );
+
 app.use(express.json());
 app.use(methodOverride('_method'))
 app.use(express.urlencoded(
@@ -47,31 +44,25 @@ app.use(session({
     cookie: { maxAge: 24 * 60 * 60 * 1000 } 
 }));
 
-
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.static(path.join(process.cwd(), 'public')));
 
+app.use(express.static(path.join(process.cwd(), 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(process.cwd(), 'views'));
 
-
-
-
 app.use("/", homeRouter);
-app.use("/productDetails", productDetailsRouter);
 app.use("/products", productRouter);
+app.use("/productDetails", productDetailsRouter);
 app.use("/user", userRouter);
-
+app.use("/reviews", reviewRouter);
 //app.use("/payment/paypal", paypalPaymentRouter); there is problem with this route
 app.use("/payment/vnpay", vnpayPaymentRouter);
-app.use("/reviews", reviewRouter);
-app.use(isUserLoginAndRedirect);
-
 app.use("/payment/stripe", stripePaymentRouter);
 app.use("/addresses", addressRouter);
 app.use("/carts", cartRouter);
 app.use("/orders", orderRouter);
+
 app.use("/admin/dashboard", adminDashBoardRouter);
 app.use("/admin/revenue", adminRevenueRouter);
 app.use((req, res) => {

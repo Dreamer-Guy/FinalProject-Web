@@ -1,3 +1,4 @@
+import { create } from "migrate-mongo";
 import Address from "../Model/Address.js";
 
 const addressService={
@@ -13,6 +14,9 @@ const addressService={
     },
     getAllAddresses: async () => {
         return Address.find().lean();
+    },
+    createAddress: async (address) => {
+        return new Address(address);
     },
 };
 
