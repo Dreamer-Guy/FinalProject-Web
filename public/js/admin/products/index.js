@@ -1,10 +1,17 @@
 const DEFAULT_PAGE = 1;
 const ROW_PER_PAGE = 10;
 
+let productIdToDelete = null;
+
 let filters = {
     page: 1,
-    rowPerPage: ROW_PER_PAGE
+    rowPerPage: ROW_PER_PAGE,
+    sort: 'price-asc'
 };
+
+function setSort(value) {
+    filters.sort = value;
+}
 
 function setCurrentPage(page) {
     filters.page = page;
@@ -14,6 +21,9 @@ async function handleFilters(type, value) {
     if(type === 'page') {
         setCurrentPage(Number(value));
     }
+    if(type === 'sort') {
+        setSort(value);
+    }
     
     const queryParams = new URLSearchParams(filters).toString();
     try {
@@ -22,17 +32,14 @@ async function handleFilters(type, value) {
             
         const products = data.products;
         const totalProducts = data.totalProducts;
-        
-        // Update desktop table
+
         const productsContainer = document.querySelector('tbody');
         productsContainer.innerHTML = '';
-        
-        // Update mobile container
+
         const mobileContainer = document.getElementById('mobile-container');
         mobileContainer.innerHTML = '';
         
         products.forEach(product => {
-            // Desktop view
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td class="px-4 py-4 whitespace-nowrap">
@@ -60,7 +67,7 @@ async function handleFilters(type, value) {
                             class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button onclick="handleDeleteProduct('${product._id}')"
+                        <button onclick="showDeleteDialog('${product._id}')"
                             class="bg-red-500 text-white p-2 rounded hover:bg-red-600">
                             <i class="fas fa-trash"></i>
                         </button>
@@ -69,7 +76,6 @@ async function handleFilters(type, value) {
             `;
             productsContainer.appendChild(tr);
 
-            // Mobile view
             const card = document.createElement('div');
             card.className = 'bg-white p-4 rounded-lg shadow';
             card.innerHTML = `
@@ -103,7 +109,7 @@ async function handleFilters(type, value) {
                                 class="flex-1 bg-blue-500 text-white py-2 px-3 rounded text-sm hover:bg-blue-600 transition-colors">
                                 <i class="fas fa-edit mr-1"></i> Edit
                             </button>
-                            <button onclick="handleDeleteProduct('${product._id}')"
+                            <button onclick="showDeleteDialog('${product._id}')"
                                 class="flex-1 bg-red-500 text-white py-2 px-3 rounded text-sm hover:bg-red-600 transition-colors">
                                 <i class="fas fa-trash mr-1"></i> Delete
                             </button>
@@ -114,12 +120,10 @@ async function handleFilters(type, value) {
             mobileContainer.appendChild(card);
         });
 
-        // Update pagination
         const totalPages = Math.ceil(totalProducts/ROW_PER_PAGE);
         const paginationContainer = $('#paging-container');
         paginationContainer.empty();
 
-        // Prev button
         if(filters.page > 1) {
             paginationContainer.append(`
                 <button
@@ -135,7 +139,6 @@ async function handleFilters(type, value) {
         if(startPage > totalPages - 2) startPage = totalPages - 2;
         if(startPage < 1) startPage = 1;
 
-        // First page if not in range
         if(startPage > 1) {
             paginationContainer.append(`
                 <button onclick="handleFilters('page', 1)"
@@ -146,8 +149,7 @@ async function handleFilters(type, value) {
                 ${startPage > 2 ? '<span class="px-2">...</span>' : ''}
             `);
         }
-        
-        // Page numbers
+
         for(let i = 0; i < 3 && startPage + i <= totalPages; i++) {
             const pageNum = startPage + i;
             paginationContainer.append(`
@@ -186,7 +188,57 @@ async function handleFilters(type, value) {
     }
 }
 
-// Load trang đầu tiên khi tải trang
+// Delete
+function showDeleteDialog(productId) {
+    productIdToDelete = productId;
+    const dialog = document.getElementById('deleteDialog');
+    dialog.style.display = 'flex';
+}
+
+function closeDeleteDialog() {
+    const dialog = document.getElementById('deleteDialog');
+    dialog.style.display = 'none';
+    productIdToDelete = null;
+}
+
+async function handleDeleteProduct() {
+    if (!productIdToDelete) return;
+
+    try {
+        const response = await fetch(`/admin/products/api/delete/${productIdToDelete}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const data = await response.json();
+
+        if (response.ok) {
+            closeDeleteDialog();
+            handleFilters('page', filters.page);
+            
+            const totalProductsElement = document.querySelector('#total-products');
+            if (totalProductsElement) {
+                const currentTotal = parseInt(totalProductsElement.textContent.split(': ')[1]);
+                totalProductsElement.textContent = `Total products: ${currentTotal - 1}`;
+            }
+            
+            showToast('Product deleted successfully','success');
+        } else {
+            showToast(data.message || 'Error deleting product','error');
+        }
+    } catch (error) {
+        console.log(error);
+        showToast('Error deleting product','error');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    if (confirmDeleteBtn) {
+        confirmDeleteBtn.addEventListener('click', handleDeleteProduct);
+    }
+    
     handleFilters('page', DEFAULT_PAGE);
 });

@@ -33,9 +33,21 @@ const getProductsApi = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const rowPerPage = parseInt(req.query.rowPerPage) || ROW_PER_PAGE;
+        const sort = req.query.sort || 'price-asc';
         
-        const products = await productService.getProducts({});
+        let products = await productService.getProducts({});
         const totalProducts = products.length;
+        
+        products = products.sort((a, b) => {
+            const priceA = a.salePrice > 0 ? a.salePrice : a.price;
+            const priceB = b.salePrice > 0 ? b.salePrice : b.price;
+            
+            if(sort === 'price-asc') {
+                return priceA - priceB;
+            } else {
+                return priceB - priceA; 
+            }
+        });
         
         const paginatedProducts = products.slice((page-1)*rowPerPage, page*rowPerPage);
         
@@ -52,6 +64,14 @@ const getProductsApi = async (req, res) => {
 const deleteProduct = async (req, res) => {
     try {
         const productId = req.params.id;
+        
+        const product = await productService.getProductById(productId);
+        if (!product) {
+            return res.status(404).json({ 
+                message: 'Product not found' 
+            });
+        }
+        
         await productService.deleteByProductId(productId);
         res.status(200).json({ message: 'Product deleted successfully' });
     } catch (error) {

@@ -9,6 +9,6 @@ adminProductRouter.use(isAdmin);
 
 adminProductRouter.get("/", getProductPage);
 adminProductRouter.get("/api/get", getProductsApi);
-adminProductRouter.delete("/:id", deleteProduct);
+adminProductRouter.delete("/api/delete/:id", deleteProduct);
 
 export default adminProductRouter;
