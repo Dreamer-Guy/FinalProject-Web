@@ -23,11 +23,22 @@
                     <span class="text-sm">Dashboard</span>
                 </a>
             </li>
-            <li class="mb-1 group active">
-                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
-                    <i class="ri-archive-line mr-3 text-lg"></i>
+            <li class="mb-1 group">
+                <a href="" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
+                    <i class="ri-instance-line mr-3 text-lg"></i>
                     <span class="text-sm">Products</span>
+                    <i class="ri-arrow-right-s-line ml-auto group-[.selected]:rotate-90"></i>
                 </a>
+                <ul class="pl-7 mt-2 hidden group-[.selected]:block">
+                    <li class="mb-4">
+                        <a href="/admin/products" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">All products</a>
+                    </li> 
+                    <li class="mb-4">
+                        <a href="#" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Add product</a>
+                    </li>
+                </ul>
             </li>
             <li class="mb-1 group">
                 <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
@@ -85,18 +96,117 @@
                 <li class="text-gray-600 mr-2 font-medium">/</li>
                 <li class="text-gray-600 mr-2 font-medium">All</li>
             </ul>
-        </div>        
-    </main>
-    
-    
+            <div class="ml-auto text-gray-600"></div>
+                <!-- Showing <%= (currentPage-1)*ROW_PER_PAGE + 1 %> to <%= Math.min(currentPage*ROW_PER_PAGE, totalProducts) %> of <%= totalProducts %> products -->
+                Total products: <%= totalProducts %>
+            </div>
+        </div>   
+        
+        <div class="bg-white rounded-lg shadow overflow-x-auto">
+            
+            <table class="w-full table-auto">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Stock</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Rating</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <% products.forEach(product => { %>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <img src="<%= product.image %>" alt="<%= product.name %>" class="h-12 w-12 object-cover rounded">
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <%= product.name %>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <% if(product.salePrice > 0) { %>
+                                    <div class="text-red-500 line-through">$<%= product.price %></div>
+                                    <div>$<%= product.salePrice %></div>
+                                <% } else { %>
+                                    <div>$<%= product.price %></div>
+                                <% } %>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center">
+                                <%= product.totalStock %>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center">
+                                <%= product.rating.toFixed(1) %>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex space-x-2">
+                                    <button onclick="handleEditProduct('<%= product._id %>')" 
+                                        class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button onclick="handleDeleteProduct('<%= product._id %>')"
+                                        class="bg-red-500 text-white p-2 rounded hover:bg-red-600">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+        
+        
+        
+        <div id="paging-container" class="bg-white py-10 text-center dark:bg-dark flex flex-row gap-2 justify-center">
+            <% const COUNT_PAGE_SHOW=3 %>
+            <% const quantity=Math.ceil(totalProducts / ROW_PER_PAGE); %>
+            <% if(currentPage > 1) { %>
+                <button
+                    id="prev-btn"
+                    onclick="window.location.href='/admin/products?page=<%=currentPage-1%>'"
+                    class="hover:cursor-pointer w-14 h-10 border text-center border-black px-2 rounded-lg">
+                    Prev
+                </button>
+            <% } %>
+            <% 
+                let startPage = currentPage - 1;
+                if(startPage < 1) startPage = 1;
+                if(startPage > quantity - COUNT_PAGE_SHOW + 1) startPage = quantity - COUNT_PAGE_SHOW + 1;
+                if(startPage < 1) startPage = 1;
+                
+                for (let i = 0; i < COUNT_PAGE_SHOW && startPage + i <= quantity; i++) { 
+                    const pageNum = startPage + i;
+            %>
+                <button onclick="window.location.href='/admin/products?page=<%= pageNum %>'" 
+                    id="page-<%= pageNum %>" 
+                    class="hover:cursor-pointer flex h-10 min-w-10 items-center justify-center rounded-lg border 
+                    border-stroke bg-blue-100 px-2 text-base font-medium text-dark hover:bg-gray-1 
+                    dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10
+                    <%= currentPage === pageNum ? 'bg-blue-500' : '' %>">
+                    <%= pageNum %>
+                </button>
+            <% } %>
+            <% if(currentPage < quantity) { %>
+                <button
+                    id="next-btn"
+                    onclick="window.location.href='/admin/products?page=<%=currentPage+1%>'"
+                    class="hover:cursor-pointer w-14 h-10 border text-center border-black px-2 rounded-lg">
+                    Next
+                </button>
+            <% } %>
+        </div>
+        
+    </main>  
     <!-- end: Main -->
-   
+
     
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="/js/admin/dashboard/index.js"></script>
+    <script src="/js/admin/products/index.js"></script>
     <script src="/js/admin/common.js"></script>
 </body>
 </html>
