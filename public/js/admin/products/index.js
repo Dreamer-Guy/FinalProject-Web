@@ -6,7 +6,11 @@ let productIdToDelete = null;
 let filters = {
     page: 1,
     rowPerPage: ROW_PER_PAGE,
-    sort: 'price-asc'
+    sort: 'price-asc',
+    categories: [],
+    brands: [],
+    minPrice: '',
+    maxPrice: '',
 };
 
 function setSort(value) {
@@ -17,15 +21,69 @@ function setCurrentPage(page) {
     filters.page = page;
 }
 
+function handleCategoryChange(checkbox) {
+    if (checkbox.checked) {
+        filters.categories.push(checkbox.value);
+    } else {
+        filters.categories = filters.categories.filter(cat => cat !== checkbox.value);
+    }
+    filters.page = 1;
+    handleFilters();
+}
+
+function handleBrandChange(checkbox) {
+    if (checkbox.checked) {
+        filters.brands.push(checkbox.value);
+    } else {
+        filters.brands = filters.brands.filter(brand => brand !== checkbox.value);
+    }
+    filters.page = 1;
+    handleFilters();
+}
+
 async function handleFilters(type, value) {
+    if(type !== 'page') {
+        filters.page = 1;
+    }
+    
     if(type === 'page') {
         setCurrentPage(Number(value));
     }
     if(type === 'sort') {
         setSort(value);
     }
+    if(type === 'category') {
+        filters.category = value;
+    }
+    if(type === 'brand') {
+        filters.brand = value;
+    }
+    if(type === 'minPrice') {
+        filters.minPrice = value;
+    }
+    if(type === 'maxPrice') {
+        filters.maxPrice = value;
+    }
     
-    const queryParams = new URLSearchParams(filters).toString();
+    
+    const queryParams = new URLSearchParams();
+    queryParams.append('page', filters.page);
+    queryParams.append('rowPerPage', filters.rowPerPage);
+    queryParams.append('sort', filters.sort);
+    
+    if (filters.categories.length > 0) {
+        queryParams.append('categories', filters.categories.join(','));
+    }
+    if (filters.brands.length > 0) {
+        queryParams.append('brands', filters.brands.join(','));
+    }
+    if (filters.minPrice) {
+        queryParams.append('minPrice', filters.minPrice);
+    }
+    if (filters.maxPrice) {
+        queryParams.append('maxPrice', filters.maxPrice);
+    }
+    
     try {
         const data = await fetch(`/admin/products/api/get?${queryParams}`)
             .then(response => response.json());
@@ -59,7 +117,11 @@ async function handleFilters(type, value) {
                     ${product.totalStock}
                 </td>
                 <td class="px-4 py-4 whitespace-nowrap text-center">
-                    ${product.rating.toFixed(1)}
+                    
+                    <span>
+                        ${product.rating.toFixed(1)}
+                        <i class="fa fa-star text-yellow-300"></i>
+                    </span>
                 </td>
                 <td class="px-4 py-4 whitespace-nowrap">
                     <div class="flex space-x-2">
@@ -100,7 +162,10 @@ async function handleFilters(type, value) {
                                 <div class="text-sm text-gray-500">
                                     <span>Stock: ${product.totalStock}</span>
                                     <span class="mx-2">•</span>
-                                    <span>Rating: ${product.rating.toFixed(1)}</span>
+                                    <span>
+                                        Rating: ${product.rating.toFixed(1)}
+                                        <i class="fa fa-star text-yellow-300"></i>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -186,6 +251,27 @@ async function handleFilters(type, value) {
     } catch(e) {
         console.log(e);
     }
+}
+
+function clearFilters() {
+    filters = {
+        page: 1,
+        rowPerPage: ROW_PER_PAGE,
+        sort: 'price-asc',
+        categories: [],
+        brands: [],
+        minPrice: '',
+        maxPrice: ''
+    };
+
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = false;
+    });
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+        input.value = '';
+    });
+    
+    handleFilters();
 }
 
 // Delete

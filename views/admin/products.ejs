@@ -105,6 +105,64 @@
         </div>
         
         <div class="p-2 sm:p-4"> 
+            <div class="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-medium mb-2">Category</h3>
+                    <div class="max-h-48 overflow-y-auto space-y-2">
+                        <% categories.forEach(category => { %>
+                            <div class="flex items-center">
+                                <input type="checkbox" 
+                                       id="category-<%= category._id %>"
+                                       value="<%= category.name %>"
+                                       onchange="handleCategoryChange(this)"
+                                       class="w-4 h-4 text-blue-600 rounded cursor-pointer">
+                                <label for="category-<%= category._id %>" 
+                                       class="ml-2 text-sm text-gray-600 cursor-pointer">
+                                    <%= category.name %>
+                                </label>
+                            </div>
+                        <% }) %>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-medium mb-2">Brand</h3>
+                    <div class="max-h-48 overflow-y-auto space-y-2">
+                        <% brands.forEach(brand => { %>
+                            <div class="flex items-center">
+                                <input type="checkbox" 
+                                       id="brand-<%= brand._id %>"
+                                       value="<%= brand.name %>"
+                                       onchange="handleBrandChange(this)"
+                                       class="w-4 h-4 text-blue-600 rounded cursor-pointer">
+                                <label for="brand-<%= brand._id %>" 
+                                       class="ml-2 text-sm text-gray-600 cursor-pointer">
+                                    <%= brand.name %>
+                                </label>
+                            </div>
+                        <% }) %>
+                    </div>
+                </div>
+
+                <div class="flex gap-2">
+                    <input type="number" 
+                           placeholder="Min Price"
+                           onchange="handleFilters('minPrice',this.value)"
+                           class="w-full text-sm text-gray-600 py-3 px-4 border-gray-300 shadow-sm rounded">
+                    <input type="number"
+                           placeholder="Max Price" 
+                           onchange="handleFilters('maxPrice',this.value)"
+                           class="w-full text-sm text-gray-600 py-3 px-4 border-gray-300 shadow-sm rounded">
+                </div>
+            
+                <button onclick="clearFilters()"
+                        class="bg-white w-40 text-gray-600 py-2 px-2 border border-gray-300 rounded hover:bg-gray-900 flex items-center justify-center gap-2">
+                    <i class="fas fa-times"></i>
+                    Clear Filters
+                </button>
+            </div>
+            
+            
             <div class="mb-6 flex justify-end">
                 <select onchange="handleFilters('sort',this.value)" name="sort" id="sort" class="w-40 text-sm text-gray-600 py-3 px-4 border-gray-300 shadow-sm 
                     rounded focus:ring-primary focus:border-primary">

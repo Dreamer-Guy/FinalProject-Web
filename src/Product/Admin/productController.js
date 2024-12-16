@@ -1,63 +1,113 @@
 import serviceFactory from "../../Factory/serviceFactory.js";
+import mongoose from "mongoose";
 
 const productService = serviceFactory.getProductSerVice();
-const ROW_PER_PAGE = 10; 
+const categoryService = serviceFactory.getCategoryService();
+const brandService = serviceFactory.getBrandService();
+const ROW_PER_PAGE = 10;
+
+const formatSortParam = (req) => {
+    const sort = req.query.sort || "price-asc";
+    const [sortField, sortOrder] = sort.split('-');
+    return {
+        sortField,
+        sortOrder: sortOrder === 'asc' ? 1 : -1
+    };
+};
+
+const formatFilterParam = (req) => {
+    const { categories = "", brands = "" } = req.query;
+    return {
+        categories: categories ? categories.split(',').map(cat => cat.toLowerCase()) : [],
+        brands: brands ? brands.split(',').map(brand => brand.toLowerCase()) : []
+    };
+};
+
+const formatPriceParam = (req) => {
+    const { minPrice, maxPrice } = req.query;
+    const priceRange = [];
+    
+    if (minPrice || maxPrice) {
+        priceRange.push({
+            minPrice: minPrice ? Number(minPrice) : 0,
+            maxPrice: maxPrice ? Number(maxPrice) : Number.MAX_VALUE
+        });
+    }
+    
+    return priceRange;
+};
+
+const getQueryParams = (req) => {
+    const { page = 1, rowPerPage = ROW_PER_PAGE } = req.query;
+    const { categories, brands } = formatFilterParam(req);
+    const { sortField, sortOrder } = formatSortParam(req);
+    const priceRange = formatPriceParam(req);
+
+    return {
+        brands,
+        categories,
+        sortField,
+        sortOrder,
+        page: Number(page),
+        rowPerPage: Number(rowPerPage),
+        priceRange
+    };
+};
 
 const getProductPage = async (req, res) => {
     try {
         const user = req.user || null;
-        const page = parseInt(req.query.page) || 1;
-        
-        
+        const categories = await categoryService.getAll();
+        const brands = await brandService.getAll();
         const products = await productService.getAll();
-        const totalProducts = products.length;
-        const paginatedProducts = products.slice((page-1)*ROW_PER_PAGE, page*ROW_PER_PAGE);
-
+        
         res.render('admin/products', {
             user,
-            products: paginatedProducts,
-            currentPage: page,
-            totalPages: Math.ceil(totalProducts/ROW_PER_PAGE),
-            totalProducts,
+            categories,
+            brands,
+            totalProducts: products.length,
             ROW_PER_PAGE
         });
     } catch (e) {
-        console.log(e);
-        return res.json({
-            data: null,
+        console.error(e);
+        return res.status(500).json({
+            message: "Internal server error"
         });    
     }
-}
+};
 
 const getProductsApi = async (req, res) => {
     try {
-        const page = parseInt(req.query.page) || 1;
-        const rowPerPage = parseInt(req.query.rowPerPage) || ROW_PER_PAGE;
-        const sort = req.query.sort || 'price-asc';
+        const { brands, categories, sortField, sortOrder, page, rowPerPage, priceRange } = getQueryParams(req);
         
-        let products = await productService.getProducts({});
-        const totalProducts = products.length;
-        
-        products = products.sort((a, b) => {
-            const priceA = a.salePrice > 0 ? a.salePrice : a.price;
-            const priceB = b.salePrice > 0 ? b.salePrice : b.price;
-            
-            if(sort === 'price-asc') {
-                return priceA - priceB;
-            } else {
-                return priceB - priceA; 
-            }
+        // console.log("Query params:", { brands, categories, priceRange });
+
+        let products = await productService.getProducts({ 
+            brands, 
+            categories, 
+            sortField, 
+            sortOrder,
+            priceRange 
         });
-        
-        const paginatedProducts = products.slice((page-1)*rowPerPage, page*rowPerPage);
-        
+
+        const totalProducts = products.length;
+
+        // Phân trang
+        const paginatedProducts = products.slice(
+            (page - 1) * rowPerPage,
+            page * rowPerPage
+        );
+
         return res.json({
             products: paginatedProducts,
             totalProducts,
             currentPage: page
         });
     } catch (error) {
-        return res.status(500).json({ message: error.message });
+        console.error("Error in getProductsApi:", error);
+        return res.status(500).json({ 
+            message: error.message 
+        });
     }
 };
 
