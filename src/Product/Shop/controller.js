@@ -76,12 +76,7 @@ const getProductsPage = async (req, res) => {
         const {onSales}=req.query;
         const {search}=req.query;
         let products=[];
-        if(search && search.trim().length>0){
-            products=await productService.getProductsBySearch({search,brands, categories, sortField, sortOrder,priceRange });
-        }
-        else{
-            products = await productService.getProducts({ brands, categories, sortField, sortOrder,priceRange });
-        }
+        products=await productService.getProductsFromElastic(search,{brands, categories, sortField, sortOrder,priceRange });
         if(onSales==='true'){
             products=products.filter((product)=>product.salePrice>0);
         }
@@ -117,12 +112,7 @@ const apiGetProducts=async (req, res) => {
         const {onSales}=req.query;
         const {search}=req.query;
         let products=[];
-        if(search && search.trim().length>0){
-            products=await productService.getProductsBySearch(search,{brands, categories, sortField, sortOrder,priceRange });
-        }
-        else{
-            products = await productService.getProducts({ brands, categories, sortField, sortOrder,priceRange });
-        }
+        products=await productService.getProductsFromElastic(search,{brands, categories, sortField, sortOrder,priceRange });
         if(onSales==='true'){
             products=products.filter((product)=>product.salePrice>0);
         }

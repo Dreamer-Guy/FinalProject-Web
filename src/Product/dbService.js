@@ -1,10 +1,13 @@
 import mongoose, { mongo } from "mongoose";
 import Product from "../Model/Product.js";
-
+import elasticSearchService from "../UtilServices/elasticSearchService.js";
 
 const productService = {
     getAll:async()=>{
-        const products=await Product.find().lean();
+        const products=await Product.find()
+        .populate('brand_id')
+        .populate('category_id')
+        .lean();
         return products;
     },
     create: async (productProps) => {
@@ -102,48 +105,48 @@ const productService = {
                     price: { $gte: minPrice, $lte: maxPrice }
                 }
             });
-            const products = await Product.aggregate([
-                {
-                    $lookup:{
-                        from:'brands',
-                        localField:'brand_id',
-                        foreignField:'_id',
-                        as:'brand'
-                    }
-                },
-                {$unwind:'$brand'},
-                {
-                    $lookup:{
-                        from:'categories',
-                        localField:'category_id',
-                        foreignField:'_id',
-                        as:'category'
-                    }
-                },
-                {$unwind:'$category'},
-                {
-                    $match:{
-                        $and: [
-                            {
-                                $or:[
-                                    { 'category.name': { $regex: searchTerm, $options: 'i' } },
-                                    { 'brand.name': { $regex: searchTerm, $options: 'i' } },
-                                    { name: { $regex: searchTerm, $options: 'i' } },
-                                    { description:{ $regex: searchTerm, $options: 'i' }}
-                                ]
-                            },
-                            categories.length > 0 ? { 'category.name': { $in: categories.map(c => new RegExp(c, 'i')) } } : {},
-                            brands.length > 0 ? { 'brand.name': { $in: brands.map(b => new RegExp(b, 'i')) } } : {},
-                            {
-                                $or: priceConditions
-                            }
-                        ]
-                    }
-                },
-                {
-                    $sort: { [sortField]: parseInt(sortOrder) }
+        const products = await Product.aggregate([
+            {
+                $lookup:{
+                    from:'brands',
+                    localField:'brand_id',
+                    foreignField:'_id',
+                    as:'brand'
                 }
-            ]);
+            },
+            {$unwind:'$brand'},
+            {
+                $lookup:{
+                    from:'categories',
+                    localField:'category_id',
+                    foreignField:'_id',
+                    as:'category'
+                }
+            },
+            {$unwind:'$category'},
+            {
+                $match:{
+                    $and: [
+                        {
+                            $or:[
+                                { 'category.name': { $regex: searchTerm, $options: 'i' } },
+                                { 'brand.name': { $regex: searchTerm, $options: 'i' } },
+                                { name: { $regex: searchTerm, $options: 'i' } },
+                                { description:{ $regex: searchTerm, $options: 'i' }}
+                            ]
+                        },
+                        categories.length > 0 ? { 'category.name': { $in: categories.map(c => new RegExp(c, 'i')) } } : {},
+                        brands.length > 0 ? { 'brand.name': { $in: brands.map(b => new RegExp(b, 'i')) } } : {},
+                        {
+                            $or: priceConditions
+                        }
+                    ]
+                }
+            },
+            {
+                $sort: { [sortField]: parseInt(sortOrder) }
+            }
+        ]);
         return products;
     },
 
@@ -165,7 +168,17 @@ const productService = {
         product.rating=(product.rating*product.numReviews+rating)/(product.numReviews+1);
         product.numReviews=product.numReviews+1;
         await product.save();
-    }
+    },
+    getProductsFromElastic:async(searchTerm,
+        { brands=[], categories=[], sortField='price', sortOrder=1,priceRange })=>{
+        const products=await elasticSearchService.search(searchTerm,brands,categories,priceRange,sortField,sortOrder);
+        return products;
+    },
+
+    SynchronizeProductsToElastic:async()=>{
+        const products=await productService.getAll();
+        await elasticSearchService.SynchronizeProductsToElastic(products);
+    },
 };
 
 export default productService;

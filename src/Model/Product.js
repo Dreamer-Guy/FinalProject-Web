@@ -27,7 +27,6 @@ const productSchema= new mongoose.Schema({
         default:0,
     },
     description: {type: String,default:"No description"},
-    status:{type:String,default:"On stock"},
     createdAt:{type:Date,default:Date.now},
 });
 
