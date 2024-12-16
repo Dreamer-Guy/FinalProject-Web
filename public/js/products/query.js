@@ -227,6 +227,33 @@ const addLastBtn=(paginationContainer,totalPages)=>{
         `);
 };
 
+const readQueryParams=()=>{
+    const queryParams=window.location.search;
+    const urlParams = new URLSearchParams(queryParams);
+    const categoryQuery=urlParams.get('category')||"";
+    const brandQuery=urlParams.get('brand')||"";
+    const categories=categoryQuery.split(',');
+    const brands=brandQuery.split(',');
+    console.log(categories,brands);
+    categories.forEach(category => {    
+        const checkbox = document.querySelector(`input[name='cat-${category}']`);
+        if (checkbox) {
+            setCategory(category);
+            checkbox.checked = true; 
+        }
+    });
+    brands.forEach(brand => {
+        const checkbox = document.querySelector(`input[name='brand-${brand}']`);
+        if (checkbox) {
+            setBrand(brand);
+            checkbox.checked = true; 
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    readQueryParams();
+});
 
 
 
