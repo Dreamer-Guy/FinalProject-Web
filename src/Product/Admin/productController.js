@@ -29,6 +29,26 @@ const getProductPage = async (req, res) => {
     }
 }
 
+const getProductsApi = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const rowPerPage = parseInt(req.query.rowPerPage) || ROW_PER_PAGE;
+        
+        const products = await productService.getProducts({});
+        const totalProducts = products.length;
+        
+        const paginatedProducts = products.slice((page-1)*rowPerPage, page*rowPerPage);
+        
+        return res.json({
+            products: paginatedProducts,
+            totalProducts,
+            currentPage: page
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
 const deleteProduct = async (req, res) => {
     try {
         const productId = req.params.id;
@@ -40,4 +60,4 @@ const deleteProduct = async (req, res) => {
     }
 };
 
-export { getProductPage, deleteProduct };
+export { getProductPage, getProductsApi, deleteProduct };

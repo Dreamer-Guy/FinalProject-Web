@@ -1,5 +1,5 @@
 import express from "express";
-import { getProductPage, deleteProduct } from "./productController.js";
+import { getProductPage, deleteProduct, getProductsApi } from "./productController.js";
 import isUserLoginAndRedirect from "../../middleWare/Authentication/isUserLoginAndRedirect.js";
 import isAdmin from "../../middleWare/Authorization/isAdmin.js";
 
@@ -8,6 +8,7 @@ adminProductRouter.use(isUserLoginAndRedirect);
 adminProductRouter.use(isAdmin);
 
 adminProductRouter.get("/", getProductPage);
+adminProductRouter.get("/api/get", getProductsApi);
 adminProductRouter.delete("/:id", deleteProduct);
 
 export default adminProductRouter;
