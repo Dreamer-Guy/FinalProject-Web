@@ -4,11 +4,20 @@ import mongoose from "mongoose";
 const productService = serviceFactory.getProductSerVice();
 const categoryService = serviceFactory.getCategoryService();
 const brandService = serviceFactory.getBrandService();
+const productPropertyService = serviceFactory.getProductPropertyService();
 const ROW_PER_PAGE = 10;
 
 const formatSortParam = (req) => {
     const sort = req.query.sort || "price-asc";
     const [sortField, sortOrder] = sort.split('-');
+    
+    if (sortField === 'price') {
+        return {
+            sortField: 'salePrice',
+            sortOrder: sortOrder === 'asc' ? 1 : -1
+        };
+    }
+    
     return {
         sortField,
         sortOrder: sortOrder === 'asc' ? 1 : -1
@@ -92,7 +101,6 @@ const getProductsApi = async (req, res) => {
 
         const totalProducts = products.length;
 
-        // Phân trang
         const paginatedProducts = products.slice(
             (page - 1) * rowPerPage,
             page * rowPerPage
@@ -130,4 +138,30 @@ const deleteProduct = async (req, res) => {
     }
 };
 
-export { getProductPage, getProductsApi, deleteProduct };
+const getProductDetail = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const product = await productService.getProductById(productId);
+        
+        if (!product) {
+            return res.redirect('/admin/products');
+        }
+        
+        const productProperties = await productPropertyService.getProductPropertiesByProductId(productId);
+        const categoryProperties = await productPropertyService.getPropertiesByCategoryId(product.category_id);
+
+        const user = req.user || null;
+        res.render('admin/productDetail', {
+            user,
+            product,
+            productProperties,
+            categoryProperties
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.redirect('/admin/products');
+    }
+};
+
+export { getProductPage, getProductsApi, deleteProduct, getProductDetail };

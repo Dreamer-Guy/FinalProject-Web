@@ -99,6 +99,8 @@ async function handleFilters(type, value) {
         
         products.forEach(product => {
             const tr = document.createElement('tr');
+            tr.className = 'cursor-pointer hover:bg-gray-50';
+            tr.onclick = () => handleProductClick(product._id);
             tr.innerHTML = `
                 <td class="px-4 py-4 whitespace-nowrap">
                     <img src="${product.image}" alt="${product.name}" class="h-12 w-12 object-cover rounded">
@@ -139,7 +141,8 @@ async function handleFilters(type, value) {
             productsContainer.appendChild(tr);
 
             const card = document.createElement('div');
-            card.className = 'bg-white p-4 rounded-lg shadow';
+            card.className = 'bg-white p-4 rounded-lg shadow cursor-pointer hover:bg-gray-50';
+            card.onclick = () => handleProductClick(product._id);
             card.innerHTML = `
                 <div class="flex flex-col sm:flex-row sm:items-center gap-3">
                     <div class="flex-shrink-0">
@@ -318,6 +321,14 @@ async function handleDeleteProduct() {
         console.log(error);
         showToast('Error deleting product','error');
     }
+}
+
+function handleEditProduct(productId) {
+    window.location.href = `/admin/products/${productId}`;
+}
+
+function handleProductClick(productId) {
+    window.location.href = `/admin/products/${productId}`;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
