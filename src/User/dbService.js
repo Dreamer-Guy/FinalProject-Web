@@ -42,6 +42,9 @@ const userService={
     getTopUsers:async(limit)=>{
         const users=await User.find().sort({totalOrder:-1}).limit(limit).lean();
         return users;
+    },
+    updateUserStatus:async(id,status)=>{
+        return User.updateOne({_id:id},{ $set: { status: status } })
     }
 }
 

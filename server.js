@@ -21,7 +21,7 @@ import stripePaymentRouter from "./src/Payment/Stripe/route.js";
 import adminDashBoardRouter from "./src/HomePage/Admin/dashboardRoute.js";
 import adminRevenueRouter from  "./src/Revenue/Admin/revenueRoute.js";
 import adminProductRouter from './src/Product/Admin/productRoute.js';
-
+import adminUserRouter from './src/Product/Admin/userRoute.js'
 const app = express();
 const PORT = process.env.PORT||3000;
 
@@ -67,6 +67,8 @@ app.use("/orders", orderRouter);
 app.use("/admin/dashboard", adminDashBoardRouter);
 app.use("/admin/revenue", adminRevenueRouter);
 app.use("/admin/products", adminProductRouter);
+app.use("/admin/users", adminUserRouter);
+
 app.use((req, res) => {
     res.status(404).render('notFound');
 }); 
