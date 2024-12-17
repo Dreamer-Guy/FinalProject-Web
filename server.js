@@ -13,6 +13,7 @@ import reviewRouter from './src/Review/Shop/route.js';
 import cartRouter from "./src/Cart/Shop/route.js";
 import orderRouter from './src/Order/Shop/route.js';
 import addressRouter from './src/Address/Shop/route.js';
+import adminCategoryRouter from './src/Category/categoryRoute.js';
 
 import paypalPaymentRouter from "./src/Payment/PayPal/route.js";
 import vnpayPaymentRouter from "./src/Payment/VNPay/route.js";
@@ -67,6 +68,7 @@ app.use("/orders", orderRouter);
 app.use("/admin/dashboard", adminDashBoardRouter);
 app.use("/admin/revenue", adminRevenueRouter);
 app.use("/admin/products", adminProductRouter);
+app.use("/admin/categories", adminCategoryRouter);
 app.use((req, res) => {
     res.status(404).render('notFound');
 }); 

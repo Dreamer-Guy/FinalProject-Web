@@ -164,4 +164,65 @@ const getProductDetail = async (req, res) => {
     }
 };
 
-export { getProductPage, getProductsApi, deleteProduct, getProductDetail };
+const getAddProductPage = async (req, res) => {
+    try {
+        const categories = await categoryService.getAll();
+        const brands = await brandService.getAll();
+        const user = req.user || null;
+        
+        res.render('admin/addProduct', {
+            user,
+            categories,
+            brands
+        });
+    } catch (error) {
+        console.error(error);
+        res.redirect('/admin/products');
+    }
+};
+
+const addProduct = async (req, res) => {
+    try {
+        const productData = req.body;
+        
+        if (!productData.name || !productData.price) {
+            return res.status(400).json({ message: 'Missing required fields' });
+        }
+
+        const newProduct = {
+            name: productData.name,
+            price: Number(productData.price),
+            salePrice: Number(productData.salePrice) || 0,
+            totalStock: Number(productData.totalStock) || 0,
+            image: productData.image,
+            description: productData.description,
+            category_id: productData.category_id,
+            brand_id: productData.brand_id,
+            rating: 0,
+            numReviews: 0,
+            status: 'On stock'
+        };
+
+        const savedProduct = await productService.create(newProduct);
+        
+        if (productData.properties) {
+            await productPropertyService.saveProductPropertiesorProduct(
+                Object.entries(productData.properties).map(([propertyId, value]) => ({
+                    product_id: savedProduct._id,
+                    property_id: propertyId,
+                    value: value
+                }))
+            );
+        }
+
+        res.status(201).json({ 
+            message: 'Product created successfully',
+            product: savedProduct 
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error creating product' });
+    }
+};
+
+export { getProductPage, getProductsApi, deleteProduct, getProductDetail, getAddProductPage, addProduct };

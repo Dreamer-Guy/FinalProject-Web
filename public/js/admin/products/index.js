@@ -127,11 +127,11 @@ async function handleFilters(type, value) {
                 </td>
                 <td class="px-4 py-4 whitespace-nowrap">
                     <div class="flex space-x-2">
-                        <button onclick="handleEditProduct('${product._id}')" 
+                        <button onclick="event.stopPropagation(); handleEditProduct('${product._id}')" 
                             class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button onclick="showDeleteDialog('${product._id}')"
+                        <button  onclick="event.stopPropagation(); showDeleteDialog('${product._id}')"
                             class="bg-red-500 text-white p-2 rounded hover:bg-red-600">
                             <i class="fas fa-trash"></i>
                         </button>
@@ -173,11 +173,11 @@ async function handleFilters(type, value) {
                             </div>
                         </div>
                         <div class="flex items-center gap-2 pt-2">
-                            <button onclick="handleEditProduct('${product._id}')" 
+                            <button onclick="event.stopPropagation(); handleEditProduct('${product._id}')" 
                                 class="flex-1 bg-blue-500 text-white py-2 px-3 rounded text-sm hover:bg-blue-600 transition-colors">
                                 <i class="fas fa-edit mr-1"></i> Edit
                             </button>
-                            <button onclick="showDeleteDialog('${product._id}')"
+                            <button onclick="event.stopPropagation(); showDeleteDialog('${product._id}')"
                                 class="flex-1 bg-red-500 text-white py-2 px-3 rounded text-sm hover:bg-red-600 transition-colors">
                                 <i class="fas fa-trash mr-1"></i> Delete
                             </button>
@@ -314,6 +314,7 @@ async function handleDeleteProduct() {
             }
             
             showToast('Product deleted successfully','success');
+            window.location.href = '/admin/products';
         } else {
             showToast(data.message || 'Error deleting product','error');
         }
