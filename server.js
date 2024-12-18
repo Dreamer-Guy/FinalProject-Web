@@ -13,7 +13,7 @@ import reviewRouter from './src/Review/Shop/route.js';
 import cartRouter from "./src/Cart/Shop/route.js";
 import orderRouter from './src/Order/Shop/route.js';
 import addressRouter from './src/Address/Shop/route.js';
-import adminCategoryRouter from './src/Category/categoryRoute.js';
+import adminCategoryRouter from './src/Category/Admin/categoryRoute.js';
 
 import paypalPaymentRouter from "./src/Payment/PayPal/route.js";
 import vnpayPaymentRouter from "./src/Payment/VNPay/route.js";

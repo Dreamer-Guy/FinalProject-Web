@@ -126,13 +126,13 @@ async function handleFilters(type, value) {
                     </span>
                 </td>
                 <td class="px-4 py-4 whitespace-nowrap">
-                    <div class="flex space-x-2">
+                    <div class="flex items-center gap-2">
                         <button onclick="event.stopPropagation(); handleEditProduct('${product._id}')" 
-                            class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+                            class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 flex items-center justify-center">
                             <i class="fas fa-edit"></i>
                         </button>
                         <button  onclick="event.stopPropagation(); showDeleteDialog('${product._id}')"
-                            class="bg-red-500 text-white p-2 rounded hover:bg-red-600">
+                            class="bg-red-500 text-white p-2 rounded hover:bg-red-600 flex items-center justify-center">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
@@ -147,10 +147,10 @@ async function handleFilters(type, value) {
                 <div class="flex flex-col sm:flex-row sm:items-center gap-3">
                     <div class="flex-shrink-0">
                         <img src="${product.image}" alt="${product.name}" 
-                            class="w-full sm:w-24 h-32 sm:h-24 object-cover rounded">
+                            class="w-full sm:w-24 h-auto sm:h-24 object-cover rounded">
                     </div>
                     <div class="flex-1 space-y-2">
-                        <h3 class="font-medium text-base sm:text-lg truncate">
+                        <h3 class="font-medium text-base sm:text-lg text-wrap">
                             ${product.name}
                         </h3>
                         <div class="flex items-center justify-between">
@@ -172,14 +172,16 @@ async function handleFilters(type, value) {
                                 </div>
                             </div>
                         </div>
-                        <div class="flex items-center gap-2 pt-2">
+                        <div class="flexflex-col sm:flex-row items-center gap-2 pt-2 max-w-[200px]">
                             <button onclick="event.stopPropagation(); handleEditProduct('${product._id}')" 
-                                class="flex-1 bg-blue-500 text-white py-2 px-3 rounded text-sm hover:bg-blue-600 transition-colors">
-                                <i class="fas fa-edit mr-1"></i> Edit
+                                class="flex-1 bg-blue-500 text-white py-2 px-3 mb-2 rounded text-sm hover:bg-blue-600 transition-colors gap-2">
+                                <i class="fas fa-edit mr-1"></i>
+                                <span>Edit</span>
                             </button>
                             <button onclick="event.stopPropagation(); showDeleteDialog('${product._id}')"
-                                class="flex-1 bg-red-500 text-white py-2 px-3 rounded text-sm hover:bg-red-600 transition-colors">
-                                <i class="fas fa-trash mr-1"></i> Delete
+                                class="flex-1 bg-red-500 text-white py-2 px-3 rounded text-sm hover:bg-red-600 transition-colors gap-2">
+                                <i class="fas fa-trash mr-1"></i>
+                                <span>Delete</span>
                             </button>
                         </div>
                     </div>

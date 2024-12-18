@@ -1310,6 +1310,10 @@ h1, h2, h3, h4, h5, h6 {
   width: 8rem;
 }
 
+.w-36 {
+  width: 9rem;
+}
+
 .w-4 {
   width: 1rem;
 }
@@ -1408,6 +1412,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .max-w-xs {
   max-width: 20rem;
+}
+
+.max-w-\[200px\] {
+  max-width: 200px;
 }
 
 .flex-1 {
@@ -1657,6 +1665,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .whitespace-nowrap {
   white-space: nowrap;
+}
+
+.text-wrap {
+  text-wrap: wrap;
 }
 
 .break-words {
@@ -2655,6 +2667,11 @@ h1, h2, h3, h4, h5, h6 {
   color: rgb(253 61 87 / var(--tw-text-opacity));
 }
 
+.hover\:text-red-700:hover {
+  --tw-text-opacity: 1;
+  color: rgb(185 28 28 / var(--tw-text-opacity));
+}
+
 .hover\:text-white:hover {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
@@ -2784,10 +2801,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (min-width: 640px) {
-  .sm\:col-span-2 {
-    grid-column: span 2 / span 2;
-  }
-
   .sm\:col-span-1 {
     grid-column: span 1 / span 1;
   }
@@ -2798,6 +2811,10 @@ h1, h2, h3, h4, h5, h6 {
 
   .sm\:ml-auto {
     margin-left: auto;
+  }
+
+  .sm\:hidden {
+    display: none;
   }
 
   .sm\:h-10 {
@@ -2830,6 +2847,10 @@ h1, h2, h3, h4, h5, h6 {
 
   .sm\:w-auto {
     width: auto;
+  }
+
+  .sm\:max-w-xs {
+    max-width: 20rem;
   }
 
   .sm\:flex-none {
