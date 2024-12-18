@@ -61,4 +61,58 @@ const getCategoryPage = async (req, res) => {
     }
 };
 
-export { getCategoryProperties, getCategories, getCategoryPage };
+const getAddCategoryPage = async (req, res) => {
+    try {
+        const user = req.user || null;
+        res.render('admin/addCategory', {
+            user,
+            activePage: 'categories'
+        });
+    } catch (error) {
+        console.error('Error in getAddCategoryPage:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+const addCategory = async (req, res) => {
+    try {
+        const { name, properties } = req.body;
+        
+        const existingCategory = await categoryService.findByName(name);
+        if (existingCategory) {
+            return res.status(400).json({ message: 'Category already exists' });
+        }
+
+        const newCategory = await categoryService.create({ name });
+        
+        if (properties && properties.length > 0) {
+            const propertyPromises = properties.map(propertyName => 
+                productPropertyService.createProductPropertyOfCategory({
+                    category_id: newCategory._id,
+                    name: propertyName
+                })
+            );
+            
+            const createdProperties = await Promise.all(propertyPromises);
+            await Promise.all(createdProperties.map(prop => 
+                productPropertyService.saveProductPropertyOfCategory(prop)
+            ));
+        }
+        
+        res.status(201).json({
+            message: 'Category created successfully',
+            category: newCategory
+        });
+    } catch (error) {
+        console.error('Error in addCategory:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+export { 
+    getCategoryProperties, 
+    getCategories, 
+    getCategoryPage,
+    getAddCategoryPage,
+    addCategory 
+};

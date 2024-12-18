@@ -15,6 +15,15 @@ const categoryService = {
             .skip(skip)
             .limit(limit)
             .lean();
+    },
+
+    create: async (categoryData) => {
+        const category = new Category(categoryData);
+        return await category.save();
+    },
+
+    findByName: async (name) => {
+        return await Category.findOne({ name }).lean();
     }
 };
 
