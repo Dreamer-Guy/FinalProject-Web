@@ -1,5 +1,7 @@
 import client from "../../Config/elasticSearch.js";
+import serviceFactory from "../../Factory/serviceFactory.js";
 
+const orderService=serviceFactory.getOrderService();
 const INDEX_NAME='products-suggester';
 const SUGGEST_FIELD_NAME='name';
 const SIZE_OF_SUGGESTIONS=3;
@@ -15,6 +17,18 @@ const getProductInforForIndexFromModel=(product)=>{
         salePrice:product.salePrice,
         image:product.image,
     }
+};
+
+const getProduct_WeightMap=(orders)=>{
+    const items=orders.flatMap((order)=>order.items);
+    return items.reduce((acc,item)=>{
+        if(acc[item.productId]){
+            acc[item.productId].weight+=item.quantity;
+        }else{
+            acc[item.productId]={weight:item.quantity};
+        }
+        return acc;
+    },{});
 };
 
 const suggesterService = {
@@ -140,6 +154,36 @@ const suggesterService = {
         });
         const res=await client.bulk({refresh:true,body});
         return res;
+    },
+
+    async SynchronizeAllOrders(orders){
+
+        const productInforsMap=getProduct_WeightMap(orders);
+        const updateCommand={
+            index:INDEX_NAME,
+            body:{
+                script:{
+                    source:`
+                    def inputsData=params.productInforsMap[ctx._id];
+                    if(ctx._source.containsKey('name') && ctx._source.name.containsKey('weight')){
+                        ctx._source.name.weight+=inputsData.weight;
+                    }else{
+                        ctx._source.name.weight=1;
+                    }
+                    `,
+                    lang:"painless",
+                    params:{
+                        productInforsMap
+                    }
+                },
+                query:{
+                    terms:{
+                        _id:Object.keys(productInforsMap)
+                    }
+                }
+            }
+        };
+        return await client.updateByQuery(updateCommand);
     },
 
 };
