@@ -1,6 +1,6 @@
 import mongoose, { mongo } from "mongoose";
 import Product from "../Model/Product.js";
-import elasticSearchService from "../UtilServices/ElasticSearchService/elasticSearchService.js";
+import elasticSearchService from "../UtilServices/ElasticSearchService/productService.js";
 
 const productService = {
     getAll:async()=>{
