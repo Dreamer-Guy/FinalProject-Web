@@ -1,7 +1,5 @@
 import client from "../../Config/elasticSearch.js";
-import serviceFactory from "../../Factory/serviceFactory.js";
 
-const orderService=serviceFactory.getOrderService();
 const INDEX_NAME='products-suggester';
 const SUGGEST_FIELD_NAME='name';
 const SIZE_OF_SUGGESTIONS=3;
