@@ -40,8 +40,7 @@ const getBrandPage = async (req, res) => {
     try {
         const user = req.user || null;
         res.render('admin/brand', {
-            user,
-            activePage: 'brands'
+            user
         });
     } catch (error) {
         console.error('Error in getBrandPage:', error);
@@ -51,4 +50,37 @@ const getBrandPage = async (req, res) => {
     }
 };
 
-export { getBrands, getBrandPage };
+const addBrand = async (req, res) => {
+    try {
+        const { name } = req.body;
+        
+        const existingBrand = await brandService.findByName(name);
+        if (existingBrand) {
+            return res.status(400).json({ message: 'Brand already exists' });
+        }
+
+        const newBrand = await brandService.create({ name });
+        
+        res.status(201).json({
+            message: 'Brand created successfully',
+            brand: newBrand
+        });
+    } catch (error) {
+        console.error('Error in addBrand:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+const getAddBrandPage = async (req, res) => {
+    try {
+        const user = req.user || null;
+        res.render('admin/addBrand', {
+            user
+        });
+    } catch (error) {
+        console.error('Error in getAddBrandPage:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+export { getBrands, getBrandPage, addBrand, getAddBrandPage };

@@ -1394,6 +1394,10 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 140px;
 }
 
+.max-w-\[200px\] {
+  max-width: 200px;
+}
+
 .max-w-\[250px\] {
   max-width: 250px;
 }
@@ -1412,10 +1416,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .max-w-xs {
   max-width: 20rem;
-}
-
-.max-w-\[200px\] {
-  max-width: 200px;
 }
 
 .flex-1 {
@@ -1469,10 +1469,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .cursor-pointer {
   cursor: pointer;
-}
-
-.cursor-not-allowed {
-  cursor: not-allowed;
 }
 
 .grid-cols-1 {
@@ -2671,11 +2667,6 @@ h1, h2, h3, h4, h5, h6 {
   color: rgb(253 61 87 / var(--tw-text-opacity));
 }
 
-.hover\:text-red-700:hover {
-  --tw-text-opacity: 1;
-  color: rgb(185 28 28 / var(--tw-text-opacity));
-}
-
 .hover\:text-white:hover {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
@@ -2817,10 +2808,6 @@ h1, h2, h3, h4, h5, h6 {
     margin-left: auto;
   }
 
-  .sm\:hidden {
-    display: none;
-  }
-
   .sm\:h-10 {
     height: 2.5rem;
   }
@@ -2851,10 +2838,6 @@ h1, h2, h3, h4, h5, h6 {
 
   .sm\:w-auto {
     width: auto;
-  }
-
-  .sm\:max-w-xs {
-    max-width: 20rem;
   }
 
   .sm\:flex-none {

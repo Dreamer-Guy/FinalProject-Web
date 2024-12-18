@@ -113,4 +113,11 @@ async function handleSort(value) {
     await updateTable();
 }
 
-document.addEventListener('DOMContentLoaded', updateTable);
+document.addEventListener('DOMContentLoaded', () => {
+    const tableBody = document.getElementById('brands-table-body');
+    if(tableBody) {
+        updateTable();
+    } else {
+        console.error('Could not find brands-table-body element');
+    }
+});
