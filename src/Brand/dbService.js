@@ -19,6 +19,19 @@ const brandService = {
     },
     countAll: async () => {
         return await Brand.countDocuments();
+    },
+    updateById: async (id, updateData) => {
+        return await Brand.findByIdAndUpdate(
+            id, 
+            updateData,
+            { new: true }
+        ).lean();
+    },
+    findByNameExcept: async (name, excludeId) => {
+        return await Brand.findOne({
+            name,
+            _id: { $ne: excludeId }
+        }).lean();
     }
 };
 

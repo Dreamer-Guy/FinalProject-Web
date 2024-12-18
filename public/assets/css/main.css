@@ -1222,6 +1222,10 @@ h1, h2, h3, h4, h5, h6 {
   max-height: 16rem;
 }
 
+.max-h-40 {
+  max-height: 10rem;
+}
+
 .min-h-screen {
   min-height: 100vh;
 }
@@ -2670,6 +2674,11 @@ h1, h2, h3, h4, h5, h6 {
 .hover\:text-white:hover {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.hover\:text-gray-700:hover {
+  --tw-text-opacity: 1;
+  color: rgb(55 65 81 / var(--tw-text-opacity));
 }
 
 .hover\:underline:hover {

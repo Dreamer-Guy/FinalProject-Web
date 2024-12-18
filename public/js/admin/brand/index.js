@@ -2,6 +2,54 @@ let currentPage = 1;
 let currentSort = 'createdAt-desc';
 const rowPerPage = 10;
 
+const editModal = document.getElementById('editBrandModal');
+const editForm = document.getElementById('editBrandForm');
+const editBrandId = document.getElementById('editBrandId');
+const editBrandName = document.getElementById('editBrandName');
+
+function openEditModal(brandId, currentName) {
+    editBrandId.value = brandId;
+    editBrandName.value = currentName;
+    editModal.classList.remove('hidden');
+    editModal.classList.add('flex');
+}
+
+function closeEditDialog() {
+    editModal.classList.remove('flex');
+    editModal.classList.add('hidden');
+    editForm.reset();
+}
+
+editForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const brandId = editBrandId.value;
+    const newName = editBrandName.value;
+    
+    try {
+        const response = await fetch(`/admin/brands/api/update/${brandId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name: newName })
+        });
+
+        const data = await response.json();
+        
+        if (response.ok) {
+            showToast('Brand updated successfully', 'success');
+            closeEditDialog();
+            await updateTable();
+        } else {
+            showToast(data.message || 'Error updating brand', 'error');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showToast('Error updating brand', 'error');
+    }
+});
+
 async function fetchBrands() {
     try {
         const response = await fetch(`/admin/brands/api/get?page=${currentPage}&rowPerPage=${rowPerPage}&sort=${currentSort}`);
@@ -33,7 +81,7 @@ function renderBrandsTable(brands) {
             <td class="px-4 py-3">
                 <div class="flex items-center space-x-2">
                     <button class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 flex items-center justify-center" 
-                            onclick="editBrand('${brand._id}')">
+                            onclick="openEditModal('${brand._id}', '${brand.name}')">
                         <i class="fas fa-edit"></i>
                     </button>
                     <button class="bg-red-500 text-white p-2 rounded hover:bg-red-600 flex items-center justify-center" 
@@ -120,4 +168,10 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         console.error('Could not find brands-table-body element');
     }
+
+    document.addEventListener('click', (e) => {
+        if (e.target === editModal) {
+            closeEditDialog();
+        }
+    });
 });

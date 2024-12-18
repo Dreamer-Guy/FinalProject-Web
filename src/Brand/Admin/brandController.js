@@ -83,4 +83,30 @@ const getAddBrandPage = async (req, res) => {
     }
 };
 
-export { getBrands, getBrandPage, addBrand, getAddBrandPage };
+const updateBrand = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name } = req.body;
+        
+        const existingBrand = await brandService.findByNameExcept(name, id);
+        if (existingBrand) {
+            return res.status(400).json({ message: 'Brand name already exists' });
+        }
+
+        const updatedBrand = await brandService.updateById(id, { name });
+        
+        if (!updatedBrand) {
+            return res.status(404).json({ message: 'Brand not found' });
+        }
+        
+        res.json({
+            message: 'Brand updated successfully',
+            brand: updatedBrand
+        });
+    } catch (error) {
+        console.error('Error in updateBrand:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+export { getBrands, getBrandPage, addBrand, getAddBrandPage, updateBrand };
