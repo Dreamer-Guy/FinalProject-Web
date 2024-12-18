@@ -77,7 +77,7 @@ function displayPagination(totalCategories) {
     if (filters.page > 1) {
         paginationHTML += `
             <button onclick="changePage(${filters.page - 1})" 
-                    class="px-3 py-1 rounded border hover:bg-gray-100">
+                    class="hover:cursor-pointer w-8 sm:w-10 h-8 sm:h-10 border text-center border-black px-2 rounded-lg">
                 <i class="fas fa-chevron-left"></i>
             </button>
         `;
@@ -86,14 +86,14 @@ function displayPagination(totalCategories) {
     for (let i = 1; i <= totalPages; i++) {
         if (i === filters.page) {
             paginationHTML += `
-                <button class="px-3 py-1 rounded bg-blue-500 text-white">
+                <button class="hover:cursor-pointer h-8 sm:h-10 w-8 sm:w-10 flex items-center justify-center rounded-lg border bg-blue-500 text-white border-gray-300 text-sm font-medium">
                     ${i}
                 </button>
             `;
         } else {
             paginationHTML += `
                 <button onclick="changePage(${i})" 
-                        class="px-3 py-1 rounded border hover:bg-gray-100">
+                        class="hover:cursor-pointer h-8 sm:h-10 w-8 sm:w-10 flex items-center justify-center rounded-lg border bg-white text-gray-700 border-gray-300 text-sm font-medium">
                     ${i}
                 </button>
             `;
@@ -103,7 +103,7 @@ function displayPagination(totalCategories) {
     if (filters.page < totalPages) {
         paginationHTML += `
             <button onclick="changePage(${filters.page + 1})" 
-                    class="px-3 py-1 rounded border hover:bg-gray-100">
+                    class="hover:cursor-pointer w-8 sm:w-10 h-8 sm:h-10 border text-center border-black px-2 rounded-lg">
                 <i class="fas fa-chevron-right"></i>
             </button>
         `;
