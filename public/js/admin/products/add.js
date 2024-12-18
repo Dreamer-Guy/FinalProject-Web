@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (properties && properties.length > 0) {
                 container.innerHTML = `
-                    <h4 class="text-lg text-gray-700 font-medium m-6">Category Properties</h4>
+                    <h4 class="text-lg text-gray-700 font-medium mb-4">Category Properties</h4>
                     ${properties.map(prop => `
                         <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-medium mb-2">${prop.name}</label>
