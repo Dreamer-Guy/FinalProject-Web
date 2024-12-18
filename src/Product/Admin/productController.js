@@ -1,5 +1,7 @@
 import serviceFactory from "../../Factory/serviceFactory.js";
 import mongoose from "mongoose";
+import uploadImage from "../../utils/uploadImage.js";
+import fs from "fs-extra";
 
 const productService = serviceFactory.getProductSerVice();
 const categoryService = serviceFactory.getCategoryService();
@@ -225,4 +227,25 @@ const addProduct = async (req, res) => {
     }
 };
 
-export { getProductPage, getProductsApi, deleteProduct, getProductDetail, getAddProductPage, addProduct };
+const uploadProductImage = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: "No file uploaded" });
+        }
+
+        const imageUrl = await uploadImage(req.file.path);
+        
+        await fs.unlink(req.file.path);
+
+        if (!imageUrl) {
+            return res.status(500).json({ message: "Failed to upload image" });
+        }
+
+        res.json({ imageUrl });
+    } catch (error) {
+        console.error("Upload error:", error);
+        res.status(500).json({ message: "Error uploading image" });
+    }
+};
+
+export { getProductPage, getProductsApi, deleteProduct, getProductDetail, getAddProductPage, addProduct, uploadProductImage };

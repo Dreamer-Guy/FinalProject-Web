@@ -104,31 +104,31 @@
         
         <form id="addProductForm" class="space-y-6 p-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-                <div>
+                <div class="col-span-2 sm:col-span-1">
                     <label class="block text-sm font-medium text-gray-700">Name</label>
                     <input type="text" name="name" required
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm px-4 py-2">
                 </div>
                 
-                <div>
+                <div class="col-span-2 sm:col-span-1">
                     <label class="block text-sm font-medium text-gray-700">Price</label>
                     <input type="number" name="price" required
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm px-4 py-2">
                 </div>
         
-                <div>
+                <div class="col-span-2 sm:col-span-1">
                     <label class="block text-sm font-medium text-gray-700">Sale Price</label>
                     <input type="number" name="salePrice"
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm px-4 py-2">
                 </div>
         
-                <div>
+                <div class="col-span-2 sm:col-span-1">
                     <label class="block text-sm font-medium text-gray-700">Stock</label>
                     <input type="number" name="totalStock" required
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm px-4 py-2">
                 </div>
         
-                <div>
+                <div class="col-span-2 sm:col-span-1">
                     <label class="block text-sm font-medium text-gray-700">Category</label>
                     <select name="category_id" id="categorySelect" required
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm px-4 py-2">
@@ -139,7 +139,7 @@
                     </select>
                 </div>
         
-                <div>
+                <div class="col-span-2 sm:col-span-1">
                     <label class="block text-sm font-medium text-gray-700">Brand</label>
                     <select name="brand_id" required
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm px-4 py-2">
@@ -151,9 +151,28 @@
                 </div>
         
                 <div class="col-span-2">
-                    <label class="block text-sm font-medium text-gray-700">Image URL</label>
-                    <input type="text" name="image" required
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm px-4 py-2">
+                    <label class="block text-sm font-medium text-gray-700">Product Image</label>
+                    <div class="mt-1 flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                        <div class="w-32 h-32 border-2 border-gray-300 border-dashed rounded-lg flex items-center justify-center">
+                            <img id="preview-image" src="" alt="" class="w-full h-full object-cover rounded-lg hidden">
+                            <span id="upload-icon" class="text-gray-400">
+                                <i class="fas fa-cloud-upload-alt text-3xl"></i>
+                            </span>
+                        </div>
+                        <div class="flex flex-col space-y-2 m-4">
+                            <input type="file" 
+                                   id="image-upload" 
+                                   name="image" 
+                                   accept="image/*"
+                                   class="hidden" 
+                                   required>
+                            <button type="button" 
+                                    onclick="document.getElementById('image-upload').click()"
+                                    class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200">
+                                Choose Image
+                            </button>
+                        </div>
+                    </div>
                 </div>
         
                 <div class="col-span-2">
@@ -197,5 +216,6 @@
     <script src="/js/admin/products/add.js"></script>
     <script src="/js/admin/common.js"></script>
     <script src="/js/common/toast.js"></script>
+    <script src="/js/admin/products/imageUpload.js"></script>
 </body>
 </html>

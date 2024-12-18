@@ -41,19 +41,29 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        const formData = new FormData(form);
-        const data = {};
-        formData.forEach((value, key) => {
-            if (key.startsWith('properties[')) {
-                if (!data.properties) data.properties = {};
-                const propId = key.match(/\[(.*?)\]/)[1];
-                data.properties[propId] = value;
-            } else {
-                data[key] = value;
-            }
-        });
-
         try {
+            const imageFile = document.getElementById('image-upload').files[0];
+            let imageUrl = '';
+            
+            if (imageFile) {
+                imageUrl = await handleImageUpload(imageFile);
+            }
+
+            const formData = new FormData(form);
+            const data = {};
+            
+            formData.forEach((value, key) => {
+                if (key.startsWith('properties[')) {
+                    if (!data.properties) data.properties = {};
+                    const propId = key.match(/\[(.*?)\]/)[1];
+                    data.properties[propId] = value;
+                } else if (key !== 'image') { 
+                    data[key] = value;
+                }
+            });
+
+            data.image = imageUrl;
+
             const response = await fetch('/admin/products/add', {
                 method: 'POST',
                 headers: {
