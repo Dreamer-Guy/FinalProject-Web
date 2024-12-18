@@ -4,7 +4,26 @@ let userIdToLock = null;
 let filters = {
     page: 1,
     rowPerPage: ROW_PER_PAGE,
+    sortFullName:null,
+    sortEmail:null,
+    sortCreatedAt:null
 };
+function handleSort(field){
+    const sortFields = ["sortFullName","sortEmail","sortCreatedAt"]
+    const otherSortFields = sortFields.filter(item => item !== field);
+        if (!filters[field]) {
+            filters[field] = 'asc';
+        } else if (filters[field] === 'asc') {
+            filters[field] = 'desc';
+        } else {
+            filters[field] = null;
+        }
+       otherSortFields.forEach(item => {
+        filters[item] = null;
+        updateSortIcons(`${field}Icon`, `${item}Icon`, filters[field]);
+       })
+    handleFilters('page', filters.page);
+}
 function setCurrentPage(page) {
     filters.page = page;
 }
@@ -15,9 +34,23 @@ async function handleFilters(type, value) {
     if(type === 'page') {
         setCurrentPage(Number(value));
     }
+    const searchQuery = document.getElementById('searchInput').value;
+
     const queryParams = new URLSearchParams();
     queryParams.append('page', filters.page);
     queryParams.append('rowPerPage', filters.rowPerPage);
+    if(searchQuery){
+        queryParams.append('search', searchQuery);
+    }
+    if(filters.sortFullName){
+        queryParams.append('sortFullName', filters.sortFullName);
+    }
+    if(filters.sortEmail){
+        queryParams.append('sortEmail', filters.sortEmail);
+    }
+    if(filters.sortCreatedAt){
+        queryParams.append('sortCreatedAt', filters.sortCreatedAt);
+    }
     try {
         const data = await fetch(`/admin/users/api/get?${queryParams}`)
             .then(response => response.json());  
@@ -29,15 +62,20 @@ async function handleFilters(type, value) {
         mobileContainer.innerHTML = '';
         users.forEach(user => {
             const tr = document.createElement('tr');
+            tr.onclick = () => showUserDetail(user._id);
+            tr.className="hover:bg-red-100 cursor-pointer"
             tr.innerHTML = `
-                <td class="px-4 py-4 whitespace-nowrap">
-                    <img src="${user.avatar}" alt="Avatar" class="h-12 w-12 object-cover rounded">
-                </td>
                 <td class="px-4 py-4 whitespace-nowrap">
                     ${user.fullName}
                 </td>
                 <td class="px-4 py-4 whitespace-nowrap">
                     ${user.userName}
+                </td>
+                <td class="px-4 py-4 whitespace-nowrap">
+                    ${user.email}
+                </td>
+                 <td class="px-4 py-4 whitespace-nowrap">
+                    ${formatDateTime(user.createdAt)}
                 </td>
                 <td class="px-4 py-4 whitespace-nowrap text-center">
                     ${user.role}
@@ -48,12 +86,12 @@ async function handleFilters(type, value) {
                 ${user.status==="active"?`
                 <td class="px-4 py-4 whitespace-nowrap">
                     <button onclick="showDialog('${user._id}')" 
-                            class="bg-red-500 text-white p-2 rounded hover:bg-blue-600">
+                            class="bg-red-500 text-white p-2 rounded hover:bg-red-600">
                            <i class="ri-indeterminate-circle-line"></i>
                     </button> 
                 </td>`:
                 `<td class="px-4 py-4 whitespace-nowrap">
-                    <button onclick="handleUnLockUser()" 
+                    <button onclick="unLockUser('${user._id}')" 
                             class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
                             <i class="ri-lock-unlock-line"></i>
                     </button> 
@@ -63,26 +101,48 @@ async function handleFilters(type, value) {
             `;
             usersContainer.appendChild(tr);
             const card = document.createElement('div');
-            card.className = 'bg-white p-4 rounded-lg shadow';
+            card.className = 'bg-white p-4 rounded-lg shadow hover:bg-red-100 cursor-pointer px-10';
+            card.onclick=()=>showUserDetail(user._id)
             card.innerHTML = `
-                <div class="flex flex-col sm:flex-row sm:items-center gap-3">
-                    <div class="flex-shrink-0">
-                        <img src="${user.avatar}" alt="${user.fullName}" 
-                            class="w-full sm:w-24 h-32 sm:h-24 object-cover rounded">
-                    </div>
-                    <div class="flex-1 space-y-2">
-                        <h3 class="font-medium text-base sm:text-lg truncate">
-                            ${user.fullName}
+                <div class="flex  sm:flex-row sm:items-center gap-3">
+                    <div class="flex-1  items-center space-y-2">
+                        <h3 class="font-bold text-base sm:text-lg truncate">
+                            FullName: ${user.fullName}
                         </h3>
-                        <div class="flex items-center justify-between">
-                            <div class="space-y-1">
-                                <div class="text-sm text-gray-500">
-                                    <span>Username: ${user.userName}</span>
-                                    <span class="mx-2">•</span>
-                                </div>
-                            </div>
-                        </div>
+                        <p>
+                          UserName: ${user.userName}
+                        </p>
+                         <p>
+                          Email: ${user.email}
+                        </p>
+                         <p>
+                          Created At: ${formatDateTime(user.createdAt)}
+                        </p>
+                         <p>
+                          Role: ${user.role}
+                        </p>
+                         <p>
+                          Status: ${user.status}
+                        </p>
+                         <div class="flex justify-center items-center">
+                    ${user.status==="active"?`
+                        <td class="px-4  py-4 whitespace-nowrap">
+                            <button onclick="showDialog('${user._id}')" 
+                                    class="w-full max-w-96  bg-red-500 text-white p-2 rounded hover:bg-blue-600">
+                                   <i class="ri-indeterminate-circle-line"></i>
+                            </button> 
+                        </td>`:
+                        `<td class="px-4 py-4 whitespace-nowrap">
+                            <button onclick="unLockUser('${user._id}')" 
+                                    class="w-full max-w-96  bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+                                    <i class="ri-lock-unlock-line"></i>
+                            </button> 
+                        </td>
+                        `
+                        }
                     </div>
+                    </div>
+                   
                 </div>
             `;
             mobileContainer.appendChild(card);
@@ -147,12 +207,92 @@ async function handleFilters(type, value) {
         console.log(e);
     }
 }
+async function showUserDetail(userId) {
+    try {
+        const response = await fetch(`/admin/users/api/detail/${userId}`);
+        const data = await response.json();
+        const user = data.user
+        if (response.ok) {
+            document.getElementById('detail-fullName').textContent = user.fullName;
+            document.getElementById('detail-userName').textContent = user.userName;
+            document.getElementById('detail-email').textContent = user.email;
+            document.getElementById('detail-role').textContent = user.role;
+            document.getElementById('detail-status').textContent = user.status;
+            document.getElementById('detail-createdAt').textContent = formatDateTime(user.createdAt);
+            document.getElementById('detail-totalOrders').textContent = data.totalOrder;
+            document.getElementById('detail-totalSpent').textContent =  data.totalSpent;
+            document.getElementById('detail-address').textContent = data.addressString
+            const modal = document.getElementById('userDetailModal');
+            modal.style.display = 'flex';
+        } else {
+            showToast(user.message || 'Error loading user details', 'error');
+        }
+    } catch (error) {
+        console.error(error);
+        showToast('Error loading user details', 'error');
+    }
+}
+
+function closeUserDetailModal() {
+    const modal = document.getElementById('userDetailModal');
+    modal.style.display = 'none';
+}
 function clearFilters() {
     filters = {
         page: 1,
         rowPerPage: ROW_PER_PAGE,
+        sortName:null,
+        sortEmail:null
     };
+    document.getElementById('sortNameIcon').className = 'fas fa-sort';
+    document.getElementById('sortEmailIcon').className = 'fas fa-sort';
+    document.getElementById('sortCreatedAtIcon').className = 'fas fa-sort';
     handleFilters();
+}
+function unLockUser(userId){
+    userIdToLock =userId
+    handleLockUser("active")
+    handleFilters('page', filters.page);
+    }
+    async function handleLockUser(status) {
+        if (!userIdToLock) return;
+    
+        try {
+            const response = await fetch(`/admin/users/api/lock/${userIdToLock}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+                ,
+                 body: JSON.stringify({status:status}),
+            });
+            
+            const data = await response.json();
+    
+            if (response.ok) {
+                closeDialog();
+                handleFilters('page', filters.page);
+                
+                showToast('User locked successfully','success');
+            } else {
+                showToast(data.message || 'Error lock user','error');
+            }
+        } catch (error) {
+            console.log(error);
+            showToast('Error locking product','error');
+        }
+    }
+function updateSortIcons(activeIconId, inactiveIconId, sortDirection) {
+    const activeIcon = document.getElementById(activeIconId);
+    const inactiveIcon = document.getElementById(inactiveIconId);
+    inactiveIcon.className = 'fas fa-sort';
+    if (sortDirection === 'asc') {
+        activeIcon.className = 'fas fa-sort-up';    
+    } else if (sortDirection === 'desc') {
+        activeIcon.className = 'fas fa-sort-down';  
+    } else {
+        activeIcon.className = 'fas fa-sort';
+    }
 }
 function showDialog(userId) {
     userIdToLock = userId;
@@ -166,39 +306,30 @@ function closeDialog() {
     userIdToLock = null;
 }
 
-async function handleLockUser(status) {
-    if (!userIdToLock) return;
 
-    try {
-        const response = await fetch(`/admin/users/api/lock/${userIdToLock}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-            ,
-             body: JSON.stringify({status:status}),
-        });
-        
-        const data = await response.json();
-
-        if (response.ok) {
-            closeDialog();
-            handleFilters('page', filters.page);
-            
-            showToast('User locked successfully','success');
-        } else {
-            showToast(data.message || 'Error lock user','error');
-        }
-    } catch (error) {
-        console.log(error);
-        showToast('Error locking product','error');
-    }
+function formatDateTime(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleString('vi-VN', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     const confirmLockBtn = document.getElementById('confirmLockBtn');
     if (confirmLockBtn) {
-        confirmLockBtn.addEventListener('click', handleLockUser("lock"));
+        confirmLockBtn.addEventListener('click', () => handleLockUser("locked"));
+    }
+    const searchButton = document.getElementById('searchButton');
+    if(searchButton){
+        searchButton.addEventListener('click', () => handleFilters('page', filters.page));
+    }
+    const searchInput = document.getElementById('searchInput');
+    if(searchInput){
+        searchInput.addEventListener('input', () => handleFilters('page', filters.page));
     }
     handleFilters('page', DEFAULT_PAGE);
 });

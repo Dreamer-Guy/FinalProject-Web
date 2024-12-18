@@ -24,6 +24,9 @@ const googleStrategyConfig = new GoogleStrategy({
         }
         if(await userService.isUserExistByUserName(profile.emails[0].value+profile.id)){
             const user=await userService.getUserByUserName(profile.emails[0].value+profile.id);
+            if (user.status === "locked") {
+                return cb(null, null);
+            }
             return cb(null, user);
         };
         try {
