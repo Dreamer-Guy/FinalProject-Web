@@ -1,5 +1,5 @@
 
-import client from "../Config/elasticSearch.js";
+import client from "../../Config/elasticSearch.js";
 
 const PRODUCT_INDEX_NAME="products";
 

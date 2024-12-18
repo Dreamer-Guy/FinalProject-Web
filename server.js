@@ -21,7 +21,7 @@ import stripePaymentRouter from "./src/Payment/Stripe/route.js";
 import adminDashBoardRouter from "./src/HomePage/Admin/dashboardRoute.js";
 import adminRevenueRouter from  "./src/Revenue/Admin/revenueRoute.js";
 
-import elasticSearchService from './src/UtilServices/elasticSearchService.js';
+import suggesterService from './src/UtilServices/ElasticSearchService/suggesterService.js';
 
 const app = express();
 const PORT = process.env.PORT||3000;
