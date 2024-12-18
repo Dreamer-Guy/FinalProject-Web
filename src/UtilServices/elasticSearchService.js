@@ -54,6 +54,7 @@ const elasticSearchService={
                     multi_match:{
                         query:searchTerm,
                         fields:FIELDS_TO_SEARCH,
+                        fuzziness:"AUTO",
                     }
                 },
                 {
@@ -61,7 +62,10 @@ const elasticSearchService={
                         path:"brand_id",
                         query:{
                             match:{
-                                "brand_id.name":searchTerm
+                                "brand_id.name":{
+                                    query:searchTerm,
+                                    fuzziness:"AUTO"
+                                }
                             }
                         }
                     }
@@ -71,7 +75,10 @@ const elasticSearchService={
                         path:"category_id",
                         query:{
                             match:{
-                                "category_id.name":searchTerm
+                                "category_id.name":{
+                                    query:searchTerm,
+                                    fuzziness:"AUTO"
+                                }
                             }
                         }
                     }
