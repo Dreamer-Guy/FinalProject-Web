@@ -1,19 +1,21 @@
 function addPropertyField() {
     const propertiesList = document.getElementById('propertiesList');
     const propertyDiv = document.createElement('div');
-    propertyDiv.className = 'flex items-center space-x-2 mb-2';
+    propertyDiv.className = 'flex flex-wrap items-center gap-2 mb-2';
     
     const propertyCount = propertiesList.children.length;
     
     propertyDiv.innerHTML = `
-        <input type="text" 
-               name="properties[${propertyCount}]"
-               class="flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-               placeholder="Property name"
-               required>
+        <div class="flex-1 min-w-[200px]">
+            <input type="text" 
+                   name="properties[${propertyCount}]"
+                   class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+                   placeholder="Property name"
+                   required>
+        </div>
         <button type="button" 
                 onclick="this.parentElement.remove()"
-                class="px-2 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+                class="shrink-0 w-8 h-8 flex items-center justify-center bg-red-500 text-white rounded-lg hover:bg-red-600">
             <i class="fas fa-trash"></i>
         </button>
     `;
