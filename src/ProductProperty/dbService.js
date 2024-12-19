@@ -59,6 +59,19 @@ const productPropteryService={
         const updatedProductDetails=await ProductPropertyValue.find({product_id:id}).populate('property_id').lean();
         return updatedProductDetails;
     },
+
+    updateById: async (id, updateData) => {
+        return await ProductProperty.findByIdAndUpdate(
+            id,
+            updateData,
+            { new: true, runValidators: true }
+        ).lean();
+    },
+
+    deleteById: async (id) => {
+        await productPropteryService.deleteDetailsByPropertyId(id);
+        return await ProductProperty.findByIdAndDelete(id);
+    },
 };
 
 export default productPropteryService;

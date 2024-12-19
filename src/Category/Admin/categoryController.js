@@ -109,10 +109,80 @@ const addCategory = async (req, res) => {
     }
 };
 
+const getCategoryDetail = async (req, res) => {
+    try {
+        const category = await categoryService.findById(req.params.id);
+        if (!category) {
+            return res.status(404).json({ message: 'Category not found' });
+        }
+
+        const properties = await productPropertyService.getPropertiesByCategoryId(category._id);
+        
+        res.render('admin/categoryDetail', {
+            category,
+            properties,
+            user: req.user
+        });
+    } catch (error) {
+        console.error('Error in getCategoryDetail:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+const updateCategory = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, properties } = req.body;
+
+        const propertyNames = properties.map(prop => prop.name);
+        const hasDuplicates = propertyNames.some((name, index) => propertyNames.indexOf(name) !== index);
+        if (hasDuplicates) {
+            return res.status(400).json({ message: 'Duplicate properties are not allowed' });
+        }
+
+        const updatedCategory = await categoryService.updateById(id, { name });
+        
+        const propertyPromises = properties.map(prop => {
+            if (!prop.id) {
+                return productPropertyService.createProductPropertyOfCategory({
+                    category_id: id,
+                    name: prop.name
+                }).then(prop => productPropertyService.saveProductPropertyOfCategory(prop));
+            } else {
+                return productPropertyService.updateById(prop.id, { name: prop.name });
+            }
+        });
+
+        await Promise.all(propertyPromises);
+
+        res.json({
+            message: 'Category updated successfully',
+            category: updatedCategory
+        });
+    } catch (error) {
+        console.error('Error in updateCategory:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+const deleteProperty = async (req, res) => {
+    try {
+        const { id } = req.params;
+        await productPropertyService.deleteById(id);
+        res.json({ message: 'Property deleted successfully' });
+    } catch (error) {
+        console.error('Error in deleteProperty:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
 export { 
     getCategoryProperties, 
     getCategories, 
     getCategoryPage,
     getAddCategoryPage,
-    addCategory 
+    addCategory,
+    getCategoryDetail,
+    updateCategory,
+    deleteProperty 
 };

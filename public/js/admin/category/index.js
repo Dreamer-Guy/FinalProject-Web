@@ -47,7 +47,12 @@ function displayCategories(categories) {
         
         const row = `
             <tr class="border-b hover:bg-gray-50">
-                <td class="px-4 py-3 text-sm">${category.name}</td>
+                <td class="px-4 py-3 text-sm">
+                    <a href="/admin/categories/${category._id}" 
+                       class="text-blue-500 hover:text-blue-700">
+                        ${category.name}
+                    </a>
+                </td>
                 <td class="px-4 py-3 text-sm">${createdAt}</td>
                 <td class="px-4 py-3 text-sm">
                     <div class="flex  space-x-2">

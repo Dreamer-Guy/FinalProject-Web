@@ -1,5 +1,5 @@
 import express from "express";
-import { getCategoryProperties, getCategories, getCategoryPage, addCategory, getAddCategoryPage } from "./categoryController.js";
+import { getCategoryProperties, getCategories, getCategoryPage, addCategory, getAddCategoryPage, getCategoryDetail, updateCategory, deleteProperty } from "./categoryController.js";
 import isUserLoginAndRedirect from "../../middleWare/Authentication/isUserLoginAndRedirect.js";
 import isAdmin from "../../middleWare/Authorization/isAdmin.js";
 
@@ -12,5 +12,8 @@ adminCategoryRouter.get("/api/get", getCategories);
 adminCategoryRouter.get("/:categoryId/properties", getCategoryProperties);
 adminCategoryRouter.get("/add", getAddCategoryPage);
 adminCategoryRouter.post("/api/add", addCategory);
+adminCategoryRouter.get("/:id", getCategoryDetail);
+adminCategoryRouter.put("/:id", updateCategory);
+adminCategoryRouter.delete("/properties/:id", deleteProperty);
 
 export default adminCategoryRouter;
