@@ -9,6 +9,9 @@ const ROW_PER_PAGE = 10;
 const getAllUsers =async(req,res)=>{
 try{
 const user = req.user||null
+if(!user){
+    return res.redirect("/login")
+}
 res.render('admin/users')
 }
 catch(e){

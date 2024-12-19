@@ -284,14 +284,20 @@ function unLockUser(userId){
     }
 function updateSortIcons(activeIconId, inactiveIconId, sortDirection) {
     const activeIcon = document.getElementById(activeIconId);
+    const activeIconMobile = document.getElementById(activeIconId+"Mobile");
     const inactiveIcon = document.getElementById(inactiveIconId);
+    const inactiveIconMobile = document.getElementById(inactiveIconId+"Mobile");
     inactiveIcon.className = 'fas fa-sort';
+    inactiveIconMobile.className = 'fas fa-sort';
     if (sortDirection === 'asc') {
         activeIcon.className = 'fas fa-sort-up';    
+        activeIconMobile.className = 'fas fa-sort-up';
     } else if (sortDirection === 'desc') {
         activeIcon.className = 'fas fa-sort-down';  
+        activeIconMobile.className = 'fas fa-sort-down';
     } else {
         activeIcon.className = 'fas fa-sort';
+        activeIconMobile.className = 'fas fa-sort';
     }
 }
 function showDialog(userId) {

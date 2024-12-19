@@ -30,6 +30,29 @@ const orderService={
         const orders=await Order.find().lean();
         return orders;
     },
+    getOrdersPopulate:async(page=1,rowPerPage=10)=>{
+        const skip=(page-1)*rowPerPage
+        const orders=await Order.find()
+        .populate("userId")
+        .skip(skip)
+        .limit(rowPerPage)
+        .lean();
+        const totalOrders=await Order.countDocuments();
+        const ordersPopulate = orders.map(order => ({
+            _id: order._id,
+            user: order.userId.fullName,
+            productQuantity: order.items.length,
+            totalPrice: order.total,
+            status: order.status,
+            checkoutStatus: order.checkoutStatus,
+            createdAt: order.createdAt,
+        }));
+
+        return {
+            orders: ordersPopulate,
+            totalOrders
+        };
+    },
     updatePaidOrderById:async(id)=>{
         const order=await Order.findByIdAndUpdate(id,{checkoutStatus:"paid"},{new:true}).lean();
         return order;
@@ -41,6 +64,29 @@ const orderService={
             }
         }).lean();
         return orders;
+    },
+    getOrdersByStatus:async(status,page=1,rowPerPage=10)=>{
+        const skip=(page-1)*rowPerPage
+        const orders=await Order.find({status:status})
+        .populate("userId")
+        .skip(skip)
+        .limit(rowPerPage)
+        .lean()
+        const totalOrders=await Order.countDocuments({status:status})
+        const ordersPoupulate = orders.map(order => ({
+            _id: order._id,
+            user: order.userId.fullName,
+            productQuantity: order.items.length,
+            totalPrice: order.total,
+            status: order.status,
+            checkoutStatus: order.checkoutStatus,
+            createdAt: order.createdAt,
+        }));
+           
+        return{
+            orders:ordersPoupulate,
+            totalOrders
+        } 
     },
     fullfillOrdersByIds:async(ids)=>{
         await ids.forEach(async(id)=>{
