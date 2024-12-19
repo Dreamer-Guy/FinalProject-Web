@@ -294,7 +294,8 @@ const updateProduct = async (req, res) => {
             image: productData.image,
             description: productData.description,
             category_id: productData.category_id,
-            brand_id: productData.brand_id
+            brand_id: productData.brand_id,
+            status: productData.status
         };
 
         await productService.updateByProductId(productId, updatedProduct);

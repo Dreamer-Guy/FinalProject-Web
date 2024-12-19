@@ -119,7 +119,11 @@ async function handleFilters(type, value) {
                     ${product.totalStock}
                 </td>
                 <td class="px-4 py-4 whitespace-nowrap text-center">
-                    
+                    <span class="${getStatusColorClass(product.status)} px-2 py-1 rounded-full text-xs">
+                        ${product.status}
+                    </span>
+                </td>
+                <td class="px-4 py-4 whitespace-nowrap text-center">
                     <span>
                         ${product.rating.toFixed(1)}
                         <i class="fa fa-star text-yellow-300"></i>
@@ -162,8 +166,12 @@ async function handleFilters(type, value) {
                                         `<span class="font-medium">$${product.price}</span>`
                                     }
                                 </div>
-                                <div class="text-sm text-gray-500">
+                                <div class="flex flex-wrap text-sm text-gray-500">
                                     <span>Stock: ${product.totalStock}</span>
+                                    <span class="mx-2">•</span>
+                                    <span class="${getStatusColorClass(product.status)} px-2 py-1 rounded-full text-xs">
+                                        ${product.status}
+                                    </span>
                                     <span class="mx-2">•</span>
                                     <span>
                                         Rating: ${product.rating.toFixed(1)}
@@ -172,14 +180,14 @@ async function handleFilters(type, value) {
                                 </div>
                             </div>
                         </div>
-                        <div class="flexflex-col sm:flex-row items-center gap-2 pt-2 max-w-[200px]">
+                        <div class="flex flex-wrap items-center gap-2 pt-2 max-w-[200px]">
                             <button onclick="event.stopPropagation(); handleEditProduct('${product._id}')" 
                                 class="flex-1 bg-blue-500 text-white py-2 px-3 mb-2 rounded text-sm hover:bg-blue-600 transition-colors gap-2">
                                 <i class="fas fa-edit mr-1"></i>
                                 <span>Edit</span>
                             </button>
                             <button onclick="event.stopPropagation(); showDeleteDialog('${product._id}')"
-                                class="flex-1 bg-red-500 text-white py-2 px-3 rounded text-sm hover:bg-red-600 transition-colors gap-2">
+                                class="flex-1 bg-red-500 text-white py-2 px-3 mb-2 rounded text-sm hover:bg-red-600 transition-colors gap-2">
                                 <i class="fas fa-trash mr-1"></i>
                                 <span>Delete</span>
                             </button>
@@ -342,3 +350,16 @@ document.addEventListener('DOMContentLoaded', () => {
     
     handleFilters('page', DEFAULT_PAGE);
 });
+
+function getStatusColorClass(status) {
+    switch(status) {
+        case 'On stock':
+            return 'bg-green-100 text-green-800';
+        case 'Out of stock':
+            return 'bg-red-100 text-red-800';
+        case 'Suspended':
+            return 'bg-yellow-100 text-gray-800';
+        default:
+            return 'bg-gray-100 text-gray-800';
+    }
+}

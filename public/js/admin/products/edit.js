@@ -2,7 +2,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('editProductForm');
     const categorySelect = document.getElementById('categorySelect');
     const container = document.getElementById('categoryProperties');
+    const previewImage = document.getElementById('preview-image');
+    const uploadIcon = document.getElementById('upload-icon');
+    const removeImageBtn = document.getElementById('remove-image');
+    const currentImageInput = document.getElementById('current-image');
+    const imageUploadInput = document.getElementById('image-upload');
     
+    let isImageRemoved = false;
+    
+    removeImageBtn.addEventListener('click', () => {
+        previewImage.src = '';
+        previewImage.classList.add('hidden');
+        uploadIcon.classList.remove('hidden');
+        currentImageInput.value = '';
+        imageUploadInput.value = '';
+        isImageRemoved = true;
+    });
+
+    imageUploadInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            previewImage.src = URL.createObjectURL(file);
+            previewImage.classList.remove('hidden');
+            uploadIcon.classList.add('hidden');
+            isImageRemoved = false;
+        }
+    });
+
     const clearProperties = () => {
         container.innerHTML = '';
     };
@@ -42,27 +68,40 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         
         try {
-            const imageFile = document.getElementById('image-upload').files[0];
-            let imageUrl = document.getElementById('preview-image').src;
+            const imageFile = imageUploadInput.files[0];
+            let imageUrl = null;
             
             if (imageFile) {
                 imageUrl = await handleImageUpload(imageFile);
+            } else if (currentImageInput.value && !isImageRemoved) {
+                imageUrl = currentImageInput.value;
             }
 
             const formData = new FormData(form);
-            const data = {};
+            const data = {
+                name: formData.get('name'),
+                price: Number(formData.get('price')),
+                salePrice: Number(formData.get('salePrice')) || 0,
+                totalStock: Number(formData.get('totalStock')) || 0,
+                description: formData.get('description'),
+                category_id: formData.get('category_id'),
+                brand_id: formData.get('brand_id'),
+                status: formData.get('status'),
+            };
             
             formData.forEach((value, key) => {
                 if (key.startsWith('properties[')) {
                     if (!data.properties) data.properties = {};
                     const propId = key.match(/\[(.*?)\]/)[1];
                     data.properties[propId] = value;
-                } else if (key !== 'image') { 
-                    data[key] = value;
                 }
             });
 
-            data.image = imageUrl;
+            if (imageUrl) {
+                data.image = imageUrl;
+            } else if (isImageRemoved) {
+                data.image = null;
+            }
 
             const productId = window.location.pathname.split('/').pop();
             const response = await fetch(`/admin/products/api/update/${productId}`, {

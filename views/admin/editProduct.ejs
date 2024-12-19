@@ -162,6 +162,16 @@
                 </div>
         
                 <div class="col-span-2 sm:col-span-1">
+                    <label class="block text-sm font-medium text-gray-700">Status</label>
+                    <select name="status" required
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm px-4 py-2">
+                        <option value="On stock" <%= product.status === 'On stock' ? 'selected' : '' %>>On Stock</option>
+                        <option value="Out of stock" <%= product.status === 'Out of stock' ? 'selected' : '' %>>Out of Stock</option>
+                        <option value="Suspended" <%= product.status === 'Suspended' ? 'selected' : '' %>>Suspended</option>
+                    </select>
+                </div>
+        
+                <div class="col-span-2 sm:col-span-1">
                     <label class="block text-sm font-medium text-gray-700">Category</label>
                     <select name="category_id" id="categorySelect" required
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm px-4 py-2">
@@ -204,10 +214,16 @@
                                    name="image" 
                                    accept="image/*"
                                    class="hidden">
+                            <input type="hidden" id="current-image" name="currentImage" value="<%= product.image %>">
                             <button type="button" 
                                     onclick="document.getElementById('image-upload').click()"
                                     class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200">
                                 Change Image
+                            </button>
+                            <button type="button" 
+                                    id="remove-image"
+                                    class="px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200">
+                                Remove Image
                             </button>
                         </div>
                     </div>
