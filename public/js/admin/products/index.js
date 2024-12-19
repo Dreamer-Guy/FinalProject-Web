@@ -327,7 +327,7 @@ async function handleDeleteProduct() {
 }
 
 function handleEditProduct(productId) {
-    window.location.href = `/admin/products/${productId}`;
+    window.location.href = `/admin/products/edit/${productId}`;
 }
 
 function handleProductClick(productId) {

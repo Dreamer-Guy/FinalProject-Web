@@ -248,4 +248,74 @@ const uploadProductImage = async (req, res) => {
     }
 };
 
-export { getProductPage, getProductsApi, deleteProduct, getProductDetail, getAddProductPage, addProduct, uploadProductImage };
+const getEditProductPage = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const product = await productService.getProductById(productId);
+        
+        if (!product) {
+            return res.redirect('/admin/products');
+        }
+        
+        const categories = await categoryService.getAll();
+        const brands = await brandService.getAll();
+        const productProperties = await productPropertyService.getProductPropertiesByProductId(productId);
+        const categoryProperties = await productPropertyService.getPropertiesByCategoryId(product.category_id);
+
+        const user = req.user || null;
+        res.render('admin/editProduct', {
+            user,
+            product,
+            categories,
+            brands,
+            productProperties,
+            categoryProperties
+        });
+    } catch (error) {
+        console.error(error);
+        res.redirect('/admin/products');
+    }
+};
+
+const updateProduct = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const productData = req.body;
+        
+        if (!productData.name || !productData.price) {
+            return res.status(400).json({ message: 'Missing required fields' });
+        }
+
+        const updatedProduct = {
+            name: productData.name,
+            price: Number(productData.price),
+            salePrice: Number(productData.salePrice) || 0,
+            totalStock: Number(productData.totalStock) || 0,
+            image: productData.image,
+            description: productData.description,
+            category_id: productData.category_id,
+            brand_id: productData.brand_id
+        };
+
+        await productService.updateByProductId(productId, updatedProduct);
+        
+        if (productData.properties) {
+            await productPropertyService.updateProductProperTiesByProductId(
+                productId,
+                Object.entries(productData.properties).map(([propertyId, value]) => ({
+                    property_id: propertyId,
+                    value: value
+                }))
+            );
+        }
+
+        res.status(200).json({ 
+            message: 'Product updated successfully'
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error updating product' });
+    }
+};
+
+export { getProductPage, getProductsApi, deleteProduct, getProductDetail, getAddProductPage, addProduct, uploadProductImage, getEditProductPage, updateProduct };
