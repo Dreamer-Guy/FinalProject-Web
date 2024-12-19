@@ -36,7 +36,7 @@
                         before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">All category</a>
                     </li> 
                     <li class="mb-4">
-                        <a href="/admin/products/add" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        <a href="/admin/categories/add" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
                         before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Add category</a>
                     </li>
                 </ul>
@@ -206,18 +206,9 @@
                             <div class="flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-4">
                                 <div class="w-full sm:w-1/4 font-semibold">Properties</div>
                                 <div class="w-full sm:w-3/4">
-                                    <% 
-                                    const availableProperties = categoryProperties.filter(property => {
-                                        const productProperty = productProperties.find(
-                                            pp => pp.property_id._id.toString() === property._id.toString()
-                                        );
-                                        return productProperty && productProperty.value;
-                                    });
-                                    %>
-                                    
-                                    <% if (availableProperties.length > 0) { %>
+                                    <% if (categoryProperties.length > 0) { %>
                                         <div class="space-y-2">
-                                            <% availableProperties.forEach(property => { %>
+                                            <% categoryProperties.forEach(property => { %>
                                                 <div class="text-gray-600">
                                                     <span class="font-bold"><%= property.name %>:</span>
                                                     <% 
@@ -225,12 +216,12 @@
                                                         pp => pp.property_id._id.toString() === property._id.toString()
                                                     );
                                                     %>
-                                                    <%= productProperty.value %>
+                                                    <%= productProperty && productProperty.value ? productProperty.value : 'Not Available' %>
                                                 </div>
                                             <% }); %>
                                         </div>
                                     <% } else { %>
-                                        <p class="text-gray-500">Not Available</p>
+                                        <p class="text-gray-500">No properties defined</p>
                                     <% } %>
                                 </div>
                             </div>
