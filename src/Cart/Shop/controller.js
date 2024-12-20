@@ -74,8 +74,8 @@ const addCartItem=async(req,res)=>{
         };
         const {productId,quantity}=req.body;
         const product=await productService.getProductById(productId);
-        if(!product){
-            return res.status(BAD_REQUEST_STATUS).json({message:"Invalid product id"});
+        if(!product || product.isDeleted){
+            return res.status(BAD_REQUEST_STATUS).json({message:"Product not available"});
         };
         if(product.totalStock<quantity){
             return res.status(BAD_REQUEST_STATUS).json({message:"Not enough stock"});

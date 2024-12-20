@@ -952,6 +952,10 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0px;
 }
 
+.m-4 {
+  margin: 1rem;
+}
+
 .mx-1 {
   margin-left: 0.25rem;
   margin-right: 0.25rem;
@@ -1207,12 +1211,21 @@ h1, h2, h3, h4, h5, h6 {
   height: 60px;
 }
 
+.h-auto {
+  height: auto;
+}
+
 .h-full {
   height: 100%;
 }
 
 .h-screen {
   height: 100vh;
+}
+
+
+.max-h-40 {
+  max-height: 10rem;
 }
 
 .max-h-48 {
@@ -1327,6 +1340,10 @@ h1, h2, h3, h4, h5, h6 {
   width: 8rem;
 }
 
+.w-36 {
+  width: 9rem;
+}
+
 .w-4 {
   width: 1rem;
 }
@@ -1399,6 +1416,10 @@ h1, h2, h3, h4, h5, h6 {
   min-width: 2.5rem;
 }
 
+.min-w-\[200px\] {
+  min-width: 200px;
+}
+
 .min-w-\[540px\] {
   min-width: 540px;
 }
@@ -1413,6 +1434,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .max-w-\[140px\] {
   max-width: 140px;
+}
+
+.max-w-\[200px\] {
+  max-width: 200px;
 }
 
 .max-w-\[250px\] {
@@ -1440,6 +1465,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .flex-shrink-0 {
+  flex-shrink: 0;
+}
+
+.shrink-0 {
   flex-shrink: 0;
 }
 
@@ -1682,6 +1711,11 @@ h1, h2, h3, h4, h5, h6 {
 
 .whitespace-nowrap {
   white-space: nowrap;
+}
+
+
+.text-wrap {
+  text-wrap: wrap;
 }
 
 .break-words {
@@ -1986,6 +2020,11 @@ h1, h2, h3, h4, h5, h6 {
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.bg-yellow-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 249 195 / var(--tw-bg-opacity));
 }
 
 .bg-yellow-200 {
@@ -2417,6 +2456,11 @@ h1, h2, h3, h4, h5, h6 {
   color: rgb(22 163 74 / var(--tw-text-opacity));
 }
 
+.text-green-800 {
+  --tw-text-opacity: 1;
+  color: rgb(22 101 52 / var(--tw-text-opacity));
+}
+
 .text-primary {
   --tw-text-opacity: 1;
   color: rgb(253 61 87 / var(--tw-text-opacity));
@@ -2435,6 +2479,11 @@ h1, h2, h3, h4, h5, h6 {
 .text-red-700 {
   --tw-text-opacity: 1;
   color: rgb(185 28 28 / var(--tw-text-opacity));
+}
+
+.text-red-800 {
+  --tw-text-opacity: 1;
+  color: rgb(153 27 27 / var(--tw-text-opacity));
 }
 
 .text-rose-500 {
@@ -2655,6 +2704,15 @@ h1, h2, h3, h4, h5, h6 {
   background-color: rgb(3 7 18 / var(--tw-bg-opacity));
 }
 
+.hover\:bg-green-600:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(22 163 74 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-red-200:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 202 202 / var(--tw-bg-opacity));}
+
 .hover\:bg-red-100:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(254 226 226 / var(--tw-bg-opacity));
@@ -2858,6 +2916,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (min-width: 640px) {
+
+  .sm\:col-span-1 {
+    grid-column: span 1 / span 1;
+  }
   .sm\:mb-0 {
     margin-bottom: 0px;
   }
@@ -2874,6 +2936,14 @@ h1, h2, h3, h4, h5, h6 {
     height: 6rem;
   }
 
+
+  .sm\:h-96 {
+    height: 24rem;
+  }
+
+  .sm\:w-1\/4 {
+    width: 25%;
+  }
   .sm\:w-10 {
     width: 2.5rem;
   }
@@ -2882,21 +2952,69 @@ h1, h2, h3, h4, h5, h6 {
     width: 6rem;
   }
 
+  .sm\:w-3\/4 {
+    width: 75%;
+  }
+
   .sm\:w-auto {
     width: auto;
   }
+
+  .sm\:flex-none {
+    flex: none;
+  }
+
 
   .sm\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+
+  .sm\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+
+
   .sm\:flex-row {
     flex-direction: row;
   }
 
+
+  .sm\:items-start {
+    align-items: flex-start;
+  }
+
+
   .sm\:items-center {
     align-items: center;
   }
+
+
+  .sm\:justify-end {
+    justify-content: flex-end;
+  }
+
+  .sm\:gap-4 {
+    gap: 1rem;
+  }
+
+  .sm\:gap-6 {
+    gap: 1.5rem;
+  }
+
+  .sm\:space-x-4 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-x-reverse: 0;
+    margin-right: calc(1rem * var(--tw-space-x-reverse));
+    margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
+  }
+
+  .sm\:space-y-0 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(0px * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(0px * var(--tw-space-y-reverse));
+  }
+
 
   .sm\:p-4 {
     padding: 1rem;
@@ -2917,6 +3035,10 @@ h1, h2, h3, h4, h5, h6 {
     padding-bottom: 1.5rem;
   }
 
+  .sm\:text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
   .sm\:text-lg {
     font-size: 1.125rem;
     line-height: 1.75rem;
@@ -3046,6 +3168,11 @@ h1, h2, h3, h4, h5, h6 {
 
   .lg\:grid-cols-3 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+
+  .lg\:gap-6 {
+    gap: 1.5rem;
   }
 
   .lg\:grid-cols-4 {

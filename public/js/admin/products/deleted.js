@@ -1,25 +1,15 @@
 const DEFAULT_PAGE = 1;
 const ROW_PER_PAGE = 10;
 
-let productIdToDelete = null;
-
 let filters = {
     page: 1,
     rowPerPage: ROW_PER_PAGE,
-    sort: 'price-asc',
+    sort: 'createdAt-desc',
     categories: [],
     brands: [],
     minPrice: '',
     maxPrice: '',
 };
-
-function setSort(value) {
-    filters.sort = value;
-}
-
-function setCurrentPage(page) {
-    filters.page = page;
-}
 
 function handleCategoryChange(checkbox) {
     if (checkbox.checked) {
@@ -47,16 +37,10 @@ async function handleFilters(type, value) {
     }
     
     if(type === 'page') {
-        setCurrentPage(Number(value));
+        filters.page = Number(value);
     }
     if(type === 'sort') {
-        setSort(value);
-    }
-    if(type === 'category') {
-        filters.category = value;
-    }
-    if(type === 'brand') {
-        filters.brand = value;
+        filters.sort = value;
     }
     if(type === 'minPrice') {
         filters.minPrice = value;
@@ -65,10 +49,9 @@ async function handleFilters(type, value) {
         filters.maxPrice = value;
     }
     
-    
     const queryParams = new URLSearchParams();
     queryParams.append('page', filters.page);
-    queryParams.append('rowPerPage', filters.rowPerPage);
+    queryParams.append('limit', filters.rowPerPage);
     queryParams.append('sort', filters.sort);
     
     if (filters.categories.length > 0) {
@@ -83,24 +66,37 @@ async function handleFilters(type, value) {
     if (filters.maxPrice) {
         queryParams.append('maxPrice', filters.maxPrice);
     }
-    
+
     try {
-        const data = await fetch(`/admin/products/api/get?${queryParams}`)
+        const data = await fetch(`/admin/products/api/deleted?${queryParams}`)
             .then(response => response.json());
             
+        if (!data || !data.products) {
+            console.error('Invalid data received:', data);
+            showToast('Error loading products', 'error');
+            return;
+        }
+
         const products = data.products;
         const totalProducts = data.totalProducts;
 
         const productsContainer = document.querySelector('tbody');
+        if (!productsContainer) {
+            console.error('Products container not found');
+            return;
+        }
         productsContainer.innerHTML = '';
 
         const mobileContainer = document.getElementById('mobile-container');
+        if (!mobileContainer) {
+            console.error('Mobile container not found');
+            return;
+        }
         mobileContainer.innerHTML = '';
         
         products.forEach(product => {
             const tr = document.createElement('tr');
             tr.className = 'cursor-pointer hover:bg-gray-50';
-            tr.onclick = () => handleProductClick(product._id);
             tr.innerHTML = `
                 <td class="px-4 py-4 whitespace-nowrap">
                     <img src="${product.image}" alt="${product.name}" class="h-12 w-12 object-cover rounded">
@@ -123,30 +119,17 @@ async function handleFilters(type, value) {
                         ${product.status}
                     </span>
                 </td>
-                <td class="px-4 py-4 whitespace-nowrap text-center">
-                    <span>
-                        ${product.rating.toFixed(1)}
-                        <i class="fa fa-star text-yellow-300"></i>
-                    </span>
-                </td>
-                <td class="px-4 py-4 whitespace-nowrap">
-                    <div class="flex items-center gap-2">
-                        <button onclick="event.stopPropagation(); handleEditProduct('${product._id}')" 
-                            class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 flex items-center justify-center">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button  onclick="event.stopPropagation(); showDeleteDialog('${product._id}')"
-                            class="bg-red-500 text-white p-2 rounded hover:bg-red-600 flex items-center justify-center">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
+                <td class="flex justify-center px-4 py-4 whitespace-nowrap text-center">
+                    <button onclick="handleRestore('${product._id}')"
+                        class="bg-green-500 text-white p-2 rounded hover:bg-green-600 flex items-center justify-center">
+                        <i class="fas fa-undo"></i>
+                    </button>
                 </td>
             `;
             productsContainer.appendChild(tr);
 
             const card = document.createElement('div');
             card.className = 'bg-white p-4 rounded-lg shadow cursor-pointer hover:bg-gray-50';
-            card.onclick = () => handleProductClick(product._id);
             card.innerHTML = `
                 <div class="flex flex-col sm:flex-row sm:items-center gap-3">
                     <div class="flex-shrink-0">
@@ -172,24 +155,14 @@ async function handleFilters(type, value) {
                                     <span class="${getStatusColorClass(product.status)} px-2 py-1 rounded-full text-xs">
                                         ${product.status}
                                     </span>
-                                    <span class="mx-2">•</span>
-                                    <span>
-                                        Rating: ${product.rating.toFixed(1)}
-                                        <i class="fa fa-star text-yellow-300"></i>
-                                    </span>
                                 </div>
                             </div>
                         </div>
-                        <div class="flex flex-wrap items-center gap-2 pt-2 max-w-[200px]">
-                            <button onclick="event.stopPropagation(); handleEditProduct('${product._id}')" 
-                                class="flex-1 bg-blue-500 text-white py-2 px-3 mb-2 rounded text-sm hover:bg-blue-600 transition-colors gap-2">
-                                <i class="fas fa-edit mr-1"></i>
-                                <span>Edit</span>
-                            </button>
-                            <button onclick="event.stopPropagation(); showDeleteDialog('${product._id}')"
-                                class="flex-1 bg-red-500 text-white py-2 px-3 mb-2 rounded text-sm hover:bg-red-600 transition-colors gap-2">
-                                <i class="fas fa-trash mr-1"></i>
-                                <span>Delete</span>
+                        <div class="flex flex-wrap items-center gap-2 pt-2">
+                            <button onclick="handleRestore('${product._id}')" 
+                                class="flex-1 bg-green-500 text-white py-2 px-3 rounded text-sm hover:bg-green-600 transition-colors gap-2">
+                                <i class="fas fa-undo mr-1"></i>
+                                <span>Restore</span>
                             </button>
                         </div>
                     </div>
@@ -262,7 +235,8 @@ async function handleFilters(type, value) {
         }
 
     } catch(e) {
-        console.log(e);
+        console.error('Error:', e);
+        showToast('Error loading products', 'error');
     }
 }
 
@@ -270,7 +244,7 @@ function clearFilters() {
     filters = {
         page: 1,
         rowPerPage: ROW_PER_PAGE,
-        sort: 'price-asc',
+        sort: 'createdAt-desc',
         categories: [],
         brands: [],
         minPrice: '',
@@ -287,70 +261,6 @@ function clearFilters() {
     handleFilters();
 }
 
-// Delete
-function showDeleteDialog(productId) {
-    productIdToDelete = productId;
-    const dialog = document.getElementById('deleteDialog');
-    dialog.style.display = 'flex';
-}
-
-function closeDeleteDialog() {
-    const dialog = document.getElementById('deleteDialog');
-    dialog.style.display = 'none';
-    productIdToDelete = null;
-}
-
-async function handleDeleteProduct() {
-    if (!productIdToDelete) return;
-
-    try {
-        const response = await fetch(`/admin/products/api/delete/${productIdToDelete}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        
-        const data = await response.json();
-
-        if (response.ok) {
-            closeDeleteDialog();
-            handleFilters('page', filters.page);
-            
-            const totalProductsElement = document.querySelector('#total-products');
-            if (totalProductsElement) {
-                const currentTotal = parseInt(totalProductsElement.textContent.split(': ')[1]);
-                totalProductsElement.textContent = `Total products: ${currentTotal - 1}`;
-            }
-            
-            showToast('Product deleted successfully','success');
-            window.location.href = '/admin/products';
-        } else {
-            showToast(data.message || 'Error deleting product','error');
-        }
-    } catch (error) {
-        console.log(error);
-        showToast('Error deleting product','error');
-    }
-}
-
-function handleEditProduct(productId) {
-    window.location.href = `/admin/products/edit/${productId}`;
-}
-
-function handleProductClick(productId) {
-    window.location.href = `/admin/products/${productId}`;
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-    if (confirmDeleteBtn) {
-        confirmDeleteBtn.addEventListener('click', handleDeleteProduct);
-    }
-    
-    handleFilters('page', DEFAULT_PAGE);
-});
-
 function getStatusColorClass(status) {
     switch(status) {
         case 'On stock':
@@ -363,3 +273,29 @@ function getStatusColorClass(status) {
             return 'bg-gray-100 text-gray-800';
     }
 }
+
+async function handleRestore(productId) {
+    try {
+        const response = await fetch(`/admin/products/api/restore/${productId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            showToast('Product restored successfully', 'success');
+            handleFilters();
+        } else {
+            const error = await response.json();
+            showToast(error.message, 'error');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showToast('Error restoring product', 'error');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    handleFilters('page', DEFAULT_PAGE);
+});
