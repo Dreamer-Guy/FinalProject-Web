@@ -9,6 +9,9 @@ const localStrategy = new Strategy(async (username, password, done) => {
         if (!user) {
             return done(null, false, { message: 'User not found' });
         }
+        if (user.status === 'locked') {
+            return done(null, false, { message: 'Account is locked. Please contact support.' });
+        }
         const isMatch = await comparePlainAndHashed(password, user.password);
         if (!isMatch) {
             return done(null, false, { message: 'Invalid password' });
