@@ -1223,7 +1223,6 @@ h1, h2, h3, h4, h5, h6 {
   height: 100vh;
 }
 
-
 .max-h-40 {
   max-height: 10rem;
 }
@@ -1712,7 +1711,6 @@ h1, h2, h3, h4, h5, h6 {
 .whitespace-nowrap {
   white-space: nowrap;
 }
-
 
 .text-wrap {
   text-wrap: wrap;
@@ -2694,11 +2692,6 @@ h1, h2, h3, h4, h5, h6 {
   background-color: rgb(249 250 251 / var(--tw-bg-opacity));
 }
 
-.hover\:bg-gray-900:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(17 24 39 / var(--tw-bg-opacity));
-}
-
 .hover\:bg-gray-950:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(3 7 18 / var(--tw-bg-opacity));
@@ -2709,13 +2702,14 @@ h1, h2, h3, h4, h5, h6 {
   background-color: rgb(22 163 74 / var(--tw-bg-opacity));
 }
 
-.hover\:bg-red-200:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(254 202 202 / var(--tw-bg-opacity));}
-
 .hover\:bg-red-100:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(254 226 226 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-red-200:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 202 202 / var(--tw-bg-opacity));
 }
 
 .hover\:bg-red-600:hover {
@@ -2916,10 +2910,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (min-width: 640px) {
-
   .sm\:col-span-1 {
     grid-column: span 1 / span 1;
   }
+
   .sm\:mb-0 {
     margin-bottom: 0px;
   }
@@ -2936,7 +2930,6 @@ h1, h2, h3, h4, h5, h6 {
     height: 6rem;
   }
 
-
   .sm\:h-96 {
     height: 24rem;
   }
@@ -2944,6 +2937,7 @@ h1, h2, h3, h4, h5, h6 {
   .sm\:w-1\/4 {
     width: 25%;
   }
+
   .sm\:w-10 {
     width: 2.5rem;
   }
@@ -2964,32 +2958,21 @@ h1, h2, h3, h4, h5, h6 {
     flex: none;
   }
 
-
   .sm\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
-
-  .sm\:grid-cols-4 {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-
 
   .sm\:flex-row {
     flex-direction: row;
   }
 
-
   .sm\:items-start {
     align-items: flex-start;
   }
 
-
   .sm\:items-center {
     align-items: center;
   }
-
 
   .sm\:justify-end {
     justify-content: flex-end;
@@ -3015,7 +2998,6 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: calc(0px * var(--tw-space-y-reverse));
   }
 
-
   .sm\:p-4 {
     padding: 1rem;
   }
@@ -3039,6 +3021,7 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 1.5rem;
     line-height: 2rem;
   }
+
   .sm\:text-lg {
     font-size: 1.125rem;
     line-height: 1.75rem;
@@ -3170,13 +3153,8 @@ h1, h2, h3, h4, h5, h6 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-
   .lg\:gap-6 {
     gap: 1.5rem;
-  }
-
-  .lg\:grid-cols-4 {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
