@@ -1,34 +1,27 @@
 import mongoose from "mongoose";
 
-const productSchema= new mongoose.Schema({
+const productSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    price: { type: Number, required: true },
+    salePrice: { type: Number, default: 0 },
+    totalStock: { type: Number, default: 0 },
+    image: { type: String },
+    description: { type: String },
+    status: { type: String, default: 'On stock' },
+    rating: { type: Number, default: 0 },
+    totalRating: { type: Number, default: 0 },
     category_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category',
-        required: true,
-    },
-    name: {type: String, required: true},
-    price: {type: Number, required: true},
-    salePrice:{
-        type:Number,
+        required: true
     },
     brand_id: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId, 
         ref: 'Brand',
-        required: true,
+        required: true
     },
-    totalStock:{type: Number,required:true},
-    image:String,
-    rating:{
-        type:Number,
-        default:0,
-    },
-    numReviews:{
-        type:Number,
-        default:0,
-    },
-    description: {type: String,default:"No description"},
-    status:{type:String,default:"On stock"},
-    createdAt:{type:Date,default:Date.now},
+    isDeleted: { type: Boolean, default: false },
+    createdAt: { type: Date, default: Date.now }
 });
 
 //exptected receit an arr

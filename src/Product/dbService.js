@@ -4,8 +4,10 @@ import Product from "../Model/Product.js";
 
 const productService = {
     getAll:async()=>{
-        const products=await Product.find().lean();
-        return products;
+        return await Product.find({ isDeleted: false })
+            .populate('category_id')
+            .populate('brand_id')
+            .lean();
     },
     create: async (productProps) => {
         const productRes =await Product.create(productProps);
@@ -20,7 +22,7 @@ const productService = {
         return product !== null;
     },
     getProducts: async ({ brands, categories, sortField='price', sortOrder=1,minPrice=0,priceRange }) => {
-        const products = await Product.find()
+        const products = await Product.find({ isDeleted: false })
             .byCategory(categories)
             .byBrand(brands)
             .byPrice(priceRange)
@@ -31,8 +33,10 @@ const productService = {
     },
     
     getProductById: async (productId) => {
-        const product = await Product.findById(productId).populate('brand_id').populate('category_id').lean();
-        return product;
+        return await Product.findOne({ _id: productId, isDeleted: false })
+            .populate('category_id')
+            .populate('brand_id')
+            .lean();
     },
 
     updateByProductId: async (productId, productProps) => {
@@ -70,6 +74,7 @@ const productService = {
             {
                 $match: {
                     $and: [
+                        { isDeleted: false },
                         {
                             $or: [
                                 {
@@ -124,6 +129,7 @@ const productService = {
                 {
                     $match:{
                         $and: [
+                            { isDeleted: false },
                             {
                                 $or:[
                                     { 'category.name': { $regex: searchTerm, $options: 'i' } },
@@ -148,11 +154,12 @@ const productService = {
     },
 
     getTopProducts: async (top) => {
-        const products = await Product.find().sort({ rating: -1 }).limit(top);
+        const products = await Product.find({ isDeleted: false })
+            .sort({ rating: -1 })
+            .limit(top);
         return products;
     },
 
-    //allow users concurrently make orders even out of stock, then let admin decided choose which orders to fulfill
     updateQuantityAfterMakingOrder: async (order) => {
         order.items.forEach(async (item) => {
             const product = await Product.findById(item.productId);
@@ -165,6 +172,49 @@ const productService = {
         product.rating=(product.rating*product.numReviews+rating)/(product.numReviews+1);
         product.numReviews=product.numReviews+1;
         await product.save();
+    },
+    softDelete: async (id) => {
+        return await Product.findByIdAndUpdate(
+            id,
+            { isDeleted: true },
+            { new: true }
+        ).lean();
+    },
+    getPaginated: async ({ skip = 0, limit = 10, sort = {}, filter = {} }) => {
+        const baseFilter = { isDeleted: false, ...filter };
+        return await Product.find(baseFilter)
+            .populate('category_id')
+            .populate('brand_id')
+            .sort(sort)
+            .skip(skip)
+            .limit(limit)
+            .lean();
+    },
+    countAll: async (filter = {}) => {
+        const baseFilter = { isDeleted: false, ...filter };
+        return await Product.countDocuments(baseFilter);
+    },
+    getDeletedProducts: async ({ brands, categories, sortField='price', sortOrder=1, priceRange }) => {
+        const products = await Product.find({ isDeleted: true })
+            .byCategory(categories)
+            .byBrand(brands)
+            .byPrice(priceRange)
+            .sort({ [sortField]: sortOrder })
+            .lean();
+        return products.filter(product => product.category_id && product.brand_id);
+    },
+
+    countDeletedProducts: async (filter = {}) => {
+        const baseFilter = { isDeleted: true, ...filter };
+        return await Product.countDocuments(baseFilter);
+    },
+
+    restoreProduct: async (productId) => {
+        return await Product.findByIdAndUpdate(
+            productId,
+            { isDeleted: false },
+            { new: true }
+        ).lean();
     }
 };
 

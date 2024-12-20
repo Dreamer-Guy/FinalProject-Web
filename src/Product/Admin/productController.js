@@ -125,18 +125,16 @@ const deleteProduct = async (req, res) => {
     try {
         const productId = req.params.id;
         
-        const product = await productService.getProductById(productId);
-        if (!product) {
-            return res.status(404).json({ 
-                message: 'Product not found' 
-            });
-        }
+        await productService.softDelete(productId);
         
-        await productService.deleteByProductId(productId);
-        res.status(200).json({ message: 'Product deleted successfully' });
+        res.json({ 
+            message: 'Product deleted successfully'
+        });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error deleting product' });
+        console.error('Error in deleteProduct:', error);
+        res.status(500).json({ 
+            message: 'Error deleting product'
+        });
     }
 };
 
@@ -319,4 +317,74 @@ const updateProduct = async (req, res) => {
     }
 };
 
-export { getProductPage, getProductsApi, deleteProduct, getProductDetail, getAddProductPage, addProduct, uploadProductImage, getEditProductPage, updateProduct };
+const restoreProduct = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        await productService.restoreProduct(productId);
+        
+        res.json({ 
+            message: 'Product restored successfully'
+        });
+    } catch (error) {
+        console.error('Error in restoreProduct:', error);
+        res.status(500).json({ 
+            message: 'Error restoring product'
+        });
+    }
+};
+
+const getDeletedProductsPage = async (req, res) => {
+    try {
+        const user = req.user || null;
+        const categories = await categoryService.getAll();
+        const brands = await brandService.getAll();
+        
+        res.render('admin/deletedProducts', {
+            user,
+            categories,
+            brands
+        });
+    } catch (error) {
+        console.error('Error in getDeletedProductsPage:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+const getDeletedProductsApi = async (req, res) => {
+    try {
+        const queryParams = getQueryParams(req);
+        const { 
+            brands, categories, sortField, 
+            sortOrder, page, rowPerPage, priceRange 
+        } = queryParams;
+
+        let products = await productService.getDeletedProducts({ 
+            brands, 
+            categories, 
+            sortField, 
+            sortOrder,
+            priceRange 
+        });
+
+        const totalProducts = products.length;
+
+        // Phân trang sau khi đã filter
+        const paginatedProducts = products.slice(
+            (page - 1) * rowPerPage,
+            page * rowPerPage
+        );
+
+        res.json({
+            products: paginatedProducts,
+            totalProducts,
+            currentPage: page
+        });
+    } catch (error) {
+        console.error('Error in getDeletedProductsApi:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+
+
+export { getProductPage, getProductsApi, deleteProduct, getProductDetail, getAddProductPage, addProduct, uploadProductImage, getEditProductPage, updateProduct, restoreProduct, getDeletedProductsPage, getDeletedProductsApi };
