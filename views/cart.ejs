@@ -306,6 +306,7 @@
         <!-- cart -->
         <div class="w-full md:w-3/4 flex flex-col gap-5">
             <% cart.items.forEach((item,index)=>{ %>
+                <% if(item.productId && !item.productId.isDeleted){ %>
                 <div
                     onclick="window.location.href='/productDetails/get/<%=item.productId._id%>'" 
                     class="hover:cursor-pointer w-full flex flex-col md:flex-row items-center justify-between border gap-3 md:gap-6 p-4 border-gray-200 rounded">
@@ -348,6 +349,9 @@
                         </div>
                     </div>
                 </div>
+                <% } else { %>
+                    <div class="text-red-500">Product not available</div>
+                <% } %>
             <% }); %>
 
             <div class="col-span-4 border border-gray-200 p-4 rounded bg-gray-200">
