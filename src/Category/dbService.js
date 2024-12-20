@@ -13,18 +13,15 @@ const categoryService = {
     softDelete: async (id) => {
         const defaultCategory = await Category.findOne({ name: 'Other' });
         if (!defaultCategory) {
-            // Tạo category Other nếu chưa tồn tại
             const otherCategory = new Category({ name: 'Other' });
             await otherCategory.save();
         }
 
-        // Cập nhật category_id của các sản phẩm
         await Product.updateMany(
             { category_id: id },
             { category_id: defaultCategory._id }
         );
 
-        // Soft delete category
         return await Category.findByIdAndUpdate(
             id,
             { 

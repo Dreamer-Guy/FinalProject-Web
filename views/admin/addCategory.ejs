@@ -155,18 +155,24 @@
                                 Properties
                             </label>
                             <div id="propertiesList">
-                                <!-- Properties will be added here dynamically -->
+                                
                             </div>
                             <button type="button" 
                                     onclick="addPropertyField()"
                                     class="mt-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
-                                + Add Property
+                                Add Property
                             </button>
                         </div>
-                         <button type="submit" 
-                                class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-                            Add Category
-                        </button>
+                        <div class="flex flex-wrap sm:items-center justify-center sm:justify-end space-x-2">
+                            <a href="/admin/categories" 
+                            class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 mb-2">
+                                Cancel
+                            </a>
+                            <button type="submit" 
+                                    class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 mb-2">
+                                Add Category
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
