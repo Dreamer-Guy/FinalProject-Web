@@ -7,6 +7,8 @@ let filters = {
     sort: 'createdAt-desc'
 };
 
+let categoryIdToDelete = null;
+
 async function loadCategories() {
     try {
         const queryParams = new URLSearchParams();
@@ -55,15 +57,19 @@ function displayCategories(categories) {
                 </td>
                 <td class="px-4 py-3 text-sm">${createdAt}</td>
                 <td class="px-4 py-3 text-sm">
-                    <div class="flex  space-x-2">
-                        <button onclick="editCategory('${category._id}')" 
-                                class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 flex items-center justify-center">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button onclick="deleteCategory('${category._id}')"
-                                class="bg-red-500 text-white p-2 rounded hover:bg-red-600 flex items-center justify-center">
-                            <i class="fas fa-trash"></i>
-                        </button>
+                    <div class="flex space-x-2">
+                        ${category.name !== 'Other' ? `
+                            <button onclick="window.location.href='/admin/categories/${category._id}'" 
+                                    class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 flex items-center justify-center">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        ` : ''}
+                        ${category.name !== 'Other' ? `
+                            <button onclick="showDeleteDialog('${category._id}')"
+                                    class="bg-red-500 text-white p-2 rounded hover:bg-red-600 flex items-center justify-center">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        ` : ''}
                     </div>
                 </td>
             </tr>
@@ -123,6 +129,44 @@ function changePage(page) {
     loadCategories();
 }
 
+function showDeleteDialog(categoryId) {
+    categoryIdToDelete = categoryId;
+    const dialog = document.getElementById('deleteDialog');
+    dialog.style.display = 'flex';
+}
+
+function closeDeleteDialog() {
+    const dialog = document.getElementById('deleteDialog');
+    dialog.style.display = 'none';
+    categoryIdToDelete = null;
+}
+
+async function handleDeleteCategory() {
+    if (!categoryIdToDelete) return;
+
+    try {
+        const response = await fetch(`/admin/categories/${categoryIdToDelete}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const data = await response.json();
+
+        if (response.ok) {
+            closeDeleteDialog();
+            loadCategories();
+            showToast('Category deleted successfully', 'success');
+        } else {
+            showToast(data.message || 'Error deleting category', 'error');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showToast('Error deleting category', 'error');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const sortSelect = document.getElementById('sortSelect');
     if (sortSelect) {
@@ -130,4 +174,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     loadCategories();
+
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    if (confirmDeleteBtn) {
+        confirmDeleteBtn.addEventListener('click', handleDeleteCategory);
+    }
 });

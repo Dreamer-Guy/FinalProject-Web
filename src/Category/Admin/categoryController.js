@@ -176,6 +176,50 @@ const deleteProperty = async (req, res) => {
     }
 };
 
+const deleteCategory = async (req, res) => {
+    try {
+        const { id } = req.params;
+        await categoryService.softDelete(id);
+        
+        res.json({ 
+            message: 'Category deleted successfully'
+        });
+    } catch (error) {
+        console.error('Error in deleteCategory:', error);
+        res.status(500).json({ 
+            message: 'Error deleting category'
+        });
+    }
+};
+
+const getDeletedCategories = async (req, res) => {
+    try {
+        const deletedCategories = await categoryService.getDeletedCategories();
+        res.json(deletedCategories);
+    } catch (error) {
+        console.error('Error in getDeletedCategories:', error);
+        res.status(500).json({ 
+            message: 'Error getting deleted categories'
+        });
+    }
+};
+
+const restoreCategory = async (req, res) => {
+    try {
+        const { id } = req.params;
+        await categoryService.restore(id);
+        
+        res.json({ 
+            message: 'Category restored successfully'
+        });
+    } catch (error) {
+        console.error('Error in restoreCategory:', error);
+        res.status(500).json({ 
+            message: 'Error restoring category'
+        });
+    }
+};
+
 export { 
     getCategoryProperties, 
     getCategories, 
@@ -184,5 +228,8 @@ export {
     addCategory,
     getCategoryDetail,
     updateCategory,
-    deleteProperty 
+    deleteProperty,
+    deleteCategory,
+    getDeletedCategories,
+    restoreCategory 
 };
