@@ -74,20 +74,23 @@ function renderBrandsTable(brands) {
     tableBody.innerHTML = '';
 
     brands.forEach(brand => {
+        const isDefaultBrand = brand.name === 'Other';
         const row = document.createElement('tr');
         row.innerHTML = `
             <td class="px-4 py-3">${brand.name}</td>
             <td class="px-4 py-3">${formatDate(brand.createdAt)}</td>
             <td class="px-4 py-3">
                 <div class="flex items-center space-x-2">
-                    <button class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 flex items-center justify-center" 
-                            onclick="openEditModal('${brand._id}', '${brand.name}')">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="bg-red-500 text-white p-2 rounded hover:bg-red-600 flex items-center justify-center" 
-                            onclick="deleteBrand('${brand._id}')">
-                        <i class="fas fa-trash"></i>
-                    </button>
+                    ${isDefaultBrand ? '' : `
+                        <button class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 flex items-center justify-center" 
+                                onclick="openEditModal('${brand._id}', '${brand.name}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="bg-red-500 text-white p-2 rounded hover:bg-red-600 flex items-center justify-center" 
+                                onclick="handleDeleteBrand('${brand._id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    `}
                 </div>
             </td>
         `;
@@ -159,6 +162,31 @@ async function handleSort(value) {
     currentSort = value;
     currentPage = 1;
     await updateTable();
+}
+
+async function handleDeleteBrand(brandId) {
+    console.log(brandId);
+    if (!confirm('Are you sure you want to delete this brand?')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`/admin/brands/api/delete/${brandId}`, {
+            method: 'DELETE'
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            showToast('Brand deleted successfully', 'success');
+            await updateTable();
+        } else {
+            showToast(data.message, 'error');
+        }
+    } catch (error) {
+        console.error(error);
+        showToast('Error deleting brand', 'error');
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

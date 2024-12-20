@@ -1,5 +1,5 @@
 import express from "express";
-import { getBrands, getBrandPage, addBrand, getAddBrandPage, updateBrand } from "./brandController.js";
+import { getBrands, getBrandPage, addBrand, getAddBrandPage, updateBrand, deleteBrand } from "./brandController.js";
 import isUserLoginAndRedirect from "../../middleWare/Authentication/isUserLoginAndRedirect.js";
 import isAdmin from "../../middleWare/Authorization/isAdmin.js";
 
@@ -12,5 +12,6 @@ adminBrandRouter.get("/api/get", getBrands);
 adminBrandRouter.get("/add", getAddBrandPage);
 adminBrandRouter.post("/api/add", addBrand);
 adminBrandRouter.put("/api/update/:id", updateBrand);
+adminBrandRouter.delete("/api/delete/:id", deleteBrand);
 
 export default adminBrandRouter;

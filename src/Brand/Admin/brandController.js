@@ -1,4 +1,5 @@
 import serviceFactory from "../../Factory/serviceFactory.js";
+import Product from "../../Model/Product.js";
 
 const brandService = serviceFactory.getBrandService();
 
@@ -34,6 +35,7 @@ const getBrands = async (req, res) => {
         console.error('Error in getBrands:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
+    
 };
 
 const getBrandPage = async (req, res) => {
@@ -109,4 +111,16 @@ const updateBrand = async (req, res) => {
     }
 };
 
-export { getBrands, getBrandPage, addBrand, getAddBrandPage, updateBrand };
+const deleteBrand = async (req, res) => {
+    try {
+        const { id } = req.params;
+        await brandService.softDeleteBrand(id);
+        res.json({ message: 'Brand deleted successfully' });
+    } catch (error) {
+        console.error('Error in deleteBrand:', error);
+        res.status(error.message.includes('not found') ? 404 : 400)
+           .json({ message: error.message });
+    }
+};
+
+export { getBrands, getBrandPage, addBrand, getAddBrandPage, updateBrand, deleteBrand };
