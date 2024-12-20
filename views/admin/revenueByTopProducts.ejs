@@ -303,17 +303,17 @@
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
                         <% topPurchasedProducts.filter((product,index)=>index<3).forEach(product=>{ %>
-                            <div class="rounded-md border border-dashed border-gray-200 p-4">
+                            <div class="rounded-md border border-dashed border-gray-200 p-4 flex flex-col justify-between gap-2">
                                 <div class="flex items-center mb-0.5">
-                                    <div class="text-xl font-semibold"><%=product.name%></div>
-                                    <span class="p-1 rounded text-[12px] font-semibold bg-blue-500/10 text-blue-500 leading-none ml-1">
-                                        Total sales: <%=product.quantity%></span>
+                                    <div class="text-xl break-all font-semibold"><%=product.name%></div>
+                                    
                                 </div>
-                                <span class="text-gray-400 text-sm">Paid</span>
+                                <span class="w-2/5 p-1 rounded text-[14px] font-semibold bg-blue-500/10 text-blue-500 leading-none">
+                                    Total sales: <%=product.quantity%></span>
                             </div>
                         <% }) %>
                     </div>
-                    <div>
+                    <div class="w-full">
                         <canvas id="revenueByTopProducts"></canvas>
                     </div>
                 </div>

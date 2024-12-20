@@ -374,12 +374,13 @@ const getDeletedProductsApi = async (req, res) => {
             page * rowPerPage
         );
 
-        res.json({
+        return res.json({
             products: paginatedProducts,
             totalProducts,
             currentPage: page
         });
-    } catch (error) {
+    } 
+    catch (error) {
         console.error('Error in getDeletedProductsApi:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
