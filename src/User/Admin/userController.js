@@ -65,7 +65,7 @@ const getUsersApi = async (req, res) => {
 };
 const getUserDetail = async (req, res) => {
     try{
-        const userId=req.params.id
+        const userId = req.params.id
         const user =await userService.getUserById(userId)
         if(!user){
             return res.status(400).json({message:"User not found"})

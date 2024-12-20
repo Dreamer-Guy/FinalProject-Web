@@ -1,13 +1,15 @@
 import serviceFactory from "../../Factory/serviceFactory.js";
 const orderService =serviceFactory.getOrderService();
+const userService =serviceFactory.getUserService();
 const ROW_PER_PAGE = 10;
-const getOrders= async(req,res)=>{
+const getOrdersPage= async(req,res)=>{
     try{
         const user =req.user||null;
+        const status=req.params.status;
         if(!user){
             return res.redirect("/login")
         }
-        res.render("admin/Order/allOrder")
+        res.render(`admin/Order/${status}Order`)
     }
     catch(e){
         return res.status(500).json({message:"Internal server error"})
@@ -16,14 +18,7 @@ const getOrders= async(req,res)=>{
 const getOrdersApi=async(req,res)=>{
 try{
     const {page,rowPerPage,status}=req.query;
-    let orders;
-    let totalOrders;
-    if(!status){
-        ({orders,totalOrders}=await orderService.getOrdersPoupulate(page,rowPerPage));
-    }
-    else{
-        ({orders,totalOrders}=await orderService.getOrdersByStatus(status,page,rowPerPage));
-    }
+    const {orders,totalOrders}=await orderService.getOrdersByStatus(page,rowPerPage,status);
     if(!orders){
         return res.status(404).json({message:"No orders found"})
     }
@@ -33,4 +28,46 @@ catch(e){
     return res.status(500).json({message:"Internal server error"})
 }
 }
-export {getOrders,getOrdersApi}
+const getOrdersDetail=async(req,res)=>{
+    try{
+        const orderId=req.params.id;
+        const order=await orderService.getOrderDetailById(orderId);
+        if(!order){
+            return res.status(404).json({message:"Order not found"})
+        }
+        console.log(order);
+        const user=await userService.getUserById(order.userId);
+        return res.status(200).json(
+            {
+            orderId:order._id,
+            fullName:user.fullName,
+            address:`${order.address.street}, ${order.address.city}.`,
+            phone:order.address.phone,
+            postalCode:order.address.postalCode,
+            total:+order.total,
+            status:order.orderStatus,
+            checkoutStatus:order.checkoutStatus,
+            createdAt:order.createdAt,
+            items:order.items,
+            }
+        )
+    }
+    catch(e){
+        return res.status(500).json({message:"Internal server error"})
+    }
+}
+const updateStatus=async(req,res)=>{
+    try{
+        const orderId=req.params.id;
+        const {status}=req.body;
+        const order=await orderService.updateStatusById(orderId,status);
+        if(!order){
+            return res.status(404).json({message:"Order not found"});
+        }
+        return res.status(200).json({message:"Status updated successfully"});
+    }
+    catch(e){
+        return res.status(500).json({message:"Internal server error"});
+    }
+}
+export {getOrdersPage,getOrdersApi,getOrdersDetail,updateStatus}

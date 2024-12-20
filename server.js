@@ -74,7 +74,6 @@ app.use((req, res) => {
     res.status(404).render('notFound');
 }); 
 
-
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });

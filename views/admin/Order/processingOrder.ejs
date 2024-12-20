@@ -9,7 +9,7 @@
     
     <title>Producs</title>
 </head>
-<body  class="text-gray-800 font-inter">
+<body data-status="processing"  class="text-gray-800 font-inter">
     
     <!-- start: Sidebar -->
 
@@ -210,7 +210,13 @@
                 </div>
 
                 <!-- Nút cập nhật trạng thái -->
-                
+                <div id="updateStatusContainer" class="flex justify-end gap-2 mt-4 flex-shrink-0">
+                    <select id="statusSelect" class="border rounded px-8 py-2">
+                        <option value="processing">Processing</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
             </div>
         </div>
     </div>

@@ -80,18 +80,18 @@ async function handleFilters(type, value) {
                 <td class="px-4 py-4 whitespace-nowrap text-center">
                     ${user.role}
                 </td>
-                <td class="px-4 py-4 whitespace-nowrap text-center">
+                <td class="p-4 font-bold ${getStatusColorClass(user.status)} bg-clip-content rounded-md  whitespace-nowrap text-center">
                     ${user.status}
                 </td>
                 ${user.status==="active"?`
                 <td class="px-4 py-4 whitespace-nowrap">
-                    <button onclick="showDialog('${user._id}')" 
+                    <button onclick="event.stopPropagation(); showDialog('${user._id}')" 
                             class="bg-red-500 text-white p-2 rounded hover:bg-red-600">
                            <i class="ri-indeterminate-circle-line"></i>
                     </button> 
                 </td>`:
                 `<td class="px-4 py-4 whitespace-nowrap">
-                    <button onclick="unLockUser('${user._id}')" 
+                    <button onclick="event.stopPropagation(); unLockUser('${user._id}')" 
                             class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
                             <i class="ri-lock-unlock-line"></i>
                     </button> 
@@ -110,30 +110,37 @@ async function handleFilters(type, value) {
                             FullName: ${user.fullName}
                         </h3>
                         <p>
-                          UserName: ${user.userName}
+                            <span class="font-bold">UserName: </span>
+                            ${user.userName}
                         </p>
                          <p>
-                          Email: ${user.email}
+                            <span class="font-bold">Email: </span>
+                            ${user.email}
                         </p>
                          <p>
-                          Created At: ${formatDateTime(user.createdAt)}
+                            <span class="font-bold">Created At: </span>
+                            ${formatDateTime(user.createdAt)}
                         </p>
                          <p>
-                          Role: ${user.role}
+                            <span class="font-bold">Role: </span>
+                            ${user.role}
                         </p>
                          <p>
-                          Status: ${user.status}
+                            <span class="font-bold">Status: </span>
+                            <span class="font-bold ${getStatusColorClass(user.status)}">
+                                ${user.status}
+                            </span>
                         </p>
                          <div class="flex justify-center items-center">
                     ${user.status==="active"?`
                         <td class="px-4  py-4 whitespace-nowrap">
-                            <button onclick="showDialog('${user._id}')" 
-                                    class="w-full max-w-96  bg-red-500 text-white p-2 rounded hover:bg-blue-600">
+                            <button onclick="event.stopPropagation(); showDialog('${user._id}')" 
+                                    class="w-full max-w-96  bg-red-500 text-white p-2 rounded hover:bg-red-600">
                                    <i class="ri-indeterminate-circle-line"></i>
                             </button> 
                         </td>`:
                         `<td class="px-4 py-4 whitespace-nowrap">
-                            <button onclick="unLockUser('${user._id}')" 
+                            <button onclick="event.stopPropagation(); unLockUser('${user._id}')" 
                                     class="w-full max-w-96  bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
                                     <i class="ri-lock-unlock-line"></i>
                             </button> 
@@ -258,6 +265,7 @@ function unLockUser(userId){
         if (!userIdToLock) return;
     
         try {
+            
             const response = await fetch(`/admin/users/api/lock/${userIdToLock}`, {
                 method: 'PATCH',
                 headers: {
@@ -298,6 +306,16 @@ function updateSortIcons(activeIconId, inactiveIconId, sortDirection) {
     } else {
         activeIcon.className = 'fas fa-sort';
         activeIconMobile.className = 'fas fa-sort';
+    }
+}
+function getStatusColorClass(status) {
+    switch(status) {
+        case 'active':
+            return 'text-blue-500';
+        case 'locked':
+            return 'text-red-500';
+        default:
+            return 'text-gray-500';
     }
 }
 function showDialog(userId) {

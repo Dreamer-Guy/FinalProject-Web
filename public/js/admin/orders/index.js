@@ -1,13 +1,16 @@
 const DEFAULT_PAGE = 1;
 const ROW_PER_PAGE = 10;
-// let userIdToLock = null;
+
 let filters = {
     page: 1,
     rowPerPage: ROW_PER_PAGE,
+    status:null
 };
+
 function setCurrentPage(page) {
     filters.page = page;
 }
+
 async function handleFilters(type, value) {
     if(type !== 'page') {
         filters.page = 1;
@@ -18,18 +21,24 @@ async function handleFilters(type, value) {
     const queryParams = new URLSearchParams();
     queryParams.append('page', filters.page);
     queryParams.append('rowPerPage', filters.rowPerPage);
+    if(filters.status) {
+        queryParams.append('status', filters.status);
+    }
     try {
+        showSpinnerLoading()
         const data = await fetch(`/admin/orders/api/get?${queryParams}`)
             .then(response => response.json());  
+        hideSpinnerLoading()
         const orders = data.orders;
-        const totalOrders = data.totalUsers;
+        const totalOrders = data.totalOrders;
         const ordersContainer = document.querySelector('tbody');
         ordersContainer.innerHTML = '';
         const mobileContainer = document.getElementById('mobile-container');
         mobileContainer.innerHTML = '';
         orders.forEach(order => {
             const tr = document.createElement('tr');
-            // tr.onclick = () => showUserDetail(order._id);
+            
+            tr.onclick = () => showOrderDetail(order._id);
             tr.className="hover:bg-red-100 cursor-pointer"
             tr.innerHTML = `
                 <td class="px-4 py-4 whitespace-nowrap">
@@ -38,69 +47,69 @@ async function handleFilters(type, value) {
                 <td class="px-4 py-4 whitespace-nowrap">
                     ${order.user}
                 </td>
-                <td class="px-4 py-4 whitespace-nowrap">
+                <td class="px-4 py-4 whitespace-nowrap text-center">
                     ${order.productQuantity}
                 </td>
-                <td class="px-4 py-4 whitespace-nowrap text-center">
+                <td class="px-4 py-4 whitespace-nowrap ">
                     ${order.totalPrice}
                 </td>
-                <td class="px-4 py-4 whitespace-nowrap text-center">
+                <td class="${getStatusColorClass(order.status)} px-4 py-4 whitespace-nowrap font-semibold">
                     ${order.status}
                 </td>
-                <td class="px-4 py-4 whitespace-nowrap text-center">
+                <td class="${getCheckoutStatusColorClass(order.checkoutStatus)} px-4 py-4 whitespace-nowrap font-semibold">
                     ${order.checkoutStatus}
                 </td>
                  <td class="px-4 py-4 whitespace-nowrap">
                     ${formatDateTime(order.createdAt)}
                 </td>
-                <td class="px-4 py-4 whitespace-nowrap">
-                    <button onclick="showDialog('${user._id}')" 
-                            class="bg-red-500 text-white p-2 rounded hover:bg-red-600">
-                           <i class="ri-indeterminate-circle-line"></i>
-                    </button> 
-                </td>
             `;
-            usersContainer.appendChild(tr);
+            ordersContainer.appendChild(tr);
             const card = document.createElement('div');
             card.className = 'bg-white p-4 rounded-lg shadow hover:bg-red-100 cursor-pointer px-10';
-            // card.onclick=()=>showUserDetail(user._id)
+            card.onclick=()=>showOrderDetail(order._id)
             card.innerHTML = `
-                <div class="flex  sm:flex-row sm:items-center gap-3">
-                    <div class="flex-1  items-center space-y-2">
-                        <h3 class="font-bold text-base sm:text-lg truncate">
-                            Order ID: ${order._id}
-                        </h3>
-                        <p>
-                          Customer Name: ${order.user}
-                        </p>
-                         <p>
-                          Product Quantity: ${order.productQuantity}
-                        </p>
-                        <p>
-                        Total Price: ${order.totalPrice}
-                        </p>
-                        <p>
-                        Status: ${order.status}
-                        </p>
-                        <p>
-                        Checkout Status: ${order.checkoutStatus}
-                        </p>
-                        <div class="flex justify-center items-center">
-                        <p>
-                         Created At: ${formatDateTime(order.createdAt)}
-                       </p>
-                   
-                        <td class="px-4 py-4 whitespace-nowrap">
-                            <button onclick="unLockUser('${user._id}')" 
-                                    class="w-full max-w-96  bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
-                                    <i class="ri-lock-unlock-line"></i>
-                            </button> 
-                        </td>
-                    </div>
+                <div class="flex flex-col gap-3">
+                    <h3 class="font-bold text-base sm:text-lg truncate">
+                        Order ID: ${order._id}
+                    </h3>
+                    <div class="flex flex-col justify-between sm:flex-row gap-4">
+                        <div class="">
+                            <p class="mb-2">
+                                <span class="font-bold">Customer Name: </span>
+                                ${order.user}
+                            </p>
+                            <p class="mb-2">
+                                <span class="font-bold">Product Quantity: </span>
+                                ${order.productQuantity}
+                            </p>
+                            <p class="mb-2">
+                                <span class="font-bold">Total Price: </span>
+                                ${order.totalPrice}
+                            </p>
+                        </div>
+                        <div class="">
+                            <p  class="mb-2">
+                                <span class="font-bold">Status: </span>
+                                <span class="${getStatusColorClass(order.status)}">                            
+                                    ${order.status}
+                                </span>
+                            </p>
+                            <p class="mb-2">
+                                <span class="font-bold">Checkout Status: </span>
+                                <span class="${getCheckoutStatusColorClass(order.checkoutStatus)}">
+                                     ${order.checkoutStatus}
+                                </span>
+                            </p>
+                            <p class="mb-2">
+                                <span class="font-bold">Created At: </span>
+                                ${formatDateTime(order.createdAt)}
+                            </p>
+                        </div>
                     </div>
                 </div>
             `;
             mobileContainer.appendChild(card);
+            
         });
         const totalPages = Math.ceil(totalOrders/ROW_PER_PAGE);
         const paginationContainer = $('#paging-container');
@@ -162,101 +171,105 @@ async function handleFilters(type, value) {
         console.log(e);
     }
 }
-// async function showUserDetail(userId) {
-//     try {
-//         const response = await fetch(`/admin/users/api/detail/${userId}`);
-//         const data = await response.json();
-//         const user = data.user
-//         if (response.ok) {
-//             document.getElementById('detail-fullName').textContent = user.fullName;
-//             document.getElementById('detail-userName').textContent = user.userName;
-//             document.getElementById('detail-email').textContent = user.email;
-//             document.getElementById('detail-role').textContent = user.role;
-//             document.getElementById('detail-status').textContent = user.status;
-//             document.getElementById('detail-createdAt').textContent = formatDateTime(user.createdAt);
-//             document.getElementById('detail-totalOrders').textContent = data.totalOrder;
-//             document.getElementById('detail-totalSpent').textContent =  data.totalSpent;
-//             document.getElementById('detail-address').textContent = data.addressString
-//             const modal = document.getElementById('userDetailModal');
-//             modal.style.display = 'flex';
-//         } else {
-//             showToast(user.message || 'Error loading user details', 'error');
-//         }
-//     } catch (error) {
-//         console.error(error);
-//         showToast('Error loading user details', 'error');
-//     }
-// }
 
-// function closeUserDetailModal() {
-//     const modal = document.getElementById('userDetailModal');
-//     modal.style.display = 'none';
-// }
+async function showOrderDetail(orderId) {
+    try{
+        const orderDetailModal = document.getElementById('orderDetailModal');
+        orderDetailModal.style.display = 'flex';
+        showSpinnerLoading()
+        const response = await fetch(`/admin/orders/api/detail/${orderId}`);
+        const data = await response.json();
+        hideSpinnerLoading()
+        if(response.ok) {
+           const orderDetailInfo=document.getElementById('orderDetailInfo')
+           orderDetailInfo.innerHTML=`
+                <div class=" w-full md:w-auto bg-green-100 p-4 rounded-lg" >
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="font-bold">User information</h4>
+                        <button onclick="toggleSection('userInfo')" class=" md:hidden text-gray-600 hover:text-gray-800">
+                            <i id="userInfoIcon" class="fas fa-chevron-up"></i>
+                        </button>
+                    </div>
+                    <div id="userInfo">
+                        <p><span class="font-bold">Full Name: </span> <span>${data.fullName}</span></p>
+                        <p><span class="font-bold">Phone: </span> <span>${data.phone}</span></p>
+                        <p><span class="font-bold">Postal Code: </span> <span>${data.postalCode}</span></p>
+                        <p><span class="font-bold">Address: </span> <span>${data.address}</span></p>
+                    </div>
+                </div>
+                <div class=" w-full md:w-auto mt-2 md:mt-0 bg-blue-100 p-4 rounded-lg">
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="font-bold">Order information</h4>
+                        <button onclick="toggleSection('orderInfo')" class="md:hidden text-gray-600 hover:text-gray-800">
+                            <i id="orderInfoIcon" class="fas fa-chevron-up"></i>
+                        </button>
+                    </div>
+                    <div id="orderInfo">
+                        <p><span class="font-bold">Status: </span> <span class=${getStatusColorClass(data.status)}>${data.status}</span></p>
+                        <p><span class="font-bold">Checkout Status: </span> <span class=${getCheckoutStatusColorClass(data.checkoutStatus)}>${data.checkoutStatus}</span></p>
+                        <p><span class="font-bold">Order ID: </span> <span>${data.orderId}</span></p>
+                        <p><span class="font-bold">Order Date: </span> <span>${formatDateTime(data.createdAt)}</span></p>
+                    </div>
+                </div>`
+            const productsContainer =document.getElementById('detail-products');
+            productsContainer.innerHTML = data.items.map(item => `
+               <div class="flex justify-between items-center border-b py-2">
+                       <div class="flex gap-4 items-center">
+                           <img src="${item.image}" alt="" class="w-16 h-16 object-cover rounded-md"/>
+                           <div>
+                               <p class="font-medium">${item.name}</p>
+                               <p class="text-sm text-gray-600">Amount: ${item.quantity}</p>
+                           </div>
+                       </div>
+                       <p class="font-medium text-red-500">$${item.price}</p>
+                   </div>
+               `).join('');
+            document.getElementById('detail-total').textContent=`$${data.total}`;
+            const updateStatusContainer = document.getElementById('updateStatusContainer')
+            const btnUpdateStatus=document.getElementById('btnUpdateStatus')
+            if(updateStatusContainer&&!btnUpdateStatus){
+                const btn = document.createElement('div');
+                btn.innerHTML = `
+                <button id="btnUpdateStatus" onclick="updateStatus('${data.orderId}')" 
+                    class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                    Update Status
+                </button>
+                `;
+                updateStatusContainer.appendChild(btn.firstElementChild)
+            }
+        }
+    }
+    catch(e){
+        console.log(e);
+        showToast('Error loading order details', 'error');
+    }
 
-// function unLockUser(userId){
-//     userIdToLock =userId
-//     handleLockUser("active")
-//     handleFilters('page', filters.page);
-//     }
-//     async function handleLockUser(status) {
-//         if (!userIdToLock) return;
-    
-//         try {
-//             const response = await fetch(`/admin/users/api/lock/${userIdToLock}`, {
-//                 method: 'PATCH',
-//                 headers: {
-//                     'Content-Type': 'application/json'
-//                 }
-//                 ,
-//                  body: JSON.stringify({status:status}),
-//             });
-            
-//             const data = await response.json();
-    
-//             if (response.ok) {
-//                 closeDialog();
-//                 handleFilters('page', filters.page);
-                
-//                 showToast('User locked successfully','success');
-//             } else {
-//                 showToast(data.message || 'Error lock user','error');
-//             }
-//         } catch (error) {
-//             console.log(error);
-//             showToast('Error locking product','error');
-//         }
-//     }
-// function updateSortIcons(activeIconId, inactiveIconId, sortDirection) {
-//     const activeIcon = document.getElementById(activeIconId);
-//     const activeIconMobile = document.getElementById(activeIconId+"Mobile");
-//     const inactiveIcon = document.getElementById(inactiveIconId);
-//     const inactiveIconMobile = document.getElementById(inactiveIconId+"Mobile");
-//     inactiveIcon.className = 'fas fa-sort';
-//     inactiveIconMobile.className = 'fas fa-sort';
-//     if (sortDirection === 'asc') {
-//         activeIcon.className = 'fas fa-sort-up';    
-//         activeIconMobile.className = 'fas fa-sort-up';
-//     } else if (sortDirection === 'desc') {
-//         activeIcon.className = 'fas fa-sort-down';  
-//         activeIconMobile.className = 'fas fa-sort-down';
-//     } else {
-//         activeIcon.className = 'fas fa-sort';
-//         activeIconMobile.className = 'fas fa-sort';
-//     }
-// }
-// function showDialog(userId) {
-//     userIdToLock = userId;
-//     const dialog = document.getElementById('deleteDialog');
-//     dialog.style.display = 'flex';
-// }
-
-// function closeDialog() {
-//     const dialog = document.getElementById('deleteDialog');
-//     dialog.style.display = 'none';
-//     userIdToLock = null;
-// }
-
-
+}
+async function updateStatus(orderId){
+ try{
+    const status=document.getElementById('statusSelect').value;
+    const response=await fetch(`/admin/orders/api/updateStatus/${orderId}`,{
+        method:'PATCH',
+        body:JSON.stringify({status}),
+        headers:{
+            'Content-Type':'application/json'
+        }
+    });
+    if(response.ok){
+        closeOrderDetailModal()
+        showToast('Status updated successfully', 'success');
+        handleFilters('page', filters.page);
+    }
+ }
+ catch(e){
+    console.log(e);
+    showToast('Error updating status', 'error');
+ }
+}
+function closeOrderDetailModal() {
+    const modal = document.getElementById('orderDetailModal');
+    modal.style.display = 'none';
+}
 function formatDateTime(dateString) {
     const date = new Date(dateString);
     return date.toLocaleString('vi-VN', {
@@ -267,19 +280,47 @@ function formatDateTime(dateString) {
         minute: '2-digit'
     });
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    // const confirmLockBtn = document.getElementById('confirmLockBtn');
-    // if (confirmLockBtn) {
-    //     confirmLockBtn.addEventListener('click', () => handleLockUser("locked"));
-    // }
-    // const searchButton = document.getElementById('searchButton');
-    // if(searchButton){
-    //     searchButton.addEventListener('click', () => handleFilters('page', filters.page));
-    // }
-    // const searchInput = document.getElementById('searchInput');
-    // if(searchInput){
-    //     searchInput.addEventListener('input', () => handleFilters('page', filters.page));
-    // }
+function getStatusColorClass(status) {
+    switch(status) {
+        case 'pending':
+            return 'text-yellow-500';
+        case 'processing':
+            return ' text-blue-500';
+        case 'completed':
+            return 'text-green-500';
+        case 'canceled':
+            return 'text-red-500';
+        default:
+            return 'text-gray-500';
+    }
+}
+function getCheckoutStatusColorClass(status) {
+    switch(status) {
+        case 'paid':
+            return 'text-green-500';
+        case 'refunded':
+            return 'text-blue-500';
+        case 'unpaid':
+            return 'text-red-500';
+        default:
+            return 'text-gray-500';
+    }
+}
+function initializeOrderPage(status){
+    filters.status = status;
     handleFilters('page', DEFAULT_PAGE);
+}
+document.addEventListener('DOMContentLoaded', () => {
+    const pageStatus=document.body.dataset.status;
+    initializeOrderPage(pageStatus);
 });
+
+function toggleSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    const icon = document.getElementById(`${sectionId}Icon`);
+    const isHidden = section.style.display !== 'none';
+    
+    section.style.display = isHidden ? 'none' : 'block';
+    icon.classList.toggle('fa-chevron-up', !isHidden);
+    icon.classList.toggle('fa-chevron-down', isHidden);
+}
