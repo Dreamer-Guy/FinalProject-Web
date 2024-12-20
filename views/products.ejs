@@ -324,11 +324,11 @@
         <div class="col-span-1 bg-white px-4 pb-6 shadow rounded overflow-hiddenb hidden md:block">
             <div class="divide-y divide-gray-200 space-y-5">
                 <div>
-                    <h3 class="text-xl text-gray-800 mb-3 uppercase font-medium">Types</h3>
+                    <h3 class="text-xl text-gray-800 mb-3 uppercase font-medium">Categories</h3>
                     <div class="space-y-2">
                         <% categories.forEach((category, index)=> { %>
-                            <div onclick="handleFilters('category','<%=categories[index].name%>')" class="flex items-center">
-                                <input type="checkbox" name="cat-<%= index + 1 %>" id="cat-<%= index + 1 %>"
+                            <div onclick="handleFilters('category','<%=categories[index].name.toLowerCase()%>')" class="flex items-center">
+                                <input type="checkbox" name="cat-<%=category.name.toLowerCase()%>" id="cat-<%=category.name.toLowerCase()%>"
                                     class="text-primary focus:ring-0 rounded-sm cursor-pointer" value="<%= category %>">
                                 <label for="cat-<%= index + 1 %>" class="text-gray-600 ml-3 cursor-pointer">
                                     <%= category.name.charAt(0).toUpperCase() + category.name.slice(1) %>
@@ -342,7 +342,7 @@
                     <h3 class="text-xl text-gray-800 mb-3 uppercase font-medium">Brands</h3>
                     <div class="space-y-2">
                         <% brands.forEach((brand, index)=> { %>
-                            <div onclick="handleFilters('brand','<%=brands[index].name%>')" class="flex items-center">
+                            <div onclick="handleFilters('brand','<%=brands[index].name.toLowerCase()%>')" class="flex items-center">
                                 <input type="checkbox" name="cat-<%= index + 1 %>" id="cat-<%= index + 1 %>"
                                     class="text-primary focus:ring-0 rounded-sm cursor-pointer"
                                     value="<%= brand.name.toLowerCase() %>">

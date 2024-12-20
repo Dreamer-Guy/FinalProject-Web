@@ -260,26 +260,38 @@ const getLoginPage=async(req,res)=>{
 }
 
 const initUserDataAfterLogin=async (req, res) => {
-    const userId = req.user._id;
-    let address = await addressService.getAddressByUserId(userId);
-    let cart = await cartService.getCartByUserId(userId);
-    if(!address){
-        const defaultAddressData={
-            userId: userId,
-            street: "",
-            city: "",
-            postalCode: "",
-            phone: "",
-            notes: ""
+    try {
+        const userId = req.user._id;
+        let address = await addressService.getAddressByUserId(userId);
+        let cart = await cartService.getCartByUserId(userId);
+        
+        if(!address){
+            const defaultAddressData = {
+                userId: userId,
+                street: "",
+                city: "",
+                postalCode: "", 
+                phone: "",
+                notes: ""
+            }
+            const address = await addressService.createAddress(defaultAddressData);
+            await addressService.saveAddress(address);
         }
-        const address=await addressService.createAddress(defaultAddressData);
-        await addressService.saveAddress(address);
+        
+        if(!cart){
+            const newCart = await cartService.createCart(userId, []);
+            await cartService.saveCart(newCart);
+        }
+
+        const redirectUrl = req.user.role === 'admin' ? '/admin/dashboard' : '/';
+        
+        return res.json({
+            message: "Login Success",
+            redirectUrl: redirectUrl
+        });
+    } catch (error) {
+        return res.status(500).json({message: error.message});
     }
-    if(!cart){
-        const newCart = await cartService.createCart(userId, []);
-        await cartService.saveCart(newCart);
-    }
-    return res.json({message:"Login Success"});
 };
 
 export {

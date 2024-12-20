@@ -6,6 +6,8 @@ const getBackgroupColor=(type)=>{
     const colorMap = {
       'default':'bg-black',
       'warning':'bg-primary',
+      'success':'bg-green-500',
+      'error':'bg-red-500',
     };
 
     return colorMap[type];
@@ -16,6 +18,8 @@ const getTextColor=(type)=>{
     const colorMap = {
       'default':'text-white',
       'warning':'text-white',
+      'success':'text-white',
+      'error':'text-white',
     };
 
     return colorMap[type];
