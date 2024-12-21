@@ -125,8 +125,10 @@ const updateCartItem=async(req,res)=>{
             }
             return item;
         });
-        await cartService.updateCart(user._id,items);
-        return res.json({message:"Cart updated successfully"});
+        const newCart=await cartService.updateCart(user._id,items);
+        return res.send({
+            cart:newCart,
+        });
     }
     catch(e){
         return res.status(INTERNAL_SERVER_ERROR_STATUS).json({message:e.message});
