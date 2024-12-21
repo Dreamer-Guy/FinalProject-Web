@@ -1,4 +1,6 @@
 import serviceFactory from "../../Factory/serviceFactory.js";
+import elasticSearchService from "../../UtilServices/ElasticSearchService/productService.js";
+import suggesterService from "../../UtilServices/ElasticSearchService/suggesterService.js";
 
 const productService = serviceFactory.getProductSerVice();
 const cartService = serviceFactory.getCartService();
@@ -131,4 +133,18 @@ const apiGetProducts=async (req, res) => {
         });
     }
 };
-export { getProductsPage,apiGetProducts};
+
+const apiGetSuggestedProducts=async (req,res)=>{
+    try {
+        const {search}=req.query;
+        const products=await productService.getSuggestedProducts(search);
+        return res.send(products);
+    }
+    catch (e) {
+        console.log(e.message);
+        return res.json({
+            message:"There is an internal error",
+        });
+    }
+};
+export { getProductsPage,apiGetProducts,apiGetSuggestedProducts };

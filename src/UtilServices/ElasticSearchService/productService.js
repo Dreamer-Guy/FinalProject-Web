@@ -321,15 +321,4 @@ const elasticSearchService={
     // },
 };
 
-const dosth=async()=>{
-    const category={
-        _id:"category_id",
-        name:"here is the brand name",
-    }
-    await elasticSearchService.SynchronizeAfterCategoryUpdate(category);
-}
-
-dosth();
-
-
 export default elasticSearchService;

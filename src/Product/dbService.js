@@ -1,6 +1,7 @@
 import mongoose, { mongo } from "mongoose";
 import Product from "../Model/Product.js";
 import elasticSearchService from "../UtilServices/ElasticSearchService/productService.js";
+import suggesterService from "../UtilServices/ElasticSearchService/suggesterService.js";
 
 const productService = {
     getAll:async()=>{
@@ -178,6 +179,11 @@ const productService = {
     SynchronizeProductsToElastic:async()=>{
         const products=await productService.getAll();
         await elasticSearchService.SynchronizeProductsToElastic(products);
+    },
+
+    getSuggestedProducts:async(search)=>{
+        const products=await suggesterService.getSuggestions(search);
+        return products;
     },
 };
 

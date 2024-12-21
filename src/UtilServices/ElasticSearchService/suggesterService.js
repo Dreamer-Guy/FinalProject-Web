@@ -53,6 +53,7 @@ const suggesterService = {
                         .map(option=>{
                             return {
                                 ...option._source,
+                                _id:option._id,
                                 name:option._source.name.input.join(' '),
                             }
                         });
