@@ -7,6 +7,7 @@ const productService = serviceFactory.getProductSerVice();
 const categoryService = serviceFactory.getCategoryService();
 const brandService = serviceFactory.getBrandService();
 const productPropertyService = serviceFactory.getProductPropertyService();
+const imagesProductService=serviceFactory.getImagesProductService();
 const ROW_PER_PAGE = 10;
 
 const formatSortParam = (req) => {
@@ -202,9 +203,10 @@ const addProduct = async (req, res) => {
             numReviews: 0,
             status: 'On stock'
         };
-
+        const imagesProduct=productData.imagesProduct;
         const savedProduct = await productService.create(newProduct);
-        
+        await imagesProductService.updateAlternativeImagesOfProductAndInsertIfNotExist(savedProduct._id.toString(),imagesProduct);
+
         if (productData.properties) {
             await productPropertyService.saveProductPropertiesorProduct(
                 Object.entries(productData.properties).map(([propertyId, value]) => ({
@@ -238,7 +240,7 @@ const uploadProductImage = async (req, res) => {
         if (!imageUrl) {
             return res.status(500).json({ message: "Failed to upload image" });
         }
-
+        console.log(imageUrl);
         res.json({ imageUrl });
     } catch (error) {
         console.error("Upload error:", error);
@@ -259,15 +261,17 @@ const getEditProductPage = async (req, res) => {
         const brands = await brandService.getAll();
         const productProperties = await productPropertyService.getProductPropertiesByProductId(productId);
         const categoryProperties = await productPropertyService.getPropertiesByCategoryId(product.category_id);
-
+        const alternativeImages=await imagesProductService.getAllAlternativeImagesOfProduct(productId)||[];
         const user = req.user || null;
+        console.log(alternativeImages);
         res.render('admin/editProduct', {
             user,
             product,
             categories,
             brands,
             productProperties,
-            categoryProperties
+            categoryProperties,
+            alternativeImages,
         });
     } catch (error) {
         console.error(error);
@@ -296,6 +300,9 @@ const updateProduct = async (req, res) => {
             status: productData.status
         };
 
+        const imagesProduct=productData.imagesProduct;
+
+        await imagesProductService.updateAlternativeImagesOfProductAndInsertIfNotExist(productId,imagesProduct);
         await productService.updateByProductId(productId, updatedProduct);
         
         if (productData.properties) {

@@ -14,6 +14,6 @@ const imagesProductSchema = new mongoose.Schema({
     ]
 });
 
-
+    
 const ImagesProduct = mongoose.model("ImageProduct", imagesProductSchema);
 export default ImagesProduct;
