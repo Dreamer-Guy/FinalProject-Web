@@ -174,6 +174,7 @@ async function handleFilters(type, value) {
 
 async function showOrderDetail(orderId) {
     try{
+        console.log(orderId)
         const orderDetailModal = document.getElementById('orderDetailModal');
         orderDetailModal.style.display = 'flex';
         showSpinnerLoading()
@@ -227,15 +228,18 @@ async function showOrderDetail(orderId) {
             document.getElementById('detail-total').textContent=`$${data.total}`;
             const updateStatusContainer = document.getElementById('updateStatusContainer')
             const btnUpdateStatus=document.getElementById('btnUpdateStatus')
-            if(updateStatusContainer&&!btnUpdateStatus){
-                const btn = document.createElement('div');
-                btn.innerHTML = `
-                <button id="btnUpdateStatus" onclick="updateStatus('${data.orderId}')" 
-                    class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                    Update Status
-                </button>
-                `;
-                updateStatusContainer.appendChild(btn.firstElementChild)
+            if(updateStatusContainer){
+                if(btnUpdateStatus){
+                    btnUpdateStatus.onclick=()=>updateStatus(orderId)
+                }
+                const statusSelect=document.getElementById('statusSelect');
+                const checkoutStatusSelect=document.getElementById('checkoutStatusSelect');
+                if(statusSelect){
+                statusSelect.value=data.status;
+                statusSelect.dataset.originStatus=data.status;
+                }
+                checkoutStatusSelect.value=data.checkoutStatus;
+                checkoutStatusSelect.dataset.originCheckoutStatus=data.checkoutStatus;
             }
         }
     }
@@ -247,10 +251,22 @@ async function showOrderDetail(orderId) {
 }
 async function updateStatus(orderId){
  try{
-    const status=document.getElementById('statusSelect').value;
+    console.log(orderId)
+    const statusElement=document.getElementById('statusSelect')
+    const checkoutStatusElement=document.getElementById('checkoutStatusSelect')
+    let newStatus,originStatus;
+    if(statusElement){
+         newStatus=statusElement.value;
+         originStatus=statusElement.dataset.originStatus;
+    }
+    const newCheckoutStatus=checkoutStatusElement.value;
+    const originCheckoutStatus=checkoutStatusElement.dataset.originCheckoutStatus;
+    if(newStatus===originStatus&&newCheckoutStatus===originCheckoutStatus){
+        return;
+    }
     const response=await fetch(`/admin/orders/api/updateStatus/${orderId}`,{
         method:'PATCH',
-        body:JSON.stringify({status}),
+        body:JSON.stringify({ status:newStatus,checkoutStatus:newCheckoutStatus}),
         headers:{
             'Content-Type':'application/json'
         }

@@ -248,6 +248,16 @@
                 </div>
 
                 <!-- Nút cập nhật trạng thái -->
+                <div id="updateStatusContainer" class="flex justify-end gap-2 mt-4 flex-shrink-0">
+                    <select id="checkoutStatusSelect" class="border rounded px-8 py-2">
+                        <option value="unpaid">Unpaid</option>
+                        <option value="paid">Paid</option>
+                    </select>
+                    <button id="btnUpdateStatus" onclick="updateStatus('${orderId}')" 
+                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                        Update Status
+                    </button>
+                </div>
                 
             </div>
         </div>

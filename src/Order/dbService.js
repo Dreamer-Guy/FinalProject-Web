@@ -34,8 +34,8 @@ const orderService={
         const order=await Order.findByIdAndUpdate(id,{checkoutStatus:"paid"},{new:true}).lean();
         return order;
     },
-    updateStatusById:async(id,status)=>{
-        const order=await Order.findByIdAndUpdate(id,{orderStatus:status},{new:true}).lean();
+    updateStatusById:async(id,status,checkoutStatus)=>{
+        const order=await Order.findByIdAndUpdate(id,{orderStatus:status,checkoutStatus:checkoutStatus},{new:true}).lean();
         return order;
     },
     getOrdersByIds:async(ids)=>{

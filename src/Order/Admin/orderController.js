@@ -35,7 +35,6 @@ const getOrdersDetail=async(req,res)=>{
         if(!order){
             return res.status(404).json({message:"Order not found"})
         }
-        console.log(order);
         const user=await userService.getUserById(order.userId);
         return res.status(200).json(
             {
@@ -58,9 +57,13 @@ const getOrdersDetail=async(req,res)=>{
 }
 const updateStatus=async(req,res)=>{
     try{
+        const user = req.user||null
+        if(!user){
+            return res.redirect("/login")
+        }
         const orderId=req.params.id;
-        const {status}=req.body;
-        const order=await orderService.updateStatusById(orderId,status);
+        const {status,checkoutStatus}=req.body;
+        const order=await orderService.updateStatusById(orderId,status,checkoutStatus);
         if(!order){
             return res.status(404).json({message:"Order not found"});
         }
