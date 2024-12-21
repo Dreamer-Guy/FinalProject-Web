@@ -330,7 +330,7 @@
                             <div onclick="handleFilters('category','<%=categories[index].name.toLowerCase()%>')" class="flex items-center">
                                 <input type="checkbox" name="cat-<%=category.name.toLowerCase()%>" id="cat-<%=category.name.toLowerCase()%>"
                                     class="text-primary focus:ring-0 rounded-sm cursor-pointer" value="<%= category %>">
-                                <label for="cat-<%= index + 1 %>" class="text-gray-600 ml-3 cursor-pointer">
+                                <label for="cat-<%=categories[index].name.toLowerCase()%>" class="text-gray-600 ml-3 cursor-pointer">
                                     <%= category.name.charAt(0).toUpperCase() + category.name.slice(1) %>
                                 </label>
                             </div>
@@ -343,10 +343,10 @@
                     <div class="space-y-2">
                         <% brands.forEach((brand, index)=> { %>
                             <div onclick="handleFilters('brand','<%=brands[index].name.toLowerCase()%>')" class="flex items-center">
-                                <input type="checkbox" name="cat-<%= index + 1 %>" id="cat-<%= index + 1 %>"
+                                <input type="checkbox" name="cat-<%= index + 1 %>" id="brand<%= index + 1 %>"
                                     class="text-primary focus:ring-0 rounded-sm cursor-pointer"
-                                    value="<%= brand.name.toLowerCase() %>">
-                                <label for="cat-<%= index + 1 %>" class="text-gray-600 ml-3 cursor-pointer">
+                                    >
+                                <label for="brand<%= index + 1 %>" class="text-gray-600 ml-3 cursor-pointer">
                                     <%= brand.name.charAt(0).toUpperCase() + brand.name.slice(1) %>
                                 </label>
                             </div>

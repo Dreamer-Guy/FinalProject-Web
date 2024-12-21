@@ -36,6 +36,10 @@ const getQueryParams = (req) => {
 
 const getUsersApi = async (req, res) => {
     try {
+        const user = req.user||null
+        if(!user){
+        return res.redirect("/login")
+        }
        const {  page, rowPerPage,search,sortFullName,sortEmail,sortCreatedAt} = getQueryParams(req);
        let sortOptions={}
        if(sortFullName){
@@ -48,7 +52,7 @@ const getUsersApi = async (req, res) => {
         sortOptions.createdAt=sortCreatedAt==='asc'?1:-1
        }
 
-       const result = await userService.getUsersApi(search,sortOptions,page,rowPerPage)
+       const result = await userService.getUsersApi(search,sortOptions,page,rowPerPage,user._id)
 
         return res.status(200).json({
             users: result.users,

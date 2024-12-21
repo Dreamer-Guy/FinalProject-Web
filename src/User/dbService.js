@@ -44,9 +44,9 @@ const userService={
         const users=await User.find().sort({totalOrder:-1}).limit(limit).lean();
         return users;
     },
-    getUsersApi:async(searchQuery,sortOptions,page=1,rowPerPage=10)=>{
+    getUsersApi:async(searchQuery,sortOptions,page=1,rowPerPage=10,currentUserId)=>{
         try{
-           let query=User.find()
+           let query=User.find({_id:{$ne:currentUserId}})
            if(searchQuery){
             query=query.or([
                 {fullName:{$regex:searchQuery,$options:'i'}},
