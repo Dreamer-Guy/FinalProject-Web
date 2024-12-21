@@ -1,4 +1,5 @@
 
+
 const DEFAULT_MIN_PRICE=0;
 const DEFAULT_MAX_PRICE=200;
 const DEFAULT_ONSALES=false;
@@ -82,6 +83,10 @@ function setOnSales(){
 }
 
 function setSearch(value){
+    const searchDiv=document.getElementById('search');
+    if(searchDiv.value.trim().length===0){
+        searchDiv.value=value;
+    }
     filters.search=value;
 }
 
@@ -236,7 +241,8 @@ const readQueryParams=()=>{
     const brandQuery=urlParams.get('brand')||"";
     const categories=categoryQuery.split(',');
     const brands=brandQuery.split(',');
-    console.log(categories,brands);
+    const search=urlParams.get('search')||"";
+    setSearch(search);
     categories.forEach(category => {    
         const checkbox = document.querySelector(`input[name='cat-${category}']`);
         if (checkbox) {

@@ -237,8 +237,8 @@
                             <h4 class="uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition"><%= product.name %></h4>
                         </a>
                         <div class="flex items-baseline mb-1 space-x-2">
-                            <p class="text-xl text-primary font-semibold">$<%= product.price %></p>
-                            <p class="text-sm text-gray-400 line-through">$<%= product.originalPrice %></p>
+                            <p class="text-xl text-primary font-semibold">$<%= product.salePrice %></p>
+                            <p class="text-sm text-gray-400 line-through">$<%= product.price %></p>
                         </div>
                         <div class="flex items-center">
                             <div class="flex gap-1 text-sm text-yellow-400">
@@ -246,7 +246,7 @@
                                     <span><i class="fa-solid fa-star"></i></span>
                                 <% } %>
                             </div>
-                            <div class="text-xs text-gray-500 ml-3">(<%= product.reviewCount %>)</div>
+                            <div class="text-xs text-gray-500 ml-3">(<%= product.numReviews>0?product.numReviews:0 %>)</div>
                         </div>
                     </div>
                     <a href="#"

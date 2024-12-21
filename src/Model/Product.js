@@ -9,7 +9,7 @@ const productSchema = new mongoose.Schema({
     description: { type: String },
     status: { type: String, default: 'On stock' },
     rating: { type: Number, default: 0 },
-    totalRating: { type: Number, default: 0 },
+    numReviews: { type: Number, default: 0 },
     category_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category',
