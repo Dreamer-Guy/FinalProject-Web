@@ -1,3 +1,10 @@
+const decodeHtmlEncodedString = (str) => {
+    const txt = document.createElement('textarea');
+    txt.innerHTML = str;
+    return JSON.parse(txt.value);
+};
+let alternativeImages=[];
+
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('editProductForm');
     const categorySelect = document.getElementById('categorySelect');
@@ -103,6 +110,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 data.image = null;
             }
 
+            data.imagesProduct=alternativeImages;
+
             const productId = window.location.pathname.split('/').pop();
             const response = await fetch(`/admin/products/api/update/${productId}`, {
                 method: 'PUT',
@@ -125,3 +134,48 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+
+const createAlternativeImageElement=(url)=>{
+    return `
+    <div
+        id="alternative-image-${encodeURIComponent(url)}" 
+        class="relative w-32 h-32 border-2 border-gray-300 border-dashed rounded-lg flex items-center justify-center">
+        <img src="${url}" alt="" class="w-full h-full object-cover rounded-lg">
+        <button type="button" 
+                class="absolute w-7 h-7 top-0 right-0 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                onclick="handleRemoveAlternativeImageByUrl('${url}')">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    `;
+};
+
+
+const handleChangeAlternativeImages=async(event)=>{
+    try{
+        event.preventDefault();
+        const imageUrl=await handleImageUpload(event.target.files[0]);
+        alternativeImages.push(imageUrl);
+        const alternativeImageContainer=document.getElementById('altertive-images-container');
+        alternativeImageContainer.innerHTML+=createAlternativeImageElement(imageUrl);
+    }
+    catch(error){
+        console.error('Error:',error);
+        showToast('An error occurred while uploading the image please try again','error');
+    }
+};
+
+
+const getInitAlternativeImage=()=>{
+    alternativeImages=decodeHtmlEncodedString(encodedAlternativeImages);
+};
+
+const handleRemoveAlternativeImageByUrl=(url)=>{
+    const index=alternativeImages.findIndex(img=>img===url);
+    alternativeImages.splice(index,1);
+    const encodedUrl = encodeURIComponent(url);
+    document.getElementById(`alternative-image-${encodedUrl}`)?.remove();
+};
+
+getInitAlternativeImage();

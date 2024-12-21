@@ -143,13 +143,13 @@
             <img id="product-img" src="<%= product.image %>" alt="product" class="w-full" />
             <div class="w-full swiper">
                 <div class="swiper-wrapper">
-                    <% alternativeImages?.images.forEach(image => { %>
-                        <div class="swiper-slide h-64">
+                    <% alternativeImages?.forEach(image => { %>
+                        <div class="swiper-slide h-64 flex flex-col justify-center items-center">
                             <img
                                 id="alternative-<%=image%>"
                                 onclick="handleSwapImage('alternative-<%=image%>')" 
                                 src="<%=image%>" class="flex items-center justify-center 
-                                h-full object-cover cursor-pointer"></img>
+                                h-full w-full object-cover cursor-pointer"></img>
                         </div>
                     <% }) %>
                 </div>
@@ -519,9 +519,9 @@
             nextEl: '.swiper-button-next',
             prevEl: '.swiper-button-prev',
             },
-            autoplay: {
-            delay: 2500, 
-            },
+                autoplay: {
+                delay: 2500, 
+                },
         });
     </script>
     <script>

@@ -884,6 +884,10 @@ h1, h2, h3, h4, h5, h6 {
   left: 1rem;
 }
 
+.right-0 {
+  right: 0px;
+}
+
 .right-2\.5 {
   right: 0.625rem;
 }
@@ -1175,6 +1179,10 @@ h1, h2, h3, h4, h5, h6 {
   height: 16rem;
 }
 
+.h-7 {
+  height: 1.75rem;
+}
+
 .h-8 {
   height: 2rem;
 }
@@ -1375,6 +1383,10 @@ h1, h2, h3, h4, h5, h6 {
   width: 16rem;
 }
 
+.w-7 {
+  width: 1.75rem;
+}
+
 .w-8 {
   width: 2rem;
 }
@@ -1385,6 +1397,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .w-96 {
   width: 24rem;
+}
+
+.w-\[200px\] {
+  width: 200px;
 }
 
 .w-\[30px\] {
@@ -1409,10 +1425,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .w-full {
   width: 100%;
-}
-
-.w-3\/12 {
-  width: 25%;
 }
 
 .min-w-10 {
@@ -2318,6 +2330,10 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 13px;
 }
 
+.text-\[14px\] {
+  font-size: 14px;
+}
+
 .text-base {
   font-size: 1rem;
   line-height: 1.5rem;
@@ -2341,10 +2357,6 @@ h1, h2, h3, h4, h5, h6 {
 .text-xs {
   font-size: 0.75rem;
   line-height: 1rem;
-}
-
-.text-\[14px\] {
-  font-size: 14px;
 }
 
 .font-bold {
