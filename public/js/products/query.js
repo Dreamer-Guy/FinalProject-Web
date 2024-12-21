@@ -115,58 +115,17 @@ async function handleFilters(type,value,value2_optional){
         setCurrentPage(1);
     }
     const queryParams= new URLSearchParams(filters).toString();
+    const newUrl=`${window.location.pathname}?${queryParams}`;
+    window.history.replaceState(null,'',newUrl);
     try{
         const data=await fetch(`/products/api/get?${queryParams.toString()}`)
         .then(response => response.json());
-        const products=data.products;
+        console.log(data);
         const totalProducts=data.totalProducts;
+        const htmlProducts=data.html;
         const productsContainer = document.getElementById('products-grid');
         productsContainer.innerHTML = '';
-        products.forEach(product => {
-            const productDiv = document.createElement('div');
-            productDiv.className = "bg-white shadow rounded overflow-hidden group cursor-pointer flex flex-col justify-between";
-            productDiv.innerHTML = `
-                <div>
-                    <div class="relative">
-                        <img src="${product.image}" alt="${product.name}" class="product-img cursor-pointer"
-                            productId="<%= product._id %>"
-                            onclick="window.location.href='/productDetails/get/${product._id}'">
-                    </div>
-                </div>
-                <div>
-                    <div class="pt-4 pb-3 px-4">
-                        <a href="#">
-                            <h4
-                                class="uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition">
-                                ${product.name}
-                            </h4>
-                        </a>
-                        <div class="flex items-baseline mb-1 space-x-2">
-                            ${product.salePrice>0?
-                                `<div class="text-xl text-primary font-semibold">$${product.salePrice}
-                                </div>
-                                <div class="text-xl text-gray-500 line-through">$${product.price}
-                                </div>
-                                `
-                                :`<div class="text-xl text-gray-500 font-semibold">$${product.price}
-                                </div>`
-                            }
-                        </div>
-                        <div class="flex items-center">
-                            <div class="flex gap-1 text-sm text-yellow-400">
-                                ${generateRatingStars(Math.floor(product.rating))}
-                            </div>
-                            <div class="text-xs text-gray-500 ml-3">(150)</div>
-                        </div>
-                    </div>
-                    <button onclick="handleAddToCart('${product._id}',1)"
-                        class="block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition">
-                        Add to cart
-                    </button>
-                </div>
-            `;
-            productsContainer.appendChild(productDiv);
-        });
+        productsContainer.innerHTML = htmlProducts;
         const totalPages=Math.ceil(totalProducts/rowPerPage);
         const paginationContainer = $('#paging-container');
         paginationContainer.empty();
@@ -234,7 +193,6 @@ const readQueryParams=()=>{
     const brandQuery=urlParams.get('brand')||"";
     const categories=categoryQuery.split(',');
     const brands=brandQuery.split(',');
-    console.log(categories,brands);
     categories.forEach(category => {    
         const checkbox = document.querySelector(`input[name='cat-${category}']`);
         if (checkbox) {
@@ -276,4 +234,3 @@ document.querySelector('#search').addEventListener('keydown', (e) => {
         handleFilters('search');
     }
 });
-

@@ -1,3 +1,4 @@
+import ejs from "ejs";
 import serviceFactory from "../../Factory/serviceFactory.js";
 
 const productService = serviceFactory.getProductSerVice();
@@ -77,7 +78,7 @@ const getProductsPage = async (req, res) => {
         const {search}=req.query;
         let products=[];
         if(search && search.trim().length>0){
-            products=await productService.getProductsBySearch({search,brands, categories, sortField, sortOrder,priceRange });
+            products=await productService.getProductsBySearch(search,{brands, categories, sortField, sortOrder,priceRange });
         }
         else{
             products = await productService.getProducts({ brands, categories, sortField, sortOrder,priceRange });
@@ -132,8 +133,8 @@ const apiGetProducts=async (req, res) => {
         }
         return res.send({
             totalProducts,
-            products,
-        });
+            html:await ejs.renderFile('./views/partials/shop/productList.ejs', {products})
+        })
     }
     catch (e) {
         return res.json({

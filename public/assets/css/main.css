@@ -1411,10 +1411,6 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
 }
 
-.w-3\/12 {
-  width: 25%;
-}
-
 .min-w-10 {
   min-width: 2.5rem;
 }
@@ -2318,6 +2314,10 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 13px;
 }
 
+.text-\[14px\] {
+  font-size: 14px;
+}
+
 .text-base {
   font-size: 1rem;
   line-height: 1.5rem;
@@ -2341,10 +2341,6 @@ h1, h2, h3, h4, h5, h6 {
 .text-xs {
   font-size: 0.75rem;
   line-height: 1rem;
-}
-
-.text-\[14px\] {
-  font-size: 14px;
 }
 
 .font-bold {
