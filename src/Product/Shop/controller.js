@@ -77,7 +77,7 @@ const getProductsPage = async (req, res) => {
         const {search}=req.query;
         let products=[];
         if(search && search.trim().length>0){
-            products=await productService.getProductsBySearch({search,brands, categories, sortField, sortOrder,priceRange });
+            products=await productService.getProductsBySearch(search,{brands, categories, sortField, sortOrder,priceRange });
         }
         else{
             products = await productService.getProducts({ brands, categories, sortField, sortOrder,priceRange });
