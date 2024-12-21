@@ -142,23 +142,194 @@ const elasticSearchService={
         const res=await client.bulk({body});
         return res;
     },
-    async getProductById(id){
-        const res=await client.get({
+    async SynchronizeAfterProductCreation(product){
+        const res=await client.index({
             index:PRODUCT_INDEX_NAME,
-            id:id
+            id:product._id,
+            body:{
+                name:product.name,
+                price:product.price,
+                salePrice:product.salePrice,
+                totalStock:product.totalStock,
+                image:product.image,
+                rating:product.rating,
+                numReviews:product.numReviews,
+                description:product.description,
+                brand_id:product.brand_id,
+                category_id :product.category_id,
+                createdAt:product.createdAt
+            }
         });
-        return {
-            _id:res._id,
-            ...res._source
-        };
     },
-    async deleteProductById(id){
+    async SynchronizeAfterProductUpdate(product){
+        const res=await client.update({
+            index:PRODUCT_INDEX_NAME,
+            id:product._id,
+            body:{
+                doc:{
+                    name:product.name,
+                    price:product.price,
+                    salePrice:product.salePrice,
+                    totalStock:product.totalStock,
+                    image:product.image,
+                    rating:product.rating,
+                    numReviews:product.numReviews,
+                    description:product.description,
+                    brand_id:product.brand_id,
+                    category_id :product.category_id,
+                    createdAt:product.createdAt
+                }
+            }
+        });
+    },
+    async SynchronizeAfterProductDelete(productId){
         const res=await client.delete({
             index:PRODUCT_INDEX_NAME,
-            id:id
+            id:productId
         });
-        return res;
     },
+    async SynchronizeAfterBrandUpdate(brand){
+        const updateCommand={
+            index:PRODUCT_INDEX_NAME,
+            refresh:true,
+            script:{
+                source:`
+                    ctx._source.brand_id=params.brand;
+                `,
+                lang:"painless",
+                params:{
+                    brand,
+                }
+            },
+            query:{
+                nested:{
+                    path:"brand_id",
+                    query:{
+                        match:{
+                            "brand_id._id":brand._id
+                        }
+                    }
+                }
+            }
+        }
+        await client.updateByQuery(updateCommand);
+    },
+    async SynchronizeAfterBrandDelete(brandId){
+        const defaultBrand={
+            _id:`${brandId}`,
+            name:"default",
+        }
+        const updateCommand={
+            index:PRODUCT_INDEX_NAME,
+            refresh:true,
+            script:{
+                source:`
+                    ctx._source.brand_id=params.brand;
+                `,
+                lang:"painless",
+                params:{
+                    brand:defaultBrand,
+                }
+            },
+            query:{
+                nested:{
+                    path:"brand_id",
+                    query:{
+                        match:{
+                            "brand_id._id":brandId
+                        }
+                    }
+                }
+            }
+        };   
+        await client.updateByQuery(updateCommand);     
+    },
+    async SynchronizeAfterCategoryUpdate(category){
+        const updateCommand={
+            index:PRODUCT_INDEX_NAME,
+            refresh:true,
+            script:{
+                source:`
+                    ctx._source.category_id=params.category;
+                `,
+                lang:"painless",
+                params:{
+                    category,
+                }
+            },
+            query:{
+                nested:{
+                    path:"category_id",
+                    query:{
+                        match:{
+                            "category_id._id":category._id
+                        }
+                    }
+                }
+            }
+        }
+        await client.updateByQuery(updateCommand);
+    },
+    async SynchronizeAfterCategoryDelete(categoryId){
+        const defaultCategory={
+            _id:`${categoryId}`,
+            name:"default",
+        };
+        const updateCommand={
+            index:PRODUCT_INDEX_NAME,
+            refresh:true,
+            script:{
+                source:`
+                    ctx._source.category_id=params.category;
+                `,
+                lang:"painless",
+                params:{
+                    category:defaultCategory,
+                }
+            },
+            query:{
+                nested:{
+                    path:"category_id",
+                    query:{
+                        match:{
+                            "category_id._id":categoryId,
+                        }
+                    }
+                }
+            }
+        }
+        await client.updateByQuery(updateCommand);
+    },
+
+
+    // async getProductById(id){
+    //     const res=await client.get({
+    //         index:PRODUCT_INDEX_NAME,
+    //         id:id
+    //     });
+    //     return {
+    //         _id:res._id,
+    //         ...res._source
+    //     };
+    // },
+    // async deleteProductById(id){
+    //     const res=await client.delete({
+    //         index:PRODUCT_INDEX_NAME,
+    //         id:id
+    //     });
+    //     return res;
+    // },
 };
+
+const dosth=async()=>{
+    const category={
+        _id:"category_id",
+        name:"here is the brand name",
+    }
+    await elasticSearchService.SynchronizeAfterCategoryUpdate(category);
+}
+
+dosth();
+
 
 export default elasticSearchService;
