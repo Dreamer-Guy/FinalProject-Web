@@ -115,6 +115,8 @@ async function handleFilters(type,value,value2_optional){
         setCurrentPage(1);
     }
     const queryParams= new URLSearchParams(filters).toString();
+    const newUrl=`${window.location.pathname}?${queryParams}`;
+    window.history.replaceState(null,'',newUrl);
     try{
         const data=await fetch(`/products/api/get?${queryParams.toString()}`)
         .then(response => response.json());

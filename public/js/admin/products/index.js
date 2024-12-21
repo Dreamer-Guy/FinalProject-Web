@@ -85,9 +85,10 @@ async function handleFilters(type, value) {
     }
     
     try {
+        showSpinnerLoading();
         const data = await fetch(`/admin/products/api/get?${queryParams}`)
             .then(response => response.json());
-            
+        hideSpinnerLoading();
         const products = data.products;
         const totalProducts = data.totalProducts;
 

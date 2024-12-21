@@ -1,5 +1,4 @@
 import serviceFactory from "../../Factory/serviceFactory.js";
-import mongoose from "mongoose";
 
 const userService = serviceFactory.getUserService()
 const addressService = serviceFactory.getAddressService()
@@ -7,19 +6,19 @@ const orderService = serviceFactory.getOrderService()
 const ROW_PER_PAGE = 10;
 
 const getAllUsers =async(req,res)=>{
-try{
-const user = req.user||null
-if(!user){
-    return res.redirect("/login")
-}
-res.render('admin/users')
-}
-catch(e){
-    console.error(e);
-    return res.status(500).send({
-        message: "Internal server error"
-    });   
-}
+    try{
+        const user = req.user||null
+        if(!user){
+            return res.redirect("/login")
+        }
+        res.render('admin/users');
+    }
+    catch(e){
+        console.error(e);
+        return res.status(500).send({
+            message: "Internal server error"
+        });   
+    }
 }
 
 const getQueryParams = (req) => {
@@ -100,7 +99,7 @@ const HandlelockUser =async(req,res)=>{
     const userId = req.params.id
     const {status}= req.body
     try{
-        const user = await userService.updateUserStatus(userId,status)
+        const user = await userService.updateUserStatus(userId,status);
         return res.status(200).json({
             message:"Successful"
         })

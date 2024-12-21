@@ -16,17 +16,17 @@ const getOrdersPage= async(req,res)=>{
     }
 }
 const getOrdersApi=async(req,res)=>{
-try{
-    const {page,rowPerPage,status}=req.query;
-    const {orders,totalOrders}=await orderService.getOrdersByStatus(page,rowPerPage,status);
-    if(!orders){
-        return res.status(404).json({message:"No orders found"})
+    try{
+        const {page,rowPerPage,status}=req.query;
+        const {orders,totalOrders}=await orderService.getOrdersByStatus(page,rowPerPage,status);
+        if(!orders){
+            return res.status(404).json({message:"No orders found"})
+        }
+        return res.status(200).json({orders,totalOrders})
     }
-    return res.status(200).json({orders,totalOrders})
-}
-catch(e){
-    return res.status(500).json({message:"Internal server error"})
-}
+    catch(e){
+        return res.status(500).json({message:"Internal server error"})
+    }
 }
 const getOrdersDetail=async(req,res)=>{
     try{

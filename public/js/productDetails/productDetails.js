@@ -205,9 +205,11 @@ const handleChangeQuantity=(quantity)=>{
 const handleAddToCart = async (productId,quantityOpt) => {
     try{
         let quantity=1;
-        if(!isNaN(quantityOpt)){
-            quantity=quantityOpt;
+        if(isNaN(quantityOpt)){
+            showToast('Quantity must be a positive integer','warning');
+            return;
         }
+        quantity=quantityOpt;
         quantity=Number($("#quantity").val());
         showSpinnerLoading();
         const res=await fetch('/carts/addItems',{
