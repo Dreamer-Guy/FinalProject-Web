@@ -30,6 +30,13 @@ const createSearchSuggestionHtml=(suggestions)=>{
     `
     <div class="text-lg font-semibold p-2">Search Suggestions</div>
     `;
+    if(suggestions.length===0){
+        const suggestionDiv=document.createElement('div');
+        suggestionDiv.classList.add('search-suggestion','italic','px-2');
+        suggestionDiv.innerHTML=`<div>No suggestions found</div>`;
+        tempContainer.appendChild(suggestionDiv);
+        return tempContainer;
+    };
     suggestions.forEach((suggestion)=>{
         const suggestionDiv=document.createElement('div');
         suggestionDiv.classList.add('search-suggestion','cursor-pointer');
@@ -53,22 +60,27 @@ const createSearchSuggestionHtml=(suggestions)=>{
 }
 
 document.getElementById('search').addEventListener('input',async function (e) {
-    if(e.target.value.length===0){
-        const searchSuggestionContainer=document.getElementById('search-suggestion-container');
-        if(searchSuggestionContainer){
-            searchSuggestionContainer.remove();
+    let debounceTimer;
+    const TIME_OUT_LIMIT=500;
+    debounceTimer=setTimeout(async()=>{
+        try{
+            const res=await fetch(`/products/api/get-suggested?search=${encodeURIComponent(e.target.value.trim())}`);
+            const searchSuggestionContainer=document.getElementById('search-suggestion-container');
+            if(searchSuggestionContainer){
+                searchSuggestionContainer.remove();
+            }
+            if(e.target.value.trim()===''){
+                return;
+            }
+            const data=await res.json();
+            const searchContainer=document.getElementById('search-container');
+            searchContainer.appendChild(createSearchSuggestionHtml(data));
         }
-        return;
-    }
-    try{
-        const res=await fetch(`/products/api/get-suggested?search=${encodeURIComponent(e.target.value)}`);
-        const data=await res.json();
-        const searchContainer=document.getElementById('search-container');
-        searchContainer.appendChild(createSearchSuggestionHtml(data));
-    }
-    catch(e){
-        console.log(e.message);
-    }
+        catch(e){
+            console.log(e.message);
+        }
+
+    },TIME_OUT_LIMIT);
 });
 
 

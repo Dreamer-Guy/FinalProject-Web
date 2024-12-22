@@ -900,6 +900,10 @@ h1, h2, h3, h4, h5, h6 {
   top: 50%;
 }
 
+.top-14 {
+  top: 3.5rem;
+}
+
 .top-2\.5 {
   top: 0.625rem;
 }
@@ -910,18 +914,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .top-full {
   top: 100%;
-}
-
-.top-12 {
-  top: 3rem;
-}
-
-.top-1 {
-  top: 0.25rem;
-}
-
-.top-14 {
-  top: 3.5rem;
 }
 
 .z-10 {
@@ -1133,6 +1125,10 @@ h1, h2, h3, h4, h5, h6 {
   height: 3.5rem;
 }
 
+.h-16 {
+  height: 4rem;
+}
+
 .h-2 {
   height: 0.5rem;
 }
@@ -1209,10 +1205,6 @@ h1, h2, h3, h4, h5, h6 {
   height: 100vh;
 }
 
-.h-16 {
-  height: 4rem;
-}
-
 .max-h-64 {
   max-height: 16rem;
 }
@@ -1263,6 +1255,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .w-14 {
   width: 3.5rem;
+}
+
+.w-16 {
+  width: 4rem;
 }
 
 .w-2 {
@@ -1367,10 +1363,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .w-full {
   width: 100%;
-}
-
-.w-16 {
-  width: 4rem;
 }
 
 .min-w-10 {
@@ -2254,6 +2246,10 @@ h1, h2, h3, h4, h5, h6 {
   text-transform: capitalize;
 }
 
+.italic {
+  font-style: italic;
+}
+
 .leading-3 {
   line-height: .75rem;
 }
@@ -2437,11 +2433,6 @@ h1, h2, h3, h4, h5, h6 {
 .outline-none {
   outline: 2px solid transparent;
   outline-offset: 2px;
-}
-
-.blur {
-  --tw-blur: blur(8px);
-  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
 .filter {
