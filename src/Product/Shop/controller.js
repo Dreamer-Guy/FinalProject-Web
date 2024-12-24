@@ -1,6 +1,5 @@
 import serviceFactory from "../../Factory/serviceFactory.js";
-import elasticSearchService from "../../UtilServices/ElasticSearchService/productService.js";
-import suggesterService from "../../UtilServices/ElasticSearchService/suggesterService.js";
+
 
 const productService = serviceFactory.getProductSerVice();
 const cartService = serviceFactory.getCartService();

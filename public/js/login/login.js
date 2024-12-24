@@ -39,7 +39,8 @@ const handleLogin = async () => {
             body: JSON.stringify(formData)
         });
         if (res.ok) { 
-            window.location.href = "/products/get";
+            const data = await res.json();
+            window.location.href = data.redirectUrl;
         } 
         else if (res.status === 401) {
             document.getElementById('error-message').classList.remove('hidden');

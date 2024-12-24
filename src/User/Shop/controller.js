@@ -12,6 +12,9 @@ const OK_STATUS = 200;
 const BAD_REQUEST_STATUS = 400;
 const INTERNAL_SERVER_ERROR_STATUS = 500;
 
+const ADMIN_BASE_URL = '/admin/dashboard';
+const USER_BASE_URL = '/';
+
 const userService=serviceFactory.getUserService();
 const addressService=serviceFactory.getAddressService();
 const cartService=serviceFactory.getCartService();
@@ -259,27 +262,51 @@ const getLoginPage=async(req,res)=>{
     });
 }
 
-const initUserDataAfterLogin=async (req, res) => {
+const initUserDataAfterFirstLogin=async(req)=>{
     const userId = req.user._id;
     let address = await addressService.getAddressByUserId(userId);
     let cart = await cartService.getCartByUserId(userId);
     if(!address){
-        const defaultAddressData={
+        const defaultAddressData = {
             userId: userId,
             street: "",
             city: "",
-            postalCode: "",
+            postalCode: "", 
             phone: "",
             notes: ""
         }
-        const address=await addressService.createAddress(defaultAddressData);
+        const address = await addressService.createAddress(defaultAddressData);
         await addressService.saveAddress(address);
     }
     if(!cart){
         const newCart = await cartService.createCart(userId, []);
         await cartService.saveCart(newCart);
     }
-    return res.json({message:"Login Success"});
+};
+
+
+const handleLogin=async (req, res) => {
+    try {
+        initUserDataAfterFirstLogin(req);
+        const redirectUrl = req.user.role === 'admin' ? ADMIN_BASE_URL : USER_BASE_URL;
+        return res.json({
+            message: "Login Success",
+            redirectUrl: redirectUrl
+        });
+    } catch (error) {
+        return res.status(500).json({message: error.message});
+    }
+};
+
+const handleLoginGoogle=async(req,res)=>{
+    try {
+        initUserDataAfterFirstLogin(req);
+        const redirectUrl = req.user.role === 'admin' ? ADMIN_BASE_URL : USER_BASE_URL;
+        return res.redirect(redirectUrl);
+    } 
+    catch (error) {
+        return res.status(500).json({message: error.message});
+    }
 };
 
 export {
@@ -287,7 +314,7 @@ export {
     getResetPasswordPage,forgotPassword,
     resetPassWord,getEditInformationPage,updateInformation,
     getChangePasswordPage,changePassword,getAccountPage,
-    getLoginPage,initUserDataAfterLogin};
+    getLoginPage,handleLogin,handleLoginGoogle};
 
 
 

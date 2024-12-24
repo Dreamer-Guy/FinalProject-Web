@@ -1,4 +1,5 @@
 
+
 const DEFAULT_MIN_PRICE=0;
 const DEFAULT_MAX_PRICE=200;
 const DEFAULT_ONSALES=false;
@@ -82,6 +83,10 @@ function setOnSales(){
 }
 
 function setSearch(value){
+    const searchDiv=document.getElementById('search');
+    if(searchDiv.value.trim().length===0){
+        searchDiv.value=value;
+    }
     filters.search=value;
 }
 
@@ -115,6 +120,8 @@ async function handleFilters(type,value,value2_optional){
         setCurrentPage(1);
     }
     const queryParams= new URLSearchParams(filters).toString();
+    const newUrl=`${window.location.pathname}?${queryParams}`;
+    window.history.replaceState(null,'',newUrl);
     try{
         const data=await fetch(`/products/api/get?${queryParams.toString()}`)
         .then(response => response.json());
@@ -227,6 +234,34 @@ const addLastBtn=(paginationContainer,totalPages)=>{
         `);
 };
 
+const readQueryParams=()=>{
+    const queryParams=window.location.search;
+    const urlParams = new URLSearchParams(queryParams);
+    const categoryQuery=urlParams.get('category')||"";
+    const brandQuery=urlParams.get('brand')||"";
+    const categories=categoryQuery.split(',');
+    const brands=brandQuery.split(',');
+    const search=urlParams.get('search')||"";
+    setSearch(search);
+    categories.forEach(category => {    
+        const checkbox = document.querySelector(`input[name='cat-${category}']`);
+        if (checkbox) {
+            setCategory(category);
+            checkbox.checked = true; 
+        }
+    });
+    brands.forEach(brand => {
+        const checkbox = document.querySelector(`input[name='brand-${brand}']`);
+        if (checkbox) {
+            setBrand(brand);
+            checkbox.checked = true; 
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    readQueryParams();
+});
 
 
 

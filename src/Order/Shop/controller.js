@@ -115,6 +115,9 @@ const createOrder=async(req,res)=>{
     if(!address || !cart){
         return res.status(BAD_REQUEST_STATUS).json({message:"Resource not found"});
     }
+    if(cart.items.length===0){
+        return res.status(BAD_REQUEST_STATUS).json({message:"Cart is empty"});
+    }
     const orderData=getOrderData(user,cart,address);
     const order=await orderService.createOrder(orderData);
     await productService.updateQuantityAfterMakingOrder(order);

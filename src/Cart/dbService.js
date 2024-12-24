@@ -5,6 +5,7 @@ const cartService={
         const cart=await Cart.findOne({userId})
         .populate({
             path:'items.productId',
+            match: { isDeleted: false },
             populate:[
                 {
                     path:'brand_id',
@@ -16,6 +17,10 @@ const cartService={
                 }
             ],
         }).lean();
+        
+        if (cart && cart.items) {
+            cart.items = cart.items.filter(item => item.productId != null);
+        }
         return cart;
     },
 
@@ -41,13 +46,15 @@ const cartService={
 
     coutProductInCart: async (userId) => {
         try {
-            const cart = await Cart.findOne({userId}).lean();
-            if (!cart) {
-                return 0;
-            }
-            return cart.items.length;
-        }
-        catch (e){
+            const cart = await Cart.findOne({userId})
+            .populate({
+                path: 'items.productId',
+                match: { isDeleted: false }
+            }).lean();
+            
+            if (!cart) return 0;
+            return cart.items.filter(item => item.productId != null).length;
+        } catch (e) {
             console.log(e);
             return 0;
         }

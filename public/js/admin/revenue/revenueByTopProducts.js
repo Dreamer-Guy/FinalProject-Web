@@ -9,6 +9,14 @@ const decodedTopPurchasedProducts= decodeHTMLEntities(topPurchasedProducts);
 const parsedTopPurchasedProducts = JSON.parse(decodedTopPurchasedProducts);
 
 
+const chunkStringToArrayWithGivenLength=(str,length)=>{
+    const arrOfStrings=[];
+    for(let i=0;i<str.length;i+=length){
+        arrOfStrings.push(str.substring(i,i+length));
+    }
+    return arrOfStrings;
+}
+
 const ctxDay = document.getElementById('revenueByTopProducts').getContext('2d');
 const salesChartInDay = new Chart(ctxDay, {
     type: 'bar', // Change to 'bar', 'pie', etc. for other charts
@@ -36,7 +44,19 @@ const salesChartInDay = new Chart(ctxDay, {
         scales: {
             x: {
                 ticks: {
-                    color: '#374151'
+                    color: '#374151',
+                    callback:function(value){
+                        const label = this.getLabelForValue(value);
+                        const words=label.split(' ');
+                        const MAX_WORD_LENGTH=12;
+                        for (let i = 0; i < words.length; i++) {
+                            if(words[i].length>MAX_WORD_LENGTH){
+                                const splittedWords=chunkStringToArrayWithGivenLength(words[i],MAX_WORD_LENGTH);
+                                words.splice(i,1,...splittedWords);
+                            }
+                        }
+                        return words;
+                    },
                 }
             },
             y: {

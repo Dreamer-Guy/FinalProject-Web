@@ -306,55 +306,62 @@
         <!-- ./diaglog -->
 
         <!-- cart -->
-        <div class="w-full md:w-3/4 flex flex-col gap-5">
-            <% cart.items.forEach((item,index)=>{ %>
-                <div
-                    onclick="window.location.href='/productDetails/get/<%=item.productId._id%>'" 
-                    class="hover:cursor-pointer w-full flex flex-col md:flex-row items-center justify-between border gap-3 md:gap-6 p-4 border-gray-200 rounded">
-                    <div class="w-full md:w-3/5 flex flex-row justify-between items-center gap-3 break-words">
-                        <div class="w-1/5">
-                            <img src="<%=item.productId.image%>" alt="product 6" class="w-[60px] h-[60px] object-cover">
-                        </div>
-                        <div class="w-4/5 flex flex-col justify-center items-end gap-1">
-                            <h2 class="text-gray-800 text-lg font-medium uppercase break-words break-all"><%= item.productId.name %></h2>
-                            <p class="text-gray-500 text-sm">Availability: <span class="text-green-600"><%=item.productId.totalStock %></span></p>
-                        </div>
-                    </div>
-        
-                    <div class="w-full md:w-2/5 flex flex-row gap-4 justify-center md:justify-end items-center">
-                        <div class="flex flex-row justify-center gap-4">
-                            <% if(item.productId.salePrice>0){%>
-                                <div class="text-primary text-lg font-semibold">$<%= item.productId.salePrice %></div>
-                                <div class="text-gray-700 text-lg font-semibold line-through">$<%= item.productId.price %></div>
-                            <%}else{%>
-                                <div class="text-black text-lg font-semibold">$<%= item.productId.price%></div>
-                            <%}%>
-                        </div>
-                        
-                        <div class="flex flex-row gap-2 justify-center items-center">
-                            <button
-                                onclick="updateCartItems('<%= item.productId._id %>','<%= item.quantity-1%>')" 
-                                class="p-2 border border-black w-[35px] h-[35px] 
-                                flex justify-center items-center rounded-xl ">-</button>
-                            <span class="p-2 w-[35px] h-[35px] flex justify-center items-center"><%= item.quantity %></span>
-                            <button 
-                            onclick="updateCartItems('<%= item.productId._id %>','<%= item.quantity+1%>')"
-                                class="p-2 border border-black w-[35px] h-[35px] 
-                                flex justify-center items-center rounded-xl ">+</button>
-                        </div>
-        
+        <div class="w-full md:w-3/4 flex flex-col gap-5" >
+            <div class="flex flex-col gap-2" id="cart-container">
+                <% cart.items.forEach((item,index)=>{ %>
+                    <% if(item.productId && !item.productId.isDeleted){ %>
+                    <div
+                        class="hover:cursor-pointer w-full flex flex-col md:flex-row items-center justify-between border gap-3 md:gap-6 p-4 border-gray-200 rounded">
                         <div
-                            onclick="deleteCartItems('<%= item.productId._id %>')" 
-                            class="text-gray-600 cursor-pointer hover:text-primary">
-                            <i class="fa-solid fa-trash"></i>
+                            onclick="window.location.href='/productDetails/get/<%=item.productId._id%>'"  
+                            class="w-full md:w-3/5 flex flex-row justify-between items-center gap-3 break-words">
+                            <div class="w-1/5">
+                                <img src="<%=item.productId.image%>" alt="product 6" class="w-[60px] h-[60px] object-cover">
+                            </div>
+                            <div class="w-4/5 flex flex-col justify-center items-end gap-1">
+                                <h2 class="text-gray-800 text-lg font-medium uppercase break-words break-all"><%= item.productId.name %></h2>
+                                <p class="text-gray-500 text-sm">Availability: <span class="text-green-600"><%=item.productId.totalStock %></span></p>
+                            </div>
+                        </div>
+            
+                        <div class="w-full md:w-2/5 flex flex-row gap-4 justify-center md:justify-end items-center">
+                            <div class="flex flex-row justify-center gap-4">
+                                <% if(item.productId.salePrice>0){%>
+                                    <div class="text-primary text-lg font-semibold">$<%= item.productId.salePrice %></div>
+                                    <div class="text-gray-700 text-lg font-semibold line-through">$<%= item.productId.price %></div>
+                                <%}else{%>
+                                    <div class="text-black text-lg font-semibold">$<%= item.productId.price%></div>
+                                <%}%>
+                            </div>
+                            
+                            <div class="flex flex-row gap-2 justify-center items-center">
+                                <button
+                                    onclick="updateCartItems('<%= item.productId._id %>','<%= item.quantity-1%>')" 
+                                    class="p-2 border border-black w-[35px] h-[35px] 
+                                    flex justify-center items-center rounded-xl ">-</button>
+                                <span class="p-2 w-[35px] h-[35px] flex justify-center items-center"><%= item.quantity %></span>
+                                <button 
+                                onclick="updateCartItems('<%= item.productId._id %>','<%= item.quantity+1%>')"
+                                    class="p-2 border border-black w-[35px] h-[35px] 
+                                    flex justify-center items-center rounded-xl ">+</button>
+                            </div>
+            
+                            <div
+                                onclick="deleteCartItems('<%= item.productId._id %>')" 
+                                class="text-gray-600 cursor-pointer hover:text-primary">
+                                <i class="fa-solid fa-trash"></i>
+                            </div>
                         </div>
                     </div>
-                </div>
-            <% }); %>
+                    <% } else { %>
+                        <div class="text-red-500">Product not available</div>
+                    <% } %>
+                <% }); %>
+            </div>
 
             <div class="col-span-4 border border-gray-200 p-4 rounded bg-gray-200">
                 <h4 class="text-gray-800 text-lg mb-4 font-medium uppercase">order summary</h4>
-                <div class="space-y-2">
+                <div class="space-y-2" id="order-summary-container">
                     <% cart.items.forEach((item,index)=>{ %>
                         <div class="flex justify-between bg-white border border-black rounded-md p-2 items-center">
                             <div class="w-3/6">
@@ -382,7 +389,7 @@
     
                 <div class="flex justify-between text-gray-800 font-medium py-3 uppercas">
                     <p class="font-semibold">Total</p>
-                    <p><span class="font-semibold">$</span>
+                    <p id="total"><span class="font-semibold">$</span>
                         <%= cart.items.reduce((acc,item)=>
                             (item.productId.salePrice>0
                                 ?acc+=(item.productId.salePrice*item.quantity)

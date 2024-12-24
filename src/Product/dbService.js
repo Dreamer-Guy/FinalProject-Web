@@ -1,18 +1,22 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 import Product from "../Model/Product.js";
 import elasticSearchService from "../UtilServices/ElasticSearchService/productService.js";
 import suggesterService from "../UtilServices/ElasticSearchService/suggesterService.js";
+import { resolve } from "chart.js/helpers";
 
 const productService = {
     getAll:async()=>{
-        const products=await Product.find()
-        .populate('brand_id')
-        .populate('category_id')
-        .lean();
-        return products;
+        return await Product.find({ isDeleted: false })
+            .populate('category_id')
+            .populate('brand_id')
+            .lean();
     },
     create: async (productProps) => {
-        const productRes =await Product.create(productProps);
+        const productRes =new Product(productProps);
+        const savedProduct=await productRes.save();
+        const populatedProduct=await Product.findById(savedProduct._id).populate('category_id').populate('brand_id').lean();
+        await elasticSearchService.SynchronizeAfterProductCreation(populatedProduct);
+        await suggesterService.SynchronizeAfterProductCreation(populatedProduct);
         return productRes;
     },
     save: async (product) => {
@@ -24,7 +28,7 @@ const productService = {
         return product !== null;
     },
     getProducts: async ({ brands, categories, sortField='price', sortOrder=1,minPrice=0,priceRange }) => {
-        const products = await Product.find()
+        const products = await Product.find({ isDeleted: false })
             .byCategory(categories)
             .byBrand(brands)
             .byPrice(priceRange)
@@ -35,17 +39,27 @@ const productService = {
     },
     
     getProductById: async (productId) => {
-        const product = await Product.findById(productId).populate('brand_id').populate('category_id').lean();
-        return product;
+        return await Product.findOne({ _id: productId, isDeleted: false })
+            .populate('category_id')
+            .populate('brand_id')
+            .lean();
     },
 
     updateByProductId: async (productId, productProps) => {
-        const product = await Product.findByIdAndUpdate(productId, productProps, { new: true });
+        const product = await Product
+        .findByIdAndUpdate(productId, productProps, { new: true })
+        .populate('category_id')
+        .populate('brand_id')
+        .lean();
+        await elasticSearchService.SynchronizeAfterProductUpdate(product);
+        await suggesterService.SynchronizeAfterProductUpdate(product);
         return product;
     },
 
     deleteByProductId: async (productId) => {
         await Product.findByIdAndDelete(productId);
+        await elasticSearchService.SynchronizeAfterProductDelete(productId);
+        await suggesterService.SynchronizeAfterProductDeletion(productId);
     },
 
     getRelatedProductsByProductId: async (productId,limit=5) => {
@@ -74,6 +88,7 @@ const productService = {
             {
                 $match: {
                     $and: [
+                        { isDeleted: false },
                         {
                             $or: [
                                 {
@@ -106,57 +121,59 @@ const productService = {
                     price: { $gte: minPrice, $lte: maxPrice }
                 }
             });
-        const products = await Product.aggregate([
-            {
-                $lookup:{
-                    from:'brands',
-                    localField:'brand_id',
-                    foreignField:'_id',
-                    as:'brand'
+            const products = await Product.aggregate([
+                {
+                    $lookup:{
+                        from:'brands',
+                        localField:'brand_id',
+                        foreignField:'_id',
+                        as:'brand'
+                    }
+                },
+                {$unwind:'$brand'},
+                {
+                    $lookup:{
+                        from:'categories',
+                        localField:'category_id',
+                        foreignField:'_id',
+                        as:'category'
+                    }
+                },
+                {$unwind:'$category'},
+                {
+                    $match:{
+                        $and: [
+                            { isDeleted: false },
+                            {
+                                $or:[
+                                    { 'category.name': { $regex: searchTerm, $options: 'i' } },
+                                    { 'brand.name': { $regex: searchTerm, $options: 'i' } },
+                                    { name: { $regex: searchTerm, $options: 'i' } },
+                                    { description:{ $regex: searchTerm, $options: 'i' }}
+                                ]
+                            },
+                            categories.length > 0 ? { 'category.name': { $in: categories.map(c => new RegExp(c, 'i')) } } : {},
+                            brands.length > 0 ? { 'brand.name': { $in: brands.map(b => new RegExp(b, 'i')) } } : {},
+                            {
+                                $or: priceConditions
+                            }
+                        ]
+                    }
+                },
+                {
+                    $sort: { [sortField]: parseInt(sortOrder) }
                 }
-            },
-            {$unwind:'$brand'},
-            {
-                $lookup:{
-                    from:'categories',
-                    localField:'category_id',
-                    foreignField:'_id',
-                    as:'category'
-                }
-            },
-            {$unwind:'$category'},
-            {
-                $match:{
-                    $and: [
-                        {
-                            $or:[
-                                { 'category.name': { $regex: searchTerm, $options: 'i' } },
-                                { 'brand.name': { $regex: searchTerm, $options: 'i' } },
-                                { name: { $regex: searchTerm, $options: 'i' } },
-                                { description:{ $regex: searchTerm, $options: 'i' }}
-                            ]
-                        },
-                        categories.length > 0 ? { 'category.name': { $in: categories.map(c => new RegExp(c, 'i')) } } : {},
-                        brands.length > 0 ? { 'brand.name': { $in: brands.map(b => new RegExp(b, 'i')) } } : {},
-                        {
-                            $or: priceConditions
-                        }
-                    ]
-                }
-            },
-            {
-                $sort: { [sortField]: parseInt(sortOrder) }
-            }
-        ]);
+            ]);
         return products;
     },
 
     getTopProducts: async (top) => {
-        const products = await Product.find().sort({ rating: -1 }).limit(top);
+        const products = await Product.find({ isDeleted: false })
+            .sort({ rating: -1 })
+            .limit(top);
         return products;
     },
 
-    //allow users concurrently make orders even out of stock, then let admin decided choose which orders to fulfill
     updateQuantityAfterMakingOrder: async (order) => {
         order.items.forEach(async (item) => {
             const product = await Product.findById(item.productId);
@@ -168,23 +185,73 @@ const productService = {
         const product=await Product.findById(productId);
         product.rating=(product.rating*product.numReviews+rating)/(product.numReviews+1);
         product.numReviews=product.numReviews+1;
-        await product.save();
+        const savedProduct=await product.save();
+        await elasticSearchService.SynchronizeAfterProductUpdate(savedProduct);
+        return savedProduct;
     },
-    getProductsFromElastic:async(searchTerm,
-        { brands=[], categories=[], sortField='price', sortOrder=1,priceRange })=>{
-        const products=await elasticSearchService.search(searchTerm,brands,categories,priceRange,sortField,sortOrder);
-        return products;
+    softDelete: async (id) => {
+        const updatedProduct=await Product.findByIdAndUpdate(
+            id,
+            { isDeleted: true },
+            { new: true }
+        )
+        .populate('category_id')
+        .populate('brand_id')
+        .lean();   
+        await elasticSearchService.SynchronizeAfterProductDelete(id);
+        await suggesterService.SynchronizeAfterProductDeletion(id);
+        return updatedProduct;
+    },
+    getPaginated: async ({ skip = 0, limit = 10, sort = {}, filter = {} }) => {
+        const baseFilter = { isDeleted: false, ...filter };
+        return await Product.find(baseFilter)
+            .populate('category_id')
+            .populate('brand_id')
+            .sort(sort)
+            .skip(skip)
+            .limit(limit)
+            .lean();
+    },
+    countAll: async (filter = {}) => {
+        const baseFilter = { isDeleted: false, ...filter };
+        return await Product.countDocuments(baseFilter);
+    },
+    getDeletedProducts: async ({ brands, categories, sortField='price', sortOrder=1, priceRange }) => {
+        const products = await Product.find({ isDeleted: true })
+            .byCategory(categories)
+            .byBrand(brands)
+            .byPrice(priceRange)
+            .sort({ [sortField]: sortOrder })
+            .lean();
+        return products.filter(product => product.category_id && product.brand_id);
     },
 
-    SynchronizeProductsToElastic:async()=>{
-        const products=await productService.getAll();
-        await elasticSearchService.SynchronizeProductsToElastic(products);
+    countDeletedProducts: async (filter = {}) => {
+        const baseFilter = { isDeleted: true, ...filter };
+        return await Product.countDocuments(baseFilter);
     },
 
-    getSuggestedProducts:async(search)=>{
-        const products=await suggesterService.getSuggestions(search);
-        return products;
+    restoreProduct: async (productId) => {
+        const restoredProduct=await Product.findByIdAndUpdate(
+            productId,
+            { isDeleted: false },
+            { new: true }
+        )
+        .populate('category_id')
+        .populate('brand_id')
+        .lean();
+        await elasticSearchService.SynchronizeAfterProductCreation(restoredProduct);
+        await suggesterService.SynchronizeAfterProductCreation(restoredProduct);
+        return restoredProduct;
     },
+
+    async getProductsFromElastic(search,{brands, categories, sortField, sortOrder,priceRange }){
+        return elasticSearchService.search(search,brands, categories, priceRange,sortField, sortOrder,);
+    },
+
+    async getSuggestedProducts(search){
+        return suggesterService.getSuggestions(search);
+    }
 };
 
 export default productService;
