@@ -1,9 +1,9 @@
 import serviceFactory from "../../Factory/serviceFactory.js";
-import { hashPassword ,comparePlainAndHashed} from "../../Utils/hashAndCompare.js";
-import sendEmail from "../../Utils/sendEmail.js";
+import { hashPassword ,comparePlainAndHashed} from "../../utils/hashAndCompare.js";
+import sendEmail from "../../utils/sendEmail.js";
 import dotenv from 'dotenv';
 import { randomBytes } from 'crypto';
-import uploadImage from "../../Utils/uploadImage.js"
+import uploadImage from "../../utils/uploadImage.js"
 import fs from 'fs-extra';
 import { console } from "inspector";
 dotenv.config();
