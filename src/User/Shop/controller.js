@@ -1,5 +1,5 @@
 import serviceFactory from "../../Factory/serviceFactory.js";
-import { hashPassword ,comparePlainAndHashed} from "../../Utils/hashAndCompare.js";
+import { hashPassword ,comparePlainAndHashed} from "../../utils/hashAndCompare.js";
 import sendEmail from "../../Utils/sendEmail.js";
 import dotenv from 'dotenv';
 import { randomBytes } from 'crypto';
