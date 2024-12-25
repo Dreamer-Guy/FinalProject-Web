@@ -202,15 +202,13 @@ const handleChangeQuantity=(quantity)=>{
     $("#quantity").val(newValue);
 };
 
-const handleAddToCart = async (productId,quantityOpt) => {
+const handleAddToCart = async (productId) => {
     try{
-        let quantity=1;
-        if(isNaN(quantityOpt)){
+        if(isNaN($("#quantity").val())){
             showToast('Quantity must be a positive integer','warning');
             return;
         }
-        quantity=quantityOpt;
-        quantity=Number($("#quantity").val());
+        const quantity=Number($("#quantity").val());
         showSpinnerLoading();
         const res=await fetch('/carts/addItems',{
             method:"POST",

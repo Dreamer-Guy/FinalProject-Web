@@ -17,6 +17,7 @@
     "tailwindcss": "^3.4.14"
   },
   "dependencies": {
+    "@elastic/elasticsearch": "^8.17.0",
     "@fortawesome/fontawesome-free": "^6.0.0",
     "axios": "^1.7.8",
     "bcryptjs": "^2.4.3",

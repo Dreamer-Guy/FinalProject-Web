@@ -1,6 +1,6 @@
 import Brand from "../Model/Brand.js";
 import Product from "../Model/Product.js";
-
+import elasticSearchService from "../UtilServices/ElasticSearchService/productService.js";
 const brandService = {
     getAll: async () => {
         return await Brand.find({ 
@@ -9,7 +9,9 @@ const brandService = {
     },
     
     create: async (brandData) => {
-        const brand = new Brand(brandData);   return await brand.save();
+        const brand = new Brand(brandData);
+        const savedBrand=await brand.save();   
+        return savedBrand; 
     },
     
    findByName: async (name) => {
@@ -42,12 +44,13 @@ const brandService = {
         if (brand?.name === 'Other') {
             throw new Error('Cannot modify default brand');
         }
-
-        return await Brand.findByIdAndUpdate(
+        const updatedBrand=await Brand.findByIdAndUpdate(
             id, 
             updateData,
             { new: true }
         ).lean();
+        await elasticSearchService.SynchronizeAfterBrandUpdate(updatedBrand);
+        return updatedBrand;
     },
     
     findByNameExcept: async (name, excludeId) => {
@@ -91,12 +94,13 @@ const brandService = {
             { brand_id: brandId },
             { brand_id: defaultBrand._id }
         );
-
-        return await Brand.findByIdAndUpdate(
+        const updatedBrand=await Brand.findByIdAndUpdate(
             brandId,
             { isDeleted: true },
             { new: true }
         );
+        await elasticSearchService.SynchronizeAfterBrandDelete(brandId);
+        return updatedBrand; 
     },
 
     isDefaultBrand: async (brandId) => {

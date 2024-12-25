@@ -55,7 +55,8 @@ app.use(express.static(path.join(process.cwd(), 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(process.cwd(), 'views'));
 
-app.use("/", homeRouter);
+
+    app.use("/", homeRouter);
 app.use("/products", productRouter);
 app.use("/productDetails", productDetailsRouter);
 app.use("/user", userRouter);
