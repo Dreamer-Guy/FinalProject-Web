@@ -74,7 +74,7 @@ function setPrice(min,max){
 }
 
 function setOnSales(){
-    if(filters.onSales==='true'){
+    if(filters.onSales===true){
         filters.onSales=false;
     }
     else{

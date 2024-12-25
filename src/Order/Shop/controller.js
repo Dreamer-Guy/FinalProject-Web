@@ -30,7 +30,7 @@ const populateOrder=(order)=>{
 
 
 const getOrderItems=(items)=>{
-    return items.map(item=>({
+    return items.filter(item=>item.productId.isDeleted === false).map(item=>({
         productId:item.productId._id.toString(),
         name:item.productId.name,
         category:item.productId.category_id.name,
@@ -40,6 +40,10 @@ const getOrderItems=(items)=>{
         quantity:item.quantity,
     }));
 };
+
+const isCartEmpty=(cart)=>{
+    return cart.items.filter(item=>item.productId.isDeleted === false).length===0;
+}
 
 const calculateOrderTotal=(items)=>{
     return items.reduce((total,item)=>{
@@ -115,7 +119,7 @@ const createOrder=async(req,res)=>{
     if(!address || !cart){
         return res.status(BAD_REQUEST_STATUS).json({message:"Resource not found"});
     }
-    if(cart.items.length===0){
+    if(isCartEmpty(cart)){
         return res.status(BAD_REQUEST_STATUS).json({message:"Cart is empty"});
     }
     const orderData=getOrderData(user,cart,address);
