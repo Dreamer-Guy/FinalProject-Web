@@ -1,6 +1,8 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 import Product from "../Model/Product.js";
-
+import elasticSearchService from "../UtilServices/ElasticSearchService/productService.js";
+import suggesterService from "../UtilServices/ElasticSearchService/suggesterService.js";
+import { resolve } from "chart.js/helpers";
 
 const productService = {
     getAll:async()=>{
@@ -10,7 +12,11 @@ const productService = {
             .lean();
     },
     create: async (productProps) => {
-        const productRes =await Product.create(productProps);
+        const productRes =new Product(productProps);
+        const savedProduct=await productRes.save();
+        const populatedProduct=await Product.findById(savedProduct._id).populate('category_id').populate('brand_id').lean();
+        await elasticSearchService.SynchronizeAfterProductCreation(populatedProduct);
+        await suggesterService.SynchronizeAfterProductCreation(populatedProduct);
         return productRes;
     },
     save: async (product) => {
@@ -40,12 +46,20 @@ const productService = {
     },
 
     updateByProductId: async (productId, productProps) => {
-        const product = await Product.findByIdAndUpdate(productId, productProps, { new: true });
+        const product = await Product
+        .findByIdAndUpdate(productId, productProps, { new: true })
+        .populate('category_id')
+        .populate('brand_id')
+        .lean();
+        await elasticSearchService.SynchronizeAfterProductUpdate(product);
+        await suggesterService.SynchronizeAfterProductUpdate(product);
         return product;
     },
 
     deleteByProductId: async (productId) => {
         await Product.findByIdAndDelete(productId);
+        await elasticSearchService.SynchronizeAfterProductDelete(productId);
+        await suggesterService.SynchronizeAfterProductDeletion(productId);
     },
 
     getRelatedProductsByProductId: async (productId,limit=5) => {
@@ -171,14 +185,22 @@ const productService = {
         const product=await Product.findById(productId);
         product.rating=(product.rating*product.numReviews+rating)/(product.numReviews+1);
         product.numReviews=product.numReviews+1;
-        await product.save();
+        const savedProduct=await product.save();
+        await elasticSearchService.SynchronizeAfterProductUpdate(savedProduct);
+        return savedProduct;
     },
     softDelete: async (id) => {
-        return await Product.findByIdAndUpdate(
+        const updatedProduct=await Product.findByIdAndUpdate(
             id,
             { isDeleted: true },
             { new: true }
-        ).lean();
+        )
+        .populate('category_id')
+        .populate('brand_id')
+        .lean();   
+        await elasticSearchService.SynchronizeAfterProductDelete(id);
+        await suggesterService.SynchronizeAfterProductDeletion(id);
+        return updatedProduct;
     },
     getPaginated: async ({ skip = 0, limit = 10, sort = {}, filter = {} }) => {
         const baseFilter = { isDeleted: false, ...filter };
@@ -210,11 +232,25 @@ const productService = {
     },
 
     restoreProduct: async (productId) => {
-        return await Product.findByIdAndUpdate(
+        const restoredProduct=await Product.findByIdAndUpdate(
             productId,
             { isDeleted: false },
             { new: true }
-        ).lean();
+        )
+        .populate('category_id')
+        .populate('brand_id')
+        .lean();
+        await elasticSearchService.SynchronizeAfterProductCreation(restoredProduct);
+        await suggesterService.SynchronizeAfterProductCreation(restoredProduct);
+        return restoredProduct;
+    },
+
+    async getProductsFromElastic(search,{brands, categories, sortField, sortOrder,priceRange }){
+        return elasticSearchService.search(search,brands, categories, priceRange,sortField, sortOrder,);
+    },
+
+    async getSuggestedProducts(search){
+        return suggesterService.getSuggestions(search);
     }
 };
 

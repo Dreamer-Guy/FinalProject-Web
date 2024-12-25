@@ -222,7 +222,6 @@ const addProduct = async (req, res) => {
             product: savedProduct 
         });
     } catch (error) {
-        console.error(error);
         res.status(500).json({ message: 'Error creating product' });
     }
 };
@@ -240,7 +239,6 @@ const uploadProductImage = async (req, res) => {
         if (!imageUrl) {
             return res.status(500).json({ message: "Failed to upload image" });
         }
-        console.log(imageUrl);
         res.json({ imageUrl });
     } catch (error) {
         console.error("Upload error:", error);
@@ -263,7 +261,6 @@ const getEditProductPage = async (req, res) => {
         const categoryProperties = await productPropertyService.getPropertiesByCategoryId(product.category_id);
         const alternativeImages=await imagesProductService.getAllAlternativeImagesOfProduct(productId)||[];
         const user = req.user || null;
-        console.log(alternativeImages);
         res.render('admin/editProduct', {
             user,
             product,

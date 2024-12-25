@@ -1,5 +1,6 @@
 import serviceFactory from "../../Factory/serviceFactory.js";
 
+
 const productService = serviceFactory.getProductSerVice();
 const cartService = serviceFactory.getCartService();
 const brandService = serviceFactory.getBrandService();
@@ -76,12 +77,7 @@ const getProductsPage = async (req, res) => {
         const {onSales}=req.query;
         const {search}=req.query;
         let products=[];
-        if(search && search.trim().length>0){
-            products=await productService.getProductsBySearch(search,{brands, categories, sortField, sortOrder,priceRange });
-        }
-        else{
-            products = await productService.getProducts({ brands, categories, sortField, sortOrder,priceRange });
-        }
+        products=await productService.getProductsFromElastic(search,{brands, categories, sortField, sortOrder,priceRange });
         if(onSales==='true'){
             products=products.filter((product)=>product.salePrice>0);
         }
@@ -117,12 +113,7 @@ const apiGetProducts=async (req, res) => {
         const {onSales}=req.query;
         const {search}=req.query;
         let products=[];
-        if(search && search.trim().length>0){
-            products=await productService.getProductsBySearch(search,{brands, categories, sortField, sortOrder,priceRange });
-        }
-        else{
-            products = await productService.getProducts({ brands, categories, sortField, sortOrder,priceRange });
-        }
+        products=await productService.getProductsFromElastic(search,{brands, categories, sortField, sortOrder,priceRange });
         if(onSales==='true'){
             products=products.filter((product)=>product.salePrice>0);
         }
@@ -141,4 +132,18 @@ const apiGetProducts=async (req, res) => {
         });
     }
 };
-export { getProductsPage,apiGetProducts};
+
+const apiGetSuggestedProducts=async (req,res)=>{
+    try {
+        const {search}=req.query;
+        const products=await productService.getSuggestedProducts(search);
+        return res.send(products);
+    }
+    catch (e) {
+        console.log(e.message);
+        return res.json({
+            message:"There is an internal error",
+        });
+    }
+};
+export { getProductsPage,apiGetProducts,apiGetSuggestedProducts };

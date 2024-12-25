@@ -1,6 +1,8 @@
-import { create } from "migrate-mongo";
+
 import Order from "../Model/Order.js";
 import User from "../Model/User.js";
+import suggesterService from "../UtilServices/ElasticSearchService/suggesterService.js";
+
 const orderService={
     getOrdersByUserId:async(userId)=>{
         const orders=await Order.find({userId:userId}).sort({createdAt:-1}).lean();
@@ -15,7 +17,9 @@ const orderService={
         return order;
     },
     save:async(order)=>{
-        return await order.save();
+        const savedOrder=await order.save();
+        await suggesterService.SynchronizeAfterOrdering(savedOrder);
+        return savedOrder;
     },
     getOrdersInTimeRange:async(startDate,endDate)=>{
         const orders=await Order.find({
@@ -88,5 +92,6 @@ const orderService={
         });
     }
 };
+
 
 export default orderService;

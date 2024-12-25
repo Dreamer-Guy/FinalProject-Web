@@ -1,5 +1,6 @@
 import Category from "../Model/Category.js";
 import Product from "../Model/Product.js";
+import elasticSearchService from "../UtilServices/ElasticSearchService/productService.js";
 
 const categoryService = {
     getAll: async () => {
@@ -21,8 +22,7 @@ const categoryService = {
             { category_id: id },
             { category_id: defaultCategory._id }
         );
-
-        return await Category.findByIdAndUpdate(
+        const updatedCategory=await Category.findByIdAndUpdate(
             id,
             { 
                 isDeleted: true,
@@ -30,6 +30,8 @@ const categoryService = {
             },
             { new: true }
         );
+        await elasticSearchService.SynchronizeAfterCategoryDelete(id);
+        return updatedCategory; 
     },
 
     restore: async (id) => {
@@ -69,11 +71,13 @@ const categoryService = {
     },
 
     updateById: async (id, updateData) => {
-        return await Category.findByIdAndUpdate(
+        const updatedCategory=await Category.findByIdAndUpdate(
             id,
             updateData,
             { new: true, runValidators: true }
         ).lean();
+        await elasticSearchService.SynchronizeAfterCategoryUpdate(updatedCategory);
+        return updatedCategory;
     }
 };
 
