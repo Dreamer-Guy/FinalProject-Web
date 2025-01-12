@@ -97,5 +97,9 @@ const updateAddress = async (req, res) => {
     }
 }
 
+const shopAddressController = {
+    getEditAddressPage,
+    updateAddress
+};
 
-export {getEditAddressPage,updateAddress}
+export default shopAddressController;

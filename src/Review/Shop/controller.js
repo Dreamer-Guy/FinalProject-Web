@@ -126,4 +126,9 @@ const getReviewsApi=async(req,res)=>{
     }
 }
 
-export {addReview,getUserReviewsPage,getReviewsApi};
+const shopReviewController={
+    addReview,
+    getUserReviewsPage,
+    getReviewsApi
+};
+export default shopReviewController;

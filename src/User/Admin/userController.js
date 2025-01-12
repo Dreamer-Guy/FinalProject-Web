@@ -109,4 +109,11 @@ const HandlelockUser =async(req,res)=>{
     }
 
 };
-export {getAllUsers,getUsersApi,HandlelockUser,getUserDetail}
+
+const adminUserController = {
+    getAllUsers,
+    getUsersApi,
+    HandlelockUser,
+    getUserDetail
+};
+export default adminUserController;

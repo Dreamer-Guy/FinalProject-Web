@@ -146,4 +146,11 @@ const apiGetSuggestedProducts=async (req,res)=>{
         });
     }
 };
-export { getProductsPage,apiGetProducts,apiGetSuggestedProducts };
+
+const shopProductController={
+    getProductsPage,
+    apiGetProducts,
+    apiGetSuggestedProducts,
+};
+
+export default shopProductController;

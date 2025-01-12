@@ -1,38 +1,33 @@
 import expresss from "express";
-import {getRegisterPage,registerUser,logoutUser,
-    getForgotPasswordPage,getResetPasswordPage,forgotPassword,
-    resetPassWord,getEditInformationPage,updateInformation,
-    getChangePasswordPage,changePassword,getAccountPage,
-    getLoginPage,handleLogin,handleLoginGoogle}
-from "./controller.js";
+import userController from "./controller.js";
 import passportLocal from "../../middleWare/PassPort.js";
 import googlePassPort from "../../middleWare/googlePassport.js";
 import upload from "../../Config/multer.js";
 
 const userRouter = expresss.Router();
 
-userRouter.get("/changePassword", getChangePasswordPage);
-userRouter.put("/changePassword", changePassword);
+userRouter.get("/changePassword", userController.getChangePasswordPage);
+userRouter.put("/changePassword", userController.changePassword);
 
 
-userRouter.get("/profile", getEditInformationPage);
-userRouter.get("/account", getAccountPage);
-userRouter.put('/:id', upload.single('avatar'), updateInformation)
+userRouter.get("/profile", userController.getEditInformationPage);
+userRouter.get("/account", userController.getAccountPage);
+userRouter.put('/:id', upload.single('avatar'), userController.updateInformation)
 
 
 
-userRouter.get("/login", getLoginPage);
-userRouter.post("/loginUser",passportLocal.authenticate('local'),handleLogin);
+userRouter.get("/login", userController.getLoginPage);
+userRouter.post("/loginUser",passportLocal.authenticate('local'),userController.handleLogin);
 
-userRouter.get("/logout",logoutUser);
+userRouter.get("/logout",userController.logoutUser);
 
-userRouter.get("/register",getRegisterPage);
-userRouter.post("/registeruser",registerUser);
+userRouter.get("/register",userController.getRegisterPage);
+userRouter.post("/registeruser",userController.registerUser);
 
-userRouter.get("/forgot/get",getForgotPasswordPage);
-userRouter.get("/reset/get",getResetPasswordPage);
-userRouter.get("/forgotPassword",forgotPassword);
-userRouter.post("/resetPassword",resetPassWord);
+userRouter.get("/forgot/get",userController.getForgotPasswordPage);
+userRouter.get("/reset/get",userController.getResetPasswordPage);
+userRouter.get("/forgotPassword",userController.forgotPassword);
+userRouter.post("/resetPassword",userController.resetPassWord);
 
 userRouter.get("/auth/google",googlePassPort.authenticate('google'),(req, res) => {
     return res.json({
@@ -46,6 +41,6 @@ userRouter.get("/auth/google/callback",googlePassPort.authenticate('google',
         failureRedirect: '/user/login',
         failureMessage: true
     }),
-    handleLoginGoogle);
+    userController.handleLoginGoogle);
 
 export default userRouter;

@@ -123,4 +123,12 @@ const deleteBrand = async (req, res) => {
     }
 };
 
-export { getBrands, getBrandPage, addBrand, getAddBrandPage, updateBrand, deleteBrand };
+const adminBrandController={
+    getBrands,
+    getBrandPage,
+    addBrand,
+    getAddBrandPage,
+    updateBrand,
+    deleteBrand
+}
+export default adminBrandController;
