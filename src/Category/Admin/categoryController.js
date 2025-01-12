@@ -220,9 +220,9 @@ const restoreCategory = async (req, res) => {
     }
 };
 
-export { 
-    getCategoryProperties, 
-    getCategories, 
+const adminCategoryController = {
+    getCategoryProperties,
+    getCategories,
     getCategoryPage,
     getAddCategoryPage,
     addCategory,
@@ -231,5 +231,7 @@ export {
     deleteProperty,
     deleteCategory,
     getDeletedCategories,
-    restoreCategory 
+    restoreCategory
 };
+
+export default adminCategoryController;

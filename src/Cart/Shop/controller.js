@@ -167,6 +167,14 @@ const getCartPage=async (req,res) => {
     });
 };
 
+const shopCartControler={
+    getCartPage,
+    addCartItem,
+    updateCartItem,
+    deleteCartItem,
+    deleteCart
+}
 
 
-export {getCartPage,addCartItem,updateCartItem,deleteCartItem};
+
+export default shopCartControler;

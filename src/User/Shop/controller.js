@@ -309,12 +309,15 @@ const handleLoginGoogle=async(req,res)=>{
     }
 };
 
-export {
-    getRegisterPage,registerUser,logoutUser,getForgotPasswordPage,
-    getResetPasswordPage,forgotPassword,
+const userController={
+    getRegisterPage,registerUser,logoutUser,
+    getForgotPasswordPage,getResetPasswordPage,forgotPassword,
     resetPassWord,getEditInformationPage,updateInformation,
     getChangePasswordPage,changePassword,getAccountPage,
-    getLoginPage,handleLogin,handleLoginGoogle};
+    getLoginPage,handleLogin,handleLoginGoogle
+};
+
+export default userController;
 
 
 

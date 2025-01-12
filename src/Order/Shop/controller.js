@@ -131,4 +131,11 @@ const createOrder=async(req,res)=>{
         order:savedOrder,
     });
 };
-export {getOrderViewPage,getOrderDetailsPage,createOrder,getOrdersApi};
+
+const shopOrderController={
+    getOrderViewPage,
+    getOrderDetailsPage,
+    createOrder,
+    getOrdersApi,
+}
+export default shopOrderController;

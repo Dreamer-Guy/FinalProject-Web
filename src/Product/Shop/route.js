@@ -1,12 +1,11 @@
 import express from "express";
-import {getProductsPage,apiGetProducts,apiGetSuggestedProducts}
-from "./controller.js";
+import shopProductController from "./controller.js";
 
 
 const shoppingProductRouter=express.Router();
 
-shoppingProductRouter.get("/get",getProductsPage);
-shoppingProductRouter.get("/api/get",apiGetProducts);
-shoppingProductRouter.get("/api/get-suggested",apiGetSuggestedProducts);
+shoppingProductRouter.get("/get",shopProductController.getProductsPage);
+shoppingProductRouter.get("/api/get",shopProductController.apiGetProducts);
+shoppingProductRouter.get("/api/get-suggested",shopProductController.apiGetSuggestedProducts);
 
 export default shoppingProductRouter;

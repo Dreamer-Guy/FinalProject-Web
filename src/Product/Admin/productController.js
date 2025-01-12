@@ -2,6 +2,7 @@ import serviceFactory from "../../Factory/serviceFactory.js";
 import mongoose from "mongoose";
 import uploadImage from "../../utils/uploadImage.js";
 import fs from "fs-extra";
+import exp from "constants";
 
 const productService = serviceFactory.getProductSerVice();
 const categoryService = serviceFactory.getCategoryService();
@@ -391,5 +392,19 @@ const getDeletedProductsApi = async (req, res) => {
 };
 
 
+const adminProductController = {
+    getProductPage,
+    getProductsApi,
+    deleteProduct,
+    getProductDetail,
+    getAddProductPage,
+    addProduct,
+    uploadProductImage,
+    getEditProductPage,
+    updateProduct,
+    restoreProduct,
+    getDeletedProductsPage,
+    getDeletedProductsApi
+};
 
-export { getProductPage, getProductsApi, deleteProduct, getProductDetail, getAddProductPage, addProduct, uploadProductImage, getEditProductPage, updateProduct, restoreProduct, getDeletedProductsPage, getDeletedProductsApi };
+export default adminProductController;

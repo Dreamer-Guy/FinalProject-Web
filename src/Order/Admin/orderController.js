@@ -73,4 +73,9 @@ const updateStatus=async(req,res)=>{
         return res.status(500).json({message:"Internal server error"});
     }
 }
-export {getOrdersPage,getOrdersApi,getOrdersDetail,updateStatus}
+
+const adminOrderController={getOrdersPage,
+    getOrdersApi,
+    getOrdersDetail,
+    updateStatus};
+export default adminOrderController;

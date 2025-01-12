@@ -1,13 +1,13 @@
 import express from 'express';
-import { getEditAddressPage, updateAddress } from './controller.js';
+import shopAddressController from './controller.js';
 
 import isUserLoginAndRedirect from '../../middleWare/Authentication/isUserLoginAndRedirect.js';
 
 const addressRouter = express.Router();
 addressRouter.use(isUserLoginAndRedirect);
 
-addressRouter.get('/get', getEditAddressPage);
-addressRouter.put('/:id', updateAddress);
+addressRouter.get('/get', shopAddressController.getEditAddressPage);
+addressRouter.put('/:id', shopAddressController.updateAddress);
 
 export default addressRouter;
 
