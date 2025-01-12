@@ -55,7 +55,7 @@ const getRevenueProductByOrders=(orders)=>{
             acc[item.productId]={
                 total:item.price*item.quantity,
                 name:item.name,
-                type:item.type,
+                category:item.category,
                 brand:item.brand,
                 image:item.image,
                 quantity:item.quantity,
@@ -221,8 +221,7 @@ const getRevenueInTimePage=async(req,res)=>{
 
 const getRevenueByTopProductsPage=async(req,res)=>{
     const orders=await orderService.getAllOrders();
-    const topPurchasedProducts= getTopPurchasedProductsFromOrders(orders,COUNT_TOP_PRODUCT);
-    console.log(topPurchasedProducts);  
+    const topPurchasedProducts= getTopPurchasedProductsFromOrders(orders,COUNT_TOP_PRODUCT); 
     return res.render('admin/revenueByTopProducts',{
         topPurchasedProducts,
     });

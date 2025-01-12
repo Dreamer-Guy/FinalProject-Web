@@ -1,5 +1,5 @@
 import serviceFactory from "../../Factory/serviceFactory.js";
-import {generateRatingStars} from "../../Utils/viewEngine.js";
+import {generateRatingStars} from "../../utils/viewEngine.js";
 
 const productService=serviceFactory.getProductSerVice();
 const reviewService=serviceFactory.getReviewService(); 

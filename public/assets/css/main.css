@@ -904,6 +904,10 @@ h1, h2, h3, h4, h5, h6 {
   top: 50%;
 }
 
+.top-14 {
+  top: 3.5rem;
+}
+
 .top-2\.5 {
   top: 0.625rem;
 }
@@ -2381,6 +2385,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .capitalize {
   text-transform: capitalize;
+}
+
+.italic {
+  font-style: italic;
 }
 
 .leading-3 {

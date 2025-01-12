@@ -1,5 +1,5 @@
 import serviceFactory from "../../Factory/serviceFactory.js";
-import checkNumber from "../../Utils/checkNumber.js";
+import checkNumber from "../../utils/checkNumber.js";
 
 const cartService=serviceFactory.getCartService();
 const productService=serviceFactory.getProductSerVice();
