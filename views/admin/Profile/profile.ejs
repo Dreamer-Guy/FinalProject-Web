@@ -6,6 +6,7 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <title>Dashboard</title>
 </head>
 <body class="text-gray-800 font-inter">
@@ -375,19 +376,57 @@
             </ul>
         </div>
         
-        
+        <form id="profileForm" method="POST" action="/user/<%= user._id %>?_method=PUT"" 
+            class="w-full md:w-3/4 flex flex-col gap-5 px-3" enctype="multipart/form-data">
+            <h4 class="text-lg font-medium capitalize mb-4">
+                Profile information
+            </h4>
+            <div class="w-full md:w-3/4 flex flex-col gap-5">
+                <div class="grid grid-cols-1 gap-y-4">
+                    <div class="">
+                        <div>
+                            <label for="first">Fullname</label>
+                            <input type="text" name="fullName"  id="fullname" class="input-box" value="<%= user.fullName %>">
+                            <p id="fullname-error" class="text-red-600"></p>
+                        </div>
+                    </div>
+                    <div class="">
+                        <div>
+                            <label for="birthday">Birthday</label>
+                            <input type="date" name="birthDate" id="birthday" class="input-box" 
+                                value="<%= user.birthDay ? new Date(user.birthDay).toISOString().split('T')[0] : '' %>">
+                        </div>
+                    </div>
+                    <div class="">
+                        <div>
+                            <label for="email">Email Address</label>
+                            <input type="email" name="email" id="email" class="input-box" value="<%= user.email %>">
+                            <p id="email-error" class="text-red-600"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-center items-center flex-col">
+                    <img id="imageDisplay" src="<%= user.avatar %>" alt="" class="h-52 w-52 rounded-full mb-10 border border-gray-200 p-1 object-cover" >
+                    <label for="inputImage" class="bg-slate-400 px-3 py-1 rounded-md">Choose avatar</label>
+                    <input id="inputImage" class="hidden" type="file" name="avatar">
+                </div>
+            </div>
+
+            <div class="mt-4 flex justify-center md:justify-start">
+                <button type="submit"
+                    class="py-3 px-4 text-center text-white bg-primary border border-primary rounded-md hover:bg-transparent hover:text-primary transition font-medium">
+                    Save changes
+                </button>
+            </div>
+        </form>
         
         
     </main>
     <!-- end: Main -->
-    <script>
-        const xAxisCaseYear="<%= xAxisCaseYear %>";
-        const yAxisRevenueYear="<%= yAxisRevenueYear %>";
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="/js/admin/dashboard/index.js"></script>
     <script src="/js/admin/common.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="/js/admin/profile/updateProfile.js"></script>
 </body>
 </html>
