@@ -77,6 +77,10 @@ app.use("/admin/brands", adminBrandRouter);
 
 app.use("/admin/users", adminUserRouter);
 app.use("/admin/orders", adminOrderRouter);
+
+app.use("/admin/profile", adminUserRouter);
+app.use("/admin/changePassword", adminUserRouter);
+
 app.use((req, res) => {
     res.status(404).render('notFound');
 }); 

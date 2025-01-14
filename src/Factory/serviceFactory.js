@@ -65,13 +65,13 @@ const serviceFactory = {
     }
 };
 
-// const dosth=async()=>{
-//     const orders=await orderService.getAllOrders();
-//     const products=await productService.getAll();
-//     await elasticSearchService.SynchronizeProductsToElastic(products);
-//     await suggesterService.SynchronizeAllProducts(products);
-//     await suggesterService.SynchronizeAllOrders(orders);
-// }
+const dosth=async()=>{
+    const orders=await orderService.getAllOrders();
+    const products=await productService.getAll();
+    await elasticSearchService.SynchronizeProductsToElastic(products);
+    await suggesterService.SynchronizeAllProducts(products);
+    await suggesterService.SynchronizeAllOrders(orders);
+}
 
-// dosth();
+dosth();
 export default serviceFactory;

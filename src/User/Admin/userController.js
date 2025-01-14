@@ -109,6 +109,7 @@ const HandlelockUser =async(req,res)=>{
     }
 
 };
+<<<<<<< Updated upstream
 
 const adminUserController = {
     getAllUsers,
@@ -117,3 +118,32 @@ const adminUserController = {
     getUserDetail
 };
 export default adminUserController;
+=======
+const getAdminProfile = async (req, res) => {
+    try {
+        const user = req.user || null;
+        res.render('admin/Profile/profile', {
+            user,
+            xAxisCaseYear: JSON.stringify([]), 
+            yAxisRevenueYear: JSON.stringify([])
+        });
+    } catch (error) {
+        console.error('Error in getAdminProfile:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+const getAdminChangePassword = async (req, res) => {
+    try {
+        const user = req.user || null;
+        res.render('admin/Profile/changePassword', {
+            user,
+            xAxisCaseYear: JSON.stringify([]),
+            yAxisRevenueYear: JSON.stringify([])
+        });
+    } catch (error) {
+        console.error('Error in getAdminProfile:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+export {getAllUsers,getUsersApi,HandlelockUser,getUserDetail,getAdminProfile,getAdminChangePassword}
+>>>>>>> Stashed changes
