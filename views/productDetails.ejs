@@ -169,7 +169,7 @@
                 <div class="flex gap-1 text-sm text-yellow-400">
                     <%-generateRatingStars(Math.floor(product.rating)) %>
                 </div>
-                <div class="text-xs text-gray-500 ml-3">(150 Reviews)</div>
+                <div class="text-xs text-gray-500 ml-3">(<%=product.numReviews?product.numReviews:0%>)</div>
             </div>
             <div class="space-y-2">
                 <p class="text-gray-800 font-semibold space-x-2">

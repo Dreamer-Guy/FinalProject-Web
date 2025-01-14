@@ -23,8 +23,8 @@ const stripeService={
                 },
             ],
             mode: 'payment', 
-            success_url: process.env.STRIPE_SUCCESS_URL || `http://localhost:3000/success`, 
-            cancel_url: process.env.STRIPE_CANCEL_URL || `http://localhost:3000/cancel`,
+            success_url:`${process.env.BASE_URL}/payment/stripe/success?session_id={CHECKOUT_SESSION_ID}`, 
+            cancel_url: `${process.env.BASE_URL}/payment/stripe/cancel`,
             metadata:{
                 orderIds:orders.map(order=>order._id).join(ORDER_SEPARATOR),
             }

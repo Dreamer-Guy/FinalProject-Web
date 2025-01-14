@@ -174,7 +174,7 @@ const getCartPage=async (req,res) => {
         return res.redirect('/user/login');
     }
     const cart=await cartService.getCartByUserId(user._id)||{userId:user._id,items:[]}; 
-    console.log(cart.items);
+    console.log(cart);
     const totalPrice=cart.items.reduce((total,item)=>{
         return total+item.productId.price*item.quantity;
     },0);
