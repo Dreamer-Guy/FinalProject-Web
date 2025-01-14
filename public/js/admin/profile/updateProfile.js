@@ -1,4 +1,3 @@
-
 function previewImage(input) {
     const imageDisplay = document.getElementById('imageDisplay');
     const file = input.files[0];
@@ -45,7 +44,7 @@ document.getElementById('profileForm').addEventListener('submit', async (e) => {
         const formData = new FormData();
         formData.append('fullName', fullname);
         formData.append('email', email);
-        formData.append('birthDay', birthday);
+        formData.append('birthDate', birthday);
 
         const avatar = document.getElementById('inputImage').files[0];
         if (avatar) {

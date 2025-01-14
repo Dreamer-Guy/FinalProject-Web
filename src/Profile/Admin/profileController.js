@@ -8,8 +8,13 @@ const userService = serviceFactory.getUserService()
 const getAdminProfile = async (req, res) => {
     try {
         const user = req.user || null;
+        const userInfo = await userService.getUserById(user._id);
+        
+        // console.log(user);
+        // console.log(userInfo);
+
         res.render('admin/Profile/profile', {
-            user,
+            user: userInfo,
             xAxisCaseYear: JSON.stringify([]), 
             yAxisRevenueYear: JSON.stringify([])
         });
@@ -88,11 +93,11 @@ const updateProfile = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        const { fullName, email, birthDay } = req.body;
+        const { fullName, email, birthDate } = req.body;
         
         userInfo.fullName = fullName;
         userInfo.email = email;
-        userInfo.birthDay = birthDay;
+        userInfo.birthDate = birthDate;
 
         if (req.file) {
             try {
