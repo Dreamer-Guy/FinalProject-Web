@@ -1,11 +1,20 @@
 import serviceFactory from "../../Factory/serviceFactory.js";
 import {generateRatingStars} from "../../utils/viewEngine.js";
+import formatNumber from "../../utils/formatNumber.js";
 
 const productService=serviceFactory.getProductSerVice();
 const reviewService=serviceFactory.getReviewService(); 
 const cartService=serviceFactory.getCartService(); 
 const productPropertyService=serviceFactory.getProductPropertyService();
 const imagesProductService=serviceFactory.getImagesProductService();
+
+const formatProduct=(product)=>{
+    return {
+        ...product,
+        price:formatNumber.decimal(product.price),
+        salePrice:formatNumber.decimal(product.salePrice),
+    }
+};
 
 const getFormatedDate=(date)=>{
     const yyyy = date.getFullYear();
@@ -52,9 +61,9 @@ const getProductDetailsPageByID=async(req,res)=>{
         const alternativeImages=await imagesProductService.getAllAlternativeImagesOfProduct(id);
         if(productDetails){
             return res.render('productDetails',{
-                product,
+                product:formatProduct(product),
                 productDetails:productDetails,
-                relatedProducts,
+                relatedProducts:relatedProducts.map((product)=>formatProduct(product)),
                 reviews:rawReviews,
                 showingReviews:limitdReviews,
                 totalReviews:rawReviews.length,

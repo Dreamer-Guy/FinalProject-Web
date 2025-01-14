@@ -1,5 +1,5 @@
 import serviceFactory from "../../Factory/serviceFactory.js";
-
+import formatNumber from "../../utils/formatNumber.js";
 
 const productService = serviceFactory.getProductSerVice();
 const cartService = serviceFactory.getCartService();
@@ -51,8 +51,8 @@ const getQueryParams=(req)=>{
 const populateProduct=(product)=>{
     return {
         ...product,
-        brand:product.brand_id.name,
-        category:product.category_id.name,
+        price:formatNumber.decimal(product.price),
+        salePrice:formatNumber.decimal(product.salePrice),
     }
 };
 
@@ -87,7 +87,7 @@ const getProductsPage = async (req, res) => {
         }
         const productsInCart = await cartService.coutProductInCart(user?user._id:null);
         return res.render('products', {
-            products:products,
+            products: products.map(populateProduct),
             totalProducts,
             rowsPerPage,
             user,
@@ -123,7 +123,7 @@ const apiGetProducts=async (req, res) => {
         }
         return res.send({
             totalProducts,
-            products,
+            products:products.map(populateProduct),
         });
     }
     catch (e) {

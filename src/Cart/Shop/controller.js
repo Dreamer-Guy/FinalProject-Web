@@ -1,5 +1,6 @@
 import serviceFactory from "../../Factory/serviceFactory.js";
 import checkNumber from "../../utils/checkNumber.js";
+import formatNumber from "../../utils/formatNumber.js";
 
 const cartService=serviceFactory.getCartService();
 const productService=serviceFactory.getProductSerVice();
@@ -7,6 +8,20 @@ const productService=serviceFactory.getProductSerVice();
 const OK_STATUS=200;
 const BAD_REQUEST_STATUS=400;
 const INTERNAL_SERVER_ERROR_STATUS=500;
+
+const formatCart=(cart)=>{
+    return{
+        ...cart,
+        items:cart.items.map(item=>({
+            ...item,
+            productId:{
+                ...item.productId,
+                price:formatNumber.decimal(item.productId.price),
+                salePrice:formatNumber.decimal(item.productId.salePrice),
+            }
+        }))
+    };
+}
 
 const isValidQuantityToUpdate=(cart,productId,quantity)=>{
     const index=cart.items.findIndex(item=>item.productId._id.toString()===productId);
@@ -159,11 +174,16 @@ const getCartPage=async (req,res) => {
         return res.redirect('/user/login');
     }
     const cart=await cartService.getCartByUserId(user._id)||{userId:user._id,items:[]}; 
+    console.log(cart.items);
+    const totalPrice=cart.items.reduce((total,item)=>{
+        return total+item.productId.price*item.quantity;
+    },0);
     const productsInCart = await cartService.coutProductInCart(user._id);
     res.render('cart',{
         user,
-        cart,
-        cartNumber: productsInCart
+        cart:formatCart(cart),
+        cartNumber: productsInCart,
+        totalPrice: formatNumber.decimal(totalPrice),
     });
 };
 

@@ -1,4 +1,5 @@
 import serviceFactory from "../../Factory/serviceFactory.js";
+import formatNumber from "../../utils/formatNumber.js";
 
 const productService = serviceFactory.getProductSerVice();
 const cartService = serviceFactory.getCartService();
@@ -10,8 +11,8 @@ const populateProduct=(product)=>{
         productId: product._id,
         type: product.type,
         name: product.name,
-        price: product.price,
-        salePrice: product.salePrice,
+        price: formatNumber.decimal(product.price),
+        salePrice: formatNumber.decimal(product.salePrice),
         brand: product.brand,
         totalStock: product.totalStock,
         image: product.image,

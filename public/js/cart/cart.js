@@ -1,11 +1,25 @@
+const formatNumber={
+    decimal:(number)=>{
+        return number
+        ?.toFixed(2)
+        ?.toString()
+        ?.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    },
+    int:(number)=>{
+        return Math.round(number)
+        ?.toString()
+        ?.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+}
+
 const displayPriceOfItem=(item)=>{
     if(item.productId.salePrice>0){
         return `
-        <div class="text-primary text-lg font-semibold">$${item.productId.salePrice}</div>
-        <div class="text-gray-700 text-lg font-semibold line-through">$${item.productId.price}</div>`;
+        <div class="text-primary text-lg font-semibold">$${formatNumber.decimal(item.productId.salePrice)}</div>
+        <div class="text-gray-700 text-lg font-semibold line-through">$${formatNumber.decimal(item.productId.price)}</div>`;
     }
     else{
-        return `<div class="text-black text-lg font-semibold">${item.productId.price}</div>`;
+        return `<div class="text-black text-lg font-semibold">${formatNumber.decimal(item.productId.price)}</div>`;
     }
 };
 
@@ -102,18 +116,18 @@ const reloadCartITems=(items)=>{
         }
     });
 };
-const reloadSummaryItems=(items)=>{
-    const summaryContainer=document.getElementById('order-summary-container');
-    summaryContainer.innerHTML='';
-    items.forEach(item=>{
-        const summaryItemHtml=createSummaryItem(item);
-        const tempContainer=document.createElement('div');
-        tempContainer.innerHTML=summaryItemHtml;
-        summaryContainer.appendChild(tempContainer);
-    });
-};
+// const reloadSummaryItems=(items)=>{
+//     const summaryContainer=document.getElementById('order-summary-container');
+//     summaryContainer.innerHTML='';
+//     items.forEach(item=>{
+//         const summaryItemHtml=createSummaryItem(item);
+//         const tempContainer=document.createElement('div');
+//         tempContainer.innerHTML=summaryItemHtml;
+//         summaryContainer.appendChild(tempContainer);
+//     });
+// };
 const reloadTotal=(items)=>{
-    document.getElementById('total').textContent=`$${calculateTotal(items)}`;
+    document.getElementById('total').textContent=`$${formatNumber.decimal(calculateTotal(items))}`;
 };
 
 const updateCartItems=async (productId,quantity) => {
@@ -132,7 +146,7 @@ const updateCartItems=async (productId,quantity) => {
             const cart=data.cart;
             reloadCartITems(cart.items);
             reloadTotal(cart.items);
-            reloadSummaryItems(cart.items);
+            //reloadSummaryItems(cart.items);
             showToast('Update cart successfully','success');
         }
         else{
@@ -195,3 +209,6 @@ const placeOrder=async()=>{
         console.log(e.message);
     }
 };
+
+
+

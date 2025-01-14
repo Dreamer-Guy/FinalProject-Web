@@ -2,6 +2,7 @@ import { get } from "mongoose";
 import serviceFactory from "../../Factory/serviceFactory.js";
 import Category from "../../Model/Category.js";
 import productService from "../../Product/dbService.js";
+import formatNumber from "../../utils/formatNumber.js";
 
 const BAD_REQUEST_STATUS=400;
 const OK_STATUS=200;
@@ -23,6 +24,7 @@ const formatDate=(date)=>{
 const populateOrder=(order)=>{
     const populatedOrder={
         ...order,
+        total:formatNumber.decimal(order.total),
         createdAt:formatDate(order.createdAt),
     };
     return populatedOrder;

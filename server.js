@@ -62,7 +62,7 @@ app.use("/productDetails", productDetailsRouter);
 app.use("/user", userRouter);
 app.use("/reviews", reviewRouter);
 //app.use("/payment/paypal", paypalPaymentRouter); there is problem with this route
-app.use("/payment/vnpay", vnpayPaymentRouter);
+//app.use("/payment/vnpay", vnpayPaymentRouter);
 app.use("/payment/stripe", stripePaymentRouter);
 app.use("/addresses", addressRouter);
 app.use("/carts", cartRouter);
