@@ -9,7 +9,7 @@ const getOrdersPage= async(req,res)=>{
         if(!user){
             return res.redirect("/login")
         }
-        res.render(`admin/Order/${status}Order`)
+        res.render(`admin/Order/${status}Order`,{user})
     }
     catch(e){
         return res.status(500).json({message:"Internal server error"})
