@@ -109,16 +109,6 @@ const HandlelockUser =async(req,res)=>{
     }
 
 };
-<<<<<<< Updated upstream
-
-const adminUserController = {
-    getAllUsers,
-    getUsersApi,
-    HandlelockUser,
-    getUserDetail
-};
-export default adminUserController;
-=======
 const getAdminProfile = async (req, res) => {
     try {
         const user = req.user || null;
@@ -145,5 +135,14 @@ const getAdminChangePassword = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
-export {getAllUsers,getUsersApi,HandlelockUser,getUserDetail,getAdminProfile,getAdminChangePassword}
->>>>>>> Stashed changes
+
+
+const adminUserController = {
+    getAllUsers,
+    getUsersApi,
+    HandlelockUser,
+    getUserDetail,
+    getAdminProfile,
+    getAdminChangePassword
+};
+export default adminUserController;
