@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <title>Edit Product</title>
+</head>
+<body class="text-gray-800 font-inter">
+    
+    <!-- start: Sidebar -->
+    <div class="fixed left-0 top-0 w-64 h-full bg-gray-900 p-4 z-50 sidebar-menu transition-transform">
+        <a href="#" class="flex items-center pb-4 border-b border-b-gray-800">
+            <span class="text-lg font-bold text-white ml-3">Admin Dashboard</span>
+        </a>
+        <ul class="mt-4">
+            <li class="mb-1 group ">
+                <a href="/admin/dashboard" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class="ri-home-2-line mr-3 text-lg"></i>
+                    <span class="text-sm">Dashboard</span>
+                </a>
+            </li>
+            <li class="mb-1 group">
+                <a href="" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
+                    <i class="ri-file-list-line mr-3 text-lg"></i>
+                    <span class="text-sm">Category</span>
+                    <i class="ri-arrow-right-s-line ml-auto group-[.selected]:rotate-90"></i>
+                </a>
+                <ul class="pl-7 mt-2 hidden group-[.selected]:block">
+                    <li class="mb-4">
+                        <a href="/admin/categories" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">All category</a>
+                    </li> 
+                    <li class="mb-4">
+                        <a href="/admin/categories/add" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Add category</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="mb-1 group">
+                <a href="" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
+                    <i class="ri-price-tag-3-line mr-3 text-lg"></i>
+                    <span class="text-sm">Brand</span>
+                    <i class="ri-arrow-right-s-line ml-auto group-[.selected]:rotate-90"></i>
+                </a>
+                <ul class="pl-7 mt-2 hidden group-[.selected]:block">
+                    <li class="mb-4">
+                        <a href="/admin/brands" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">All brand</a>
+                    </li> 
+                    <li class="mb-4">
+                        <a href="/admin/brands/add" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Add brand</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="mb-1 group">
+                <a href="" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
+                    <i class="ri-archive-line mr-3 text-lg"></i>
+                    <span class="text-sm">Products</span>
+                    <i class="ri-arrow-right-s-line ml-auto group-[.selected]:rotate-90"></i>
+                </a>
+                <ul class="pl-7 mt-2 hidden group-[.selected]:block">
+                    <li class="mb-4">
+                        <a href="/admin/products" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">All products</a>
+                    </li> 
+                    <li class="mb-4">
+                        <a href="/admin/products/add" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Add product</a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="/admin/products/deleted" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Deleted products</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="mb-1 group">
+                <a href="" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
+                    <i class="ri-user-line mr-3 text-lg"></i>
+                    <span class="text-sm">Users</span>
+                    <i class="ri-arrow-right-s-line ml-auto group-[.selected]:rotate-90"></i>
+                </a>
+                <ul class="pl-7 mt-2 hidden group-[.selected]:block">
+                    <li class="mb-4">
+                        <a href="/admin/users" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">All users</a>
+                    </li> 
+                </ul>
+            </li>
+            <li class="mb-1 group">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
+                    <i class="ri-instance-line mr-3 text-lg"></i>
+                    <span class="text-sm">Orders</span>
+                    <i class="ri-arrow-right-s-line ml-auto group-[.selected]:rotate-90"></i>
+                </a>
+                <ul class="pl-7 mt-2 hidden group-[.selected]:block">
+                    <li class="mb-4">
+                        <a href="/admin/orders/all" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">All order</a>
+                    </li> 
+                    <li class="mb-4">
+                        <a href="/admin/orders/pending" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Pending order</a>
+                    </li> 
+                    <li class="mb-4">
+                        <a href="/admin/orders/processing" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Processing order</a>
+                    </li> 
+                    <li class="mb-4">
+                        <a href="/admin/orders/completed" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Completed order</a>
+                    </li> 
+                    <li class="mb-4">
+                        <a href="/admin/orders/canceled" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Canceled order</a>
+                    </li> 
+                </ul>
+            </li>
+            <li class="mb-1 group">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
+                    <i class="ri-flashlight-line mr-3 text-lg"></i>
+                    <span class="text-sm">Services</span>
+                    <i class="ri-arrow-right-s-line ml-auto group-[.selected]:rotate-90"></i>
+                </a>
+                <ul class="pl-7 mt-2 hidden group-[.selected]:block">
+                    <li class="mb-4">
+                        <a href="#" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Manage services</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="mb-1 group">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
+                    <i class="ri-settings-2-line mr-3 text-lg"></i>
+                    <span class="text-sm">Settings</span>
+                    <i class="ri-arrow-right-s-line ml-auto group-[.selected]:rotate-90"></i>
+                </a>
+                <ul class="pl-7 mt-2 hidden group-[.selected]:block">
+                    <li class="mb-4">
+                        <a href="/admin/profile" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Profile</a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="/admin/profile/changePassword" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Change Password</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="fixed top-0 left-0 w-full h-full bg-black/50 z-40 md:hidden sidebar-overlay"></div>
+    <!-- end: Sidebar -->
+
+    <!-- start: Main -->
+    <main class="w-full md:w-[calc(100%-256px)] md:ml-64 bg-gray-50 min-h-screen transition-all main">
+        <div class="py-2 px-4 sm:px-6 bg-white flex flex-wrap items-center justify-between shadow-md shadow-black/5 sticky top-0 left-0 z-30">
+            <div class="flex items-center w-full sm:w-auto mb-2 sm:mb-0">
+                <button type="button" class="text-lg text-gray-600 sidebar-toggle">
+                    <i class="ri-menu-line"></i>
+                </button>
+                <ul class="flex items-center text-sm ml-4">
+                    <li class="mr-2">
+                        <a href="/admin/products" class="text-gray-400 hover:text-gray-600 font-medium">Products</a>
+                    </li>
+                    <li class="text-gray-600 mr-2 font-medium">/</li>
+                    <li class="text-gray-600 mr-2 font-medium">Edit Product</li>
+                </ul>
+            </div>
+            <ul class="flex items-center">
+                <li class="dropdown ml-3">
+                    <button type="button" class="dropdown-toggle flex items-center">
+                        <img src="<%= user.avatar || '/assets/images/default-avatar.png' %>" alt="User avatar" class="w-8 h-8 rounded-full block object-cover align-middle">
+                    </button>
+                    <ul class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
+                        <li>
+                            <a href="/admin/profile" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Profile</a>
+                        </li>
+                        <li>
+                            <a href="/user/logout" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Logout</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        
+        <form id="editProductForm" class="space-y-6 p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                <div class="col-span-2 sm:col-span-1">
+                    <label class="block text-sm font-medium text-gray-700">Name</label>
+                    <input type="text" name="name" required value="<%= product.name %>"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm px-4 py-2">
+                </div>
+                
+                <div class="col-span-2 sm:col-span-1">
+                    <label class="block text-sm font-medium text-gray-700">Price</label>
+                    <input type="number" name="price" required value="<%= product.price %>"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm px-4 py-2">
+                </div>
+        
+                <div class="col-span-2 sm:col-span-1">
+                    <label class="block text-sm font-medium text-gray-700">Sale Price</label>
+                    <input type="number" name="salePrice" value="<%= product.salePrice %>"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm px-4 py-2">
+                </div>
+        
+                <div class="col-span-2 sm:col-span-1">
+                    <label class="block text-sm font-medium text-gray-700">Stock</label>
+                    <input type="number" name="totalStock" required value="<%= product.totalStock %>"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm px-4 py-2">
+                </div>
+        
+                <div class="col-span-2 sm:col-span-1">
+                    <label class="block text-sm font-medium text-gray-700">Status</label>
+                    <select name="status" required
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm px-4 py-2">
+                        <option value="On stock" <%= product.status === 'On stock' ? 'selected' : '' %>>On Stock</option>
+                        <option value="Out of stock" <%= product.status === 'Out of stock' ? 'selected' : '' %>>Out of Stock</option>
+                        <option value="Suspended" <%= product.status === 'Suspended' ? 'selected' : '' %>>Suspended</option>
+                    </select>
+                </div>
+        
+                <div class="col-span-2 sm:col-span-1">
+                    <label class="block text-sm font-medium text-gray-700">Category</label>
+                    <select name="category_id" id="categorySelect" required
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm px-4 py-2">
+                        <option value="">Select Category</option>
+                        <% categories.forEach(category => { %>
+                            <option value="<%= category._id %>" 
+                                <%= category._id.toString() === product.category_id._id.toString() ? 'selected' : '' %>>
+                                <%= category.name %>
+                            </option>
+                        <% }); %>
+                    </select>
+                </div>
+        
+                <div class="col-span-2 sm:col-span-1">
+                    <label class="block text-sm font-medium text-gray-700">Brand</label>
+                    <select name="brand_id" required
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm px-4 py-2">
+                        <option value="">Select Brand</option>
+                        <% brands.forEach(brand => { %>
+                            <option value="<%= brand._id %>"
+                                <%= brand._id.toString() === product.brand_id._id.toString() ? 'selected' : '' %>>
+                                <%= brand.name %>
+                            </option>
+                        <% }); %>
+                    </select>
+                </div>
+        
+                <div class="col-span-2">
+                    <label class="block text-sm font-medium text-gray-700">Product Image</label>
+                    <div class="mt-1 flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                        <div class="w-32 h-32 border-2 border-gray-300 border-dashed rounded-lg flex items-center justify-center">
+                            <img id="preview-image" src="<%= product.image %>" alt="" class="w-full h-full object-cover rounded-lg">
+                            <span id="upload-icon" class="text-gray-400 hidden">
+                                <i class="fas fa-cloud-upload-alt text-3xl"></i>
+                            </span>
+                        </div>
+                        <div class="flex flex-col space-y-2 m-4">
+                            <input type="file" 
+                                   id="image-upload" 
+                                   name="image" 
+                                   accept="image/*"
+                                   class="hidden">
+                            <input type="hidden" id="current-image" name="currentImage" value="<%= product.image %>">
+                            <button type="button" 
+                                    onclick="document.getElementById('image-upload').click()"
+                                    class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200">
+                                Change Image
+                            </button>
+                            <button type="button" 
+                                    id="remove-image"
+                                    class="px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200">
+                                Remove Image
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-2" >
+                    <label class="block text-sm font-medium text-gray-700 mb-3">Altertive images</label>
+                    <div class="flex flex-col md:flex-row gap-5" id="altertive-images-container">
+                    <% alternativeImages.forEach(image => { %>
+                        <div
+                            id="alternative-image-<%= encodeURIComponent(image)%>" 
+                            class="relative w-32 h-32 border-2 border-gray-300 border-dashed rounded-lg flex items-center justify-center">
+                            <img src="<%= image %>" alt="" class="w-full h-full object-cover rounded-lg">
+                            <button type="button" 
+                                    class="absolute w-7 h-7 top-0 right-0 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                                    onclick="handleRemoveAlternativeImageByUrl('<%= image %>')">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    <% }); %>
+                    </div>
+                    <div
+                        onclick="document.getElementById('alternative-input').click()" 
+                        class="p-2 bg-blue-400 rounded-lg mt-2 hover:cursor-pointer w-[200px] text-center">Add alternativeImages</div>
+                    <input 
+                        onchange="handleChangeAlternativeImages(event)"
+                        id="alternative-input"
+                        type="file"  class="hidden" />
+                </div>
+                <div class="col-span-2">
+                    <label class="block text-sm font-medium text-gray-700">Description</label>
+                    <textarea name="description" rows="4"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm px-4 py-2"><%= product.description %></textarea>
+                </div>
+            
+                <div id="categoryProperties" class="col-span-2">
+                    <% if (categoryProperties.length > 0) { %>
+                        <h4 class="text-lg text-gray-700 font-medium mb-4">Category Properties</h4>
+                        <% categoryProperties.forEach(prop => { 
+                            const productProp = productProperties.find(pp => 
+                                pp.property_id._id.toString() === prop._id.toString()
+                            );
+                        %>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-medium mb-2"><%= prop.name %></label>
+                                <input type="text" 
+                                       name="properties[<%= prop._id %>]" 
+                                       value="<%= productProp ? productProp.value : '' %>"
+                                       class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                            </div>
+                        <% }); %>
+                    <% } %>
+                </div>
+            </div>
+            
+            <div class="flex justify-center space-x-4 mt-4">
+                <button type="button" 
+                    onclick="window.location.href='/admin/products'" 
+                    class="px-6 py-2 bg-white text-gray-500 rounded-md hover:bg-gray-300">
+                    Cancel
+                </button>
+                
+                <button type="submit"
+                    class="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+                    Update Product
+                </button>
+            </div>
+        </form>
+    </main>  
+    <!-- end: Main -->
+
+    
+    
+    <script>
+        const encodedAlternativeImages ='<%= JSON.stringify(alternativeImages) %>';
+    </script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/admin/products/edit.js"></script>
+    <script src="/js/admin/common.js"></script>
+    <script src="/js/common/toast.js"></script>
+    <script src="/js/admin/products/imageUpload.js"></script>
+</body>
+</html>

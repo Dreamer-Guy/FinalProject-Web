@@ -183,6 +183,7 @@ const getYAxisRevenue=async(timeRanges)=>{
 }
 
 const getDashBoardPage=async(req,res)=>{
+    const user=req.user;
     const orders=await orderService.getAllOrders();
     const users=await userService.getAllUsers();
     const topRatingProducts=await productService.getTopProducts(COUNT_TOP_PRODUCT);
@@ -209,6 +210,7 @@ const getDashBoardPage=async(req,res)=>{
     console.log(orders);
     const totalMoneyFromPaidOrders=orders.reduce((acc,order)=>order.checkoutStatus==='paid'?acc+order.total:acc,0);
     return res.render('admin/dashboard',{
+        user,
         xAxisCaseYear,
         yAxisRevenueYear,
         orders,

@@ -25,6 +25,7 @@ import adminProductRouter from './src/Product/Admin/productRoute.js';
 import adminBrandRouter from './src/Brand/Admin/brandRoute.js';
 import adminUserRouter from './src/User/Admin/userRoute.js'
 import adminOrderRouter from './src/Order/Admin/orderRoute.js';
+import adminProfileRouter from './src/Profile/Admin/profileRoute.js';
 const app = express();
 const PORT = process.env.PORT||3000;
 
@@ -77,6 +78,9 @@ app.use("/admin/brands", adminBrandRouter);
 
 app.use("/admin/users", adminUserRouter);
 app.use("/admin/orders", adminOrderRouter);
+
+app.use("/admin/profile", adminProfileRouter);
+
 app.use((req, res) => {
     res.status(404).render('notFound');
 }); 

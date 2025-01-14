@@ -206,7 +206,7 @@ const getRevenueInTimePage=async(req,res)=>{
     const ordersInDayRange=await getOrdersInTimeRange(startDateCaseday,endDate);
     const ordersInRangeMonth=await getOrdersInTimeRange(startDateCaseMonth,endDate);
     const ordersInRangeYear=await getOrdersInTimeRange(startDateCaseYear,endDate);
-    return res.render('admin/revenueInTime',{
+    return res.render('admin/Revenue/revenueInTime',{
         xAxisCaseYear,
         yAxisRevenueYear,
         xAxisCaseMonth,
@@ -222,7 +222,7 @@ const getRevenueInTimePage=async(req,res)=>{
 const getRevenueByTopProductsPage=async(req,res)=>{
     const orders=await orderService.getAllOrders();
     const topPurchasedProducts= getTopPurchasedProductsFromOrders(orders,COUNT_TOP_PRODUCT); 
-    return res.render('admin/revenueByTopProducts',{
+    return res.render('admin/Revenue/revenueByTopProducts',{
         topPurchasedProducts,
     });
 };

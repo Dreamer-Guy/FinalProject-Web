@@ -15,12 +15,11 @@
 
     <div class="fixed left-0 top-0 w-64 h-full bg-gray-900 p-4 z-50 sidebar-menu transition-transform">
         <a href="#" class="flex items-center pb-4 border-b border-b-gray-800">
-            <img src="https://placehold.co/32x32" alt="" class="w-8 h-8 rounded object-cover">
-            <span class="text-lg font-bold text-white ml-3">Logo</span>
+            <span class="text-lg font-bold text-white ml-3">Admin Dashboard</span>
         </a>
         <ul class="mt-4">
-            <li class="mb-1 group ">
-                <a href="/admin/dashboard" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+            <li class="mb-1 group active">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
                     <i class="ri-home-2-line mr-3 text-lg"></i>
                     <span class="text-sm">Dashboard</span>
                 </a>
@@ -80,6 +79,7 @@
                     </li>
                 </ul>
             </li>
+            
             <li class="mb-1 group">
                 <a href="" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
                     <i class="ri-user-line mr-3 text-lg"></i>
@@ -120,25 +120,38 @@
                         <a href="/admin/orders/canceled" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
                         before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Canceled order</a>
                     </li> 
+                    
                 </ul>
             </li>
             <li class="mb-1 group">
                 <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
-                    <i class="ri-flashlight-line mr-3 text-lg"></i>
-                    <span class="text-sm">Services</span>
+                    <i class="ri-money-dollar-circle-line mr-3 text-lg"></i>
+                    <span class="text-sm">Revenue</span>
                     <i class="ri-arrow-right-s-line ml-auto group-[.selected]:rotate-90"></i>
                 </a>
                 <ul class="pl-7 mt-2 hidden group-[.selected]:block">
                     <li class="mb-4">
-                        <a href="#" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Manage services</a>
+                        <a href="/admin/revenue/time" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Revenue in time</a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="/admin/revenue/top-products" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Revenue by top products</a>
                     </li>
                 </ul>
             </li>
             <li class="mb-1 group">
-                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
                     <i class="ri-settings-2-line mr-3 text-lg"></i>
                     <span class="text-sm">Settings</span>
+                    <i class="ri-arrow-right-s-line ml-auto group-[.selected]:rotate-90"></i>
                 </a>
+                <ul class="pl-7 mt-2 hidden group-[.selected]:block">
+                    <li class="mb-4">
+                        <a href="/admin/profile" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Profile</a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="/admin/profile/changePassword" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Change Password</a>
+                    </li>
+                </ul>
             </li>
         </ul>
     </div>
@@ -155,22 +168,14 @@
                 </button>
                 <ul class="flex items-center text-sm ml-4">
                     <li class="mr-2">
-                        <a href="#" class="text-gray-400 hover:text-gray-600 font-medium">User</a>
+                        <a href="/admin/orders/all" class="text-gray-400 hover:text-gray-600 font-medium">Order</a>
                     </li>
                     <li class="text-gray-600 mr-2 font-medium">/</li>
                     <li class="text-gray-600 mr-2 font-medium">All</li>
                 </ul>
+                
             </div>
-            <div class="flex-1 flex gap-4 justify-end">
-                <input type="text" 
-                       id="searchInput" 
-                       placeholder="Search by name or email..." 
-                       class="w-full max-w-xs px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
-                <button id="searchButton" 
-                        class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-                    Search
-                </button>
-            </div>
+           
         </div>
         <div class="hidden md:block bg-white rounded-lg shadow overflow-x-auto">
             <table class="w-full table-auto">

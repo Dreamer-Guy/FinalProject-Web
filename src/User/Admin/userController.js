@@ -11,7 +11,7 @@ const getAllUsers =async(req,res)=>{
         if(!user){
             return res.redirect("/login")
         }
-        res.render('admin/users');
+        res.render('admin/User/users');
     }
     catch(e){
         console.error(e);
@@ -116,4 +116,5 @@ const adminUserController = {
     HandlelockUser,
     getUserDetail
 };
+
 export default adminUserController;

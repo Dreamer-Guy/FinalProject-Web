@@ -6,6 +6,7 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <title>Dashboard</title>
 </head>
 <body class="text-gray-800 font-inter">
@@ -13,8 +14,7 @@
     <!-- start: Sidebar -->
     <div class="fixed left-0 top-0 w-64 h-full bg-gray-900 p-4 z-50 sidebar-menu transition-transform">
         <a href="#" class="flex items-center pb-4 border-b border-b-gray-800">
-            <img src="https://placehold.co/32x32" alt="" class="w-8 h-8 rounded object-cover">
-            <span class="text-lg font-bold text-white ml-3">Logo</span>
+            <span class="text-lg font-bold text-white ml-3">Admin Dashboard</span>
         </a>
         <ul class="mt-4">
             <li class="mb-1 group active">
@@ -24,6 +24,75 @@
                 </a>
             </li>
             <li class="mb-1 group">
+                <a href="" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
+                    <i class="ri-file-list-line mr-3 text-lg"></i>
+                    <span class="text-sm">Category</span>
+                    <i class="ri-arrow-right-s-line ml-auto group-[.selected]:rotate-90"></i>
+                </a>
+                <ul class="pl-7 mt-2 hidden group-[.selected]:block">
+                    <li class="mb-4">
+                        <a href="/admin/categories" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">All category</a>
+                    </li> 
+                    <li class="mb-4">
+                        <a href="/admin/categories/add" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Add category</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="mb-1 group">
+                <a href="" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
+                    <i class="ri-price-tag-3-line mr-3 text-lg"></i>
+                    <span class="text-sm">Brand</span>
+                    <i class="ri-arrow-right-s-line ml-auto group-[.selected]:rotate-90"></i>
+                </a>
+                <ul class="pl-7 mt-2 hidden group-[.selected]:block">
+                    <li class="mb-4">
+                        <a href="/admin/brands" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">All brand</a>
+                    </li> 
+                    <li class="mb-4">
+                        <a href="/admin/brands/add" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Add brand</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="mb-1 group">
+                <a href="" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
+                    <i class="ri-archive-line mr-3 text-lg"></i>
+                    <span class="text-sm">Products</span>
+                    <i class="ri-arrow-right-s-line ml-auto group-[.selected]:rotate-90"></i>
+                </a>
+                <ul class="pl-7 mt-2 hidden group-[.selected]:block">
+                    <li class="mb-4">
+                        <a href="/admin/products" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">All products</a>
+                    </li> 
+                    <li class="mb-4">
+                        <a href="/admin/products/add" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Add product</a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="/admin/products/deleted" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Deleted products</a>
+                    </li>
+                </ul>
+            </li>
+            
+            <li class="mb-1 group">
+                <a href="" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
+                    <i class="ri-user-line mr-3 text-lg"></i>
+                    <span class="text-sm">Users</span>
+                    <i class="ri-arrow-right-s-line ml-auto group-[.selected]:rotate-90"></i>
+                </a>
+                <ul class="pl-7 mt-2 hidden group-[.selected]:block">
+                    <li class="mb-4">
+                        <a href="/admin/users" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">All users</a>
+                    </li> 
+                </ul>
+            </li>
+            <li class="mb-1 group">
                 <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
                     <i class="ri-instance-line mr-3 text-lg"></i>
                     <span class="text-sm">Orders</span>
@@ -31,16 +100,26 @@
                 </a>
                 <ul class="pl-7 mt-2 hidden group-[.selected]:block">
                     <li class="mb-4">
-                        <a href="#" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
-                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Active order</a>
+                        <a href="/admin/orders/all" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">All order</a>
                     </li> 
                     <li class="mb-4">
-                        <a href="#" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        <a href="/admin/orders/pending" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Pending order</a>
+                    </li> 
+                    <li class="mb-4">
+                        <a href="/admin/orders/processing" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Processing order</a>
+                    </li> 
+                    <li class="mb-4">
+                        <a href="/admin/orders/completed" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
                         before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Completed order</a>
                     </li> 
                     <li class="mb-4">
-                        <a href="#" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Canceled order</a>
+                        <a href="/admin/orders/canceled" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] 
+                        before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Canceled order</a>
                     </li> 
+                    
                 </ul>
             </li>
             <li class="mb-1 group">
@@ -56,10 +135,34 @@
                 </ul>
             </li>
             <li class="mb-1 group">
-                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
+                    <i class="ri-money-dollar-circle-line mr-3 text-lg"></i>
+                    <span class="text-sm">Revenue</span>
+                    <i class="ri-arrow-right-s-line ml-auto group-[.selected]:rotate-90"></i>
+                </a>
+                <ul class="pl-7 mt-2 hidden group-[.selected]:block">
+                    <li class="mb-4">
+                        <a href="/admin/revenue/time" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Revenue in time</a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="/admin/revenue/top-products" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Revenue by top products</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="mb-1 group">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
                     <i class="ri-settings-2-line mr-3 text-lg"></i>
                     <span class="text-sm">Settings</span>
+                    <i class="ri-arrow-right-s-line ml-auto group-[.selected]:rotate-90"></i>
                 </a>
+                <ul class="pl-7 mt-2 hidden group-[.selected]:block">
+                    <li class="mb-4">
+                        <a href="/admin/profile" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Profile</a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="/admin/profile/changePassword" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Change Password</a>
+                    </li>
+                </ul>
             </li>
         </ul>
     </div>
@@ -74,10 +177,8 @@
             </button>
             <ul class="flex items-center text-sm ml-4">
                 <li class="mr-2">
-                    <a href="#" class="text-gray-400 hover:text-gray-600 font-medium">Dashboard</a>
+                    <a href="/admin/profile" class="text-gray-400 hover:text-gray-600 font-medium">Profile</a>
                 </li>
-                <li class="text-gray-600 mr-2 font-medium">/</li>
-                <li class="text-gray-600 mr-2 font-medium">Analytics</li>
             </ul>
             <ul class="ml-auto flex items-center">
                 <li class="mr-1 dropdown">
@@ -285,9 +386,7 @@
                         <li>
                             <a href="#" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Profile</a>
                         </li>
-                        <li>
-                            <a href="#" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Settings</a>
-                        </li>
+                       
                         <li>
                             <a href="#" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Logout</a>
                         </li>
@@ -295,133 +394,58 @@
                 </li>
             </ul>
         </div>
-        <div class="p-6">
-            <div class="flex flex-rol justify-center items-center mb-6">
-                <div class="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md w-full">
-                    <div class="flex justify-between mb-4 items-start">
-                        <div class="font-medium">Order In Days</div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-                        <div class="rounded-md border border-dashed border-gray-200 p-4">
-                            <div class="flex items-center mb-0.5">
-                                <div class="text-xl font-semibold"><%=ordersInDayRange.filter(order=>order.checkoutStatus.toLowerCase()==='paid').length%></div>
-                                <span class="p-1 rounded text-[12px] font-semibold bg-blue-500/10 text-blue-500 leading-none ml-1">
-                                    $<%=ordersInDayRange.filter(order=>order.checkoutStatus.toLowerCase()==='paid').reduce((acc,order)=>acc+=order.total,0)%></span>
-                            </div>
-                            <span class="text-gray-400 text-sm">Paid</span>
-                        </div>
-                        <div class="rounded-md border border-dashed border-gray-200 p-4">
-                            <div class="flex items-center mb-0.5">
-                                <div class="text-xl font-semibold"><%=ordersInDayRange.filter(order=>order.orderStatus.toLowerCase()==='processing').length%></div>
-                                <span class="p-1 rounded text-[12px] font-semibold bg-emerald-500/10 text-emerald-500 leading-none ml-1">
-                                    $<%=ordersInDayRange.filter(order=>order.orderStatus.toLowerCase()==='processing').reduce((acc,order)=>acc+=order.total,0)%></span>
-                            </div>
-                            <span class="text-gray-400 text-sm">Processing</span>
-                        </div>
-                        <div class="rounded-md border border-dashed border-gray-200 p-4">
-                            <div class="flex items-center mb-0.5">
-                                <div class="text-xl font-semibold"><%=ordersInDayRange.filter(order=>order.orderStatus.toLowerCase()==='canceled').length%></div>
-                                <span class="p-1 rounded text-[12px] font-semibold bg-rose-500/10 text-rose-500 leading-none ml-1">
-                                    -$<%=ordersInDayRange.filter(order=>order.orderStatus.toLowerCase()==='canceled').reduce((acc,order)=>acc+=order.total,0)%></span>
-                            </div>
-                            <span class="text-gray-400 text-sm">Canceled</span>
+        
+        <form id="profileForm" method="POST" action="/user/<%= user._id %>?_method=PUT"" 
+            class="w-full md:w-3/4 flex flex-col gap-5 px-3" enctype="multipart/form-data">
+            <h4 class="text-lg font-medium capitalize mb-4">
+                Profile information
+            </h4>
+            <div class="w-full md:w-3/4 flex flex-col gap-5">
+                <div class="grid grid-cols-1 gap-y-4">
+                    <div class="">
+                        <div>
+                            <label for="first">Fullname</label>
+                            <input type="text" name="fullName"  id="fullname" class="input-box" value="<%= user.fullName %>">
+                            <p id="fullname-error" class="text-red-600"></p>
                         </div>
                     </div>
-                    <div>
-                        <canvas id="dayRevenueChart"></canvas>
+                    <div class="">
+                        <div>
+                            <label for="birthday">Birthday</label>
+                            <input type="date" name="birthDate" id="birthday" class="input-box" 
+                            value="<%= user.birthDate ? new Date(user.birthDate).toISOString().split('T')[0] : '' %>">
+                        </div>
+                    </div>
+                    <div class="">
+                        <div>
+                            <label for="email">Email Address</label>
+                            <input type="email" name="email" id="email" class="input-box" value="<%= user.email %>">
+                            <p id="email-error" class="text-red-600"></p>
+                        </div>
                     </div>
                 </div>
-                
-            </div>
-            <div class="flex flex-rol justify-center items-center mb-6">
-                <div class="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md w-full">
-                    <div class="flex justify-between mb-4 items-start">
-                        <div class="font-medium">Order In Months</div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-                        <div class="rounded-md border border-dashed border-gray-200 p-4">
-                            <div class="flex items-center mb-0.5">
-                                <div class="text-xl font-semibold"><%= ordersInRangeMonth.filter(order=>order.checkoutStatus.toLowerCase()==='paid').length%></div>
-                                <span class="p-1 rounded text-[12px] font-semibold bg-blue-500/10 text-blue-500 leading-none ml-1">
-                                    $<%= ordersInRangeMonth.filter(order=>order.checkoutStatus.toLowerCase()==='paid').reduce((acc,order)=>acc+=order.total,0)%></span>
-                            </div>
-                            <span class="text-gray-400 text-sm">Paid</span>
-                        </div>
-                        <div class="rounded-md border border-dashed border-gray-200 p-4">
-                            <div class="flex items-center mb-0.5">
-                                <div class="text-xl font-semibold"><%= ordersInRangeMonth.filter(order=>order.orderStatus.toLowerCase()==='processing').length%></div>
-                                <span class="p-1 rounded text-[12px] font-semibold bg-emerald-500/10 text-emerald-500 leading-none ml-1">
-                                    $<%= ordersInRangeMonth.filter(order=>order.orderStatus.toLowerCase()==='processing').reduce((acc,order)=>acc+=order.total,0)%></span>
-                            </div>
-                            <span class="text-gray-400 text-sm">Processing</span>
-                        </div>
-                        <div class="rounded-md border border-dashed border-gray-200 p-4">
-                            <div class="flex items-center mb-0.5">
-                                <div class="text-xl font-semibold"><%= ordersInRangeMonth.filter(order=>order.orderStatus.toLowerCase()==='canceled').length%></div>
-                                <span class="p-1 rounded text-[12px] font-semibold bg-rose-500/10 text-rose-500 leading-none ml-1">
-                                    -$<%= ordersInRangeMonth.filter(order=>order.orderStatus.toLowerCase()==='canceled').reduce((acc,order)=>acc+=order.total,0)%></span>
-                            </div>
-                            <span class="text-gray-400 text-sm">Canceled</span>
-                        </div>
-                    </div>
-                    <div>
-                        <canvas id="monthRevenueChart"></canvas>
-                    </div>
+                <div class="flex justify-center items-center flex-col">
+                    <img id="imageDisplay" src="<%= user.avatar %>" alt="" class="h-52 w-52 rounded-full mb-10 border border-gray-200 p-1 object-cover" >
+                    <label for="inputImage" class="bg-slate-400 px-3 py-1 rounded-md">Choose avatar</label>
+                    <input id="inputImage" class="hidden" type="file" name="avatar">
                 </div>
-                
             </div>
-            <div class="flex flex-rol justify-center items-center mb-6">
-                <div class="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md w-full">
-                    <div class="flex justify-between mb-4 items-start">
-                        <div class="font-medium">Order In Years</div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-                        <div class="rounded-md border border-dashed border-gray-200 p-4">
-                            <div class="flex items-center mb-0.5">
-                                <div class="text-xl font-semibold"><%=ordersInRangeYear.filter(order=>order.checkoutStatus.toLowerCase()==='paid').length%></div>
-                                <span class="p-1 rounded text-[12px] font-semibold bg-blue-500/10 text-blue-500 leading-none ml-1">
-                                    $<%=ordersInRangeYear.filter(order=>order.checkoutStatus.toLowerCase()==='paid').reduce((acc,order)=>acc+=order.total,0)%></span>
-                            </div>
-                            <span class="text-gray-400 text-sm">Paid</span>
-                        </div>
-                        <div class="rounded-md border border-dashed border-gray-200 p-4">
-                            <div class="flex items-center mb-0.5">
-                                <div class="text-xl font-semibold"><%=ordersInRangeYear.filter(order=>order.orderStatus.toLowerCase()==='processing').length%></div>
-                                <span class="p-1 rounded text-[12px] font-semibold bg-emerald-500/10 text-emerald-500 leading-none ml-1">
-                                    $<%=ordersInRangeYear.filter(order=>order.orderStatus.toLowerCase()==='processing').reduce((acc,order)=>acc+=order.total,0)%></span>
-                            </div>
-                            <span class="text-gray-400 text-sm">Processing</span>
-                        </div>
-                        <div class="rounded-md border border-dashed border-gray-200 p-4">
-                            <div class="flex items-center mb-0.5">
-                                <div class="text-xl font-semibold"><%=ordersInRangeYear.filter(order=>order.orderStatus.toLowerCase()==='canceled').length%></div>
-                                <span class="p-1 rounded text-[12px] font-semibold bg-rose-500/10 text-rose-500 leading-none ml-1">
-                                    -$<%=ordersInRangeYear.filter(order=>order.orderStatus.toLowerCase()==='canceled').reduce((acc,order)=>acc+=order.total,0)%></span>
-                            </div>
-                            <span class="text-gray-400 text-sm">Canceled</span>
-                        </div>
-                    </div>
-                    <div>
-                        <canvas id="yearRevenueChart"></canvas>
-                    </div>
-                </div>
-                
+
+            <div class="mt-4 flex justify-center md:justify-start">
+                <button type="submit"
+                    class="py-3 px-4 text-center text-white bg-primary border border-primary rounded-md hover:bg-transparent hover:text-primary transition font-medium">
+                    Save changes
+                </button>
             </div>
-        </div>
+        </form>
+        
+        
     </main>
     <!-- end: Main -->
-    <script>
-        const xAxisCaseYear="<%= xAxisCaseYear %>";
-        const yAxisRevenueYear="<%= yAxisRevenueYear %>";
-        const xAxisCaseMonth="<%= xAxisCaseMonth %>";
-        const yAxisRevenueMonth="<%= yAxisRevenueMonth %>";
-        const xAxisCaseDay="<%= xAxisCaseDay %>";
-        const yAxisRevenueDay="<%= yAxisRevenueDay %>";
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="/js/admin/revenue/revenueInTime.js"></script>
     <script src="/js/admin/common.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="/js/admin/profile/updateProfile.js"></script>
 </body>
 </html>

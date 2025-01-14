@@ -145,6 +145,10 @@ const suggesterService = {
     },
 
     async SynchronizeAllProducts(products){
+        if (!products || products.length ===0){
+            return;
+        }
+        
         const body=products.flatMap((product)=>{
             return [
                 {index:{_index:INDEX_NAME,_id:product._id}},
@@ -156,6 +160,9 @@ const suggesterService = {
     },
 
     async SynchronizeAllOrders(orders){
+        if (!orders || orders.length === 0){
+            return;
+        }
 
         const productInforsMap=getProduct_WeightMap(orders);
         const updateCommand={

@@ -41,7 +41,7 @@ const getBrands = async (req, res) => {
 const getBrandPage = async (req, res) => {
     try {
         const user = req.user || null;
-        res.render('admin/brand', {
+        res.render('admin/Brand/brand', {
             user
         });
     } catch (error) {
@@ -76,7 +76,7 @@ const addBrand = async (req, res) => {
 const getAddBrandPage = async (req, res) => {
     try {
         const user = req.user || null;
-        res.render('admin/addBrand', {
+        res.render('admin/Brand/addBrand', {
             user
         });
     } catch (error) {
