@@ -23,7 +23,7 @@ const forgotPasswordTokenService=serviceFactory.getForgotPasswordTokenService();
 
 const generateGetPasswordLink = (queryData) => {
     const query = new URLSearchParams(queryData).toString();
-    const generateLink = process.env.FORGET_PASSWORD_URL + "?" + query;
+    const generateLink = `${process.env.BASE_URL}`+"/user/reset/get"+ "?" + query;
     return generateLink;
 };
 
