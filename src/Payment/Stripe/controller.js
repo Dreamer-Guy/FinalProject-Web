@@ -41,14 +41,23 @@ const getPaymentUrl = async (req, res) => {
 
 
 const getSuccessPage = async (req, res) => {
-    //techb-deb
-    return res.send("success");
+    try{
+        const {session_id} = req.query;
+        const stripe=stripeService.getStripe();
+        const session = await stripe.checkout.sessions.retrieve(session_id);
+        const orderIds = session.metadata.orderIds.split(ORDER_SEPARATOR);
+        await orderService.fullfillOrdersByIds(orderIds);
+        return res.render("payment/success");
+    }
+    catch(e){
+        console.log(e.message);
+        return res.status(500).json({ error: e.message });
+    }
 };
 
 
 const getCancelPage = async (req, res) => {
-    //tech-debt
-    return res.send("cancel");
+    return res.render("payment/cancel");
 };
 
 

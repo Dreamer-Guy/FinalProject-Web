@@ -196,8 +196,9 @@ const placeOrder=async()=>{
         hideSpinnerLoading();
         if(res.ok){
             showToast('Order placed successfully','success');
+            const data=await res.json();
             setTimeout(()=>{
-                window.location.href="/orders/get";
+                window.location.href=data.url;
             },1500);
         }
         else{

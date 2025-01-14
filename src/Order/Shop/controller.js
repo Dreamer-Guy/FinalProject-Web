@@ -1,8 +1,8 @@
-import { get } from "mongoose";
+
 import serviceFactory from "../../Factory/serviceFactory.js";
-import Category from "../../Model/Category.js";
 import productService from "../../Product/dbService.js";
 import formatNumber from "../../utils/formatNumber.js";
+import stripeService from "../../Payment/Stripe/service.js";
 
 const BAD_REQUEST_STATUS=400;
 const OK_STATUS=200;
@@ -115,23 +115,31 @@ const getOrderDetailsPage=async(req,res)=>{
 };
 
 const createOrder=async(req,res)=>{
-    const user=req.user||null;
-    const cart=await cartService.getCartByUserId(user._id);
-    const address=await addressService.getAddressByUserId(user._id);
-    if(!address || !cart){
-        return res.status(BAD_REQUEST_STATUS).json({message:"Resource not found"});
+    try{
+        const user=req.user||null;
+        const cart=await cartService.getCartByUserId(user._id);
+        const address=await addressService.getAddressByUserId(user._id);
+        if(!address || !cart){
+            return res.status(BAD_REQUEST_STATUS).json({message:"Resource not found"});
+        }
+        if(isCartEmpty(cart)){
+            return res.status(BAD_REQUEST_STATUS).json({message:"Cart is empty"});
+        }
+        const orderData=getOrderData(user,cart,address);
+        const order=await orderService.createOrder(orderData);
+        await productService.updateQuantityAfterMakingOrder(order);
+        const savedOrder=await orderService.save(order);
+        await cartService.deleteCartByUserId(user._id);
+        const url=await stripeService.createPaymentUrl(Array.of(savedOrder));
+        return res.status(OK_STATUS).send({
+            order:savedOrder,
+            url:url,
+        });
     }
-    if(isCartEmpty(cart)){
-        return res.status(BAD_REQUEST_STATUS).json({message:"Cart is empty"});
+    catch(e){
+        console.log(e.message);
+        return res.status(BAD_REQUEST_STATUS).json({message:"Internal server error"});
     }
-    const orderData=getOrderData(user,cart,address);
-    const order=await orderService.createOrder(orderData);
-    await productService.updateQuantityAfterMakingOrder(order);
-    const savedOrder=await orderService.save(order);
-    await cartService.deleteCartByUserId(user._id);
-    return res.status(OK_STATUS).send({
-        order:savedOrder,
-    });
 };
 
 const shopOrderController={
