@@ -1,44 +1,53 @@
-// module.exports = {
-//   async up(db, client) {
-//     // TODO write your migration here.
-//     // See https://github.com/seppevs/migrate-mongo/#creating-a-new-migration-script
-//     // Example:
-//     // await db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: true}});
-//   },
-
-//   async down(db, client) {
-//     // TODO write the statements to rollback your migration (if possible)
-//     // Example:
-//     // await db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: false}});
-//   }
-// };
-
-
-
-
-
 import mongoose from "mongoose";
+
+const mockBanners = 
+[{
+    "image": "https://firebasestorage.googleapis.com/v0/b/my-app-4c221.appspot.com/o/web%2Fimages%2Fbanner1.jpg?alt=media&token=3eb632f4-66a0-4960-aef2-24af69199547"
+  },
+  {
+    "image": "https://firebasestorage.googleapis.com/v0/b/my-app-4c221.appspot.com/o/web%2Fimages%2Fbanner3.jpg?alt=media&token=f4177f40-3742-44ab-8c02-20e6f2900a3d"
+  },
+  {
+    "image": "https://firebasestorage.googleapis.com/v0/b/my-app-4c221.appspot.com/o/web%2Fimages%2Fbanner.jpg?alt=media&token=d8f45201-6b80-4c1b-8d4e-2c9a4e8aebca"
+  }]
+
 
 // Dữ liệu mock cho Category
 const mockCategories = [
     {
         name: 'Laptop',
+        isDeleted:false,
+        deletedAt:null,
         createdAt: new Date('2022-01-01T00:00:00Z'),
     },
     {
         name: 'Television',
+        isDeleted:false,
+        deletedAt:null,
         createdAt: new Date('2022-02-01T00:00:00Z'),
     },
     {
         name: 'Camera',
+        isDeleted:false,
+        deletedAt:null,
         createdAt: new Date('2022-03-01T00:00:00Z'),
     },
     {
         name: 'Phone',
+        isDeleted:false,
+        deletedAt:null,
         createdAt: new Date('2022-04-01T00:00:00Z'),
     },
     {
         name: 'Watch',
+        isDeleted:false,
+        deletedAt:null,
+        createdAt: new Date('2022-05-01T00:00:00Z'),
+    },
+    {
+        name: 'Other',
+        isDeleted:false,
+        deletedAt:null,
         createdAt: new Date('2022-05-01T00:00:00Z'),
     },
 ];
@@ -48,34 +57,32 @@ const mockCategories = [
 const mockBrands = [
     {
         name: 'Samsung',
+        isDeleted:false,
         createdAt: new Date('2022-02-01T00:00:00Z'),
     },
     {
-        name: 'Vivo',
+        name: 'Apple',
+        isDeleted:false,
         createdAt: new Date('2022-03-01T00:00:00Z'),
     },
     {
         name: 'Acer',
+        isDeleted:false,
         createdAt: new Date('2022-04-01T00:00:00Z'),
     },
     {
         name: 'Oppo',
+        isDeleted:false,
         createdAt: new Date('2022-05-01T00:00:00Z'),
     },
     {
-        name: 'Iphone',
+        name: 'Lazada',
+        isDeleted:false,
         createdAt: new Date('2024-11-30T06:45:33.946Z'),
     },
     {
-        name: 'Asus',
-        createdAt: new Date('2024-11-30T06:45:33.946Z'),
-    },
-    {
-        name: 'Apple',
-        createdAt: new Date('2024-11-30T06:45:33.946Z'),
-    },
-    {
-        name: 'Xiaomi',
+        name: 'Other',
+        isDeleted:false,
         createdAt: new Date('2024-11-30T06:45:33.946Z'),
     },
 ];
@@ -83,25 +90,26 @@ const mockBrands = [
 
 // Dữ liệu mock cho Product
 const mockProducts = [
+    // Phone
     {
         name: 'iPhone 11 128GB',
-        price: 1999,
-        salePrice: 1799,
+        price: 472.61,
+        salePrice: 413.48,
         totalStock: 50,
         image: 'https://cdn.tgdd.vn/Products/Images/42/210644/Slider/iphone-11-128gb638176672333284623.jpeg',
         rating: 4.1,
-        description: 'Great',
+        description: 'Latest generation smartphone',
         status: 'On stock',
         createdAt: new Date('2022-01-01T00:00:00Z'),
         category_id: "None",
-        totalRating:10,
         brand_id: "None",
-        createdAt: new Date('2022-05-01T00:00:00Z')
+        isDeleted: false,
+        numReviews: 1,
     },
     {
         name: 'iPhone 16 Pro Max 256GB',
-        price: 999,
-        salePrice: 899,
+        price: 1379.19,
+        salePrice: 1339.77,
         totalStock: 30,
         image: 'https://cdn.tgdd.vn/Products/Images/42/329149/Slider/vi-vn-iphone-16-pro-max-1.jpg',
         rating: 4.7,
@@ -109,354 +117,362 @@ const mockProducts = [
         status: 'On stock',
         createdAt: new Date('2022-02-01T00:00:00Z'),
         category_id: "None",
-        totalRating:10,
         brand_id: "None",
-        createdAt: new Date('2022-05-01T00:00:00Z')
+        isDeleted: false,
+        numReviews: 1,
     },
     {
         name: 'Samsung Galaxy M15 5G 4GB/128GB',
-        price: 2499,
-        salePrice: 2199,
+        price: 184.86,
+        salePrice: 165.16,
         totalStock: 20,
         image: 'https://cdn.tgdd.vn/Products/Images/42/325073/Slider/samsung-galaxy-m15-5g-4gb638566551162956020.jpg',
         rating: 4.9,
-        description: 'Full-frame mirrorless camera for professionals',
+        description: 'Mid-range phone with 5G support, sharp 6.6-inch screen, stable performance and spacious storage.',
         status: 'On stock',
         createdAt: new Date('2022-03-01T00:00:00Z'),
         category_id: "None",
-        totalRating:10,
         brand_id: "None",
-        createdAt: new Date('2022-05-01T00:00:00Z')
+        isDeleted: false,
+        numReviews: 1,
     },
     {
         name: 'OPPO Find N3 5G 16GB/512GB',
-        price: 1099,
-        salePrice: 999,
+        price: 1773.35,
+        salePrice: 1576.27,
         totalStock: 80,
         image: 'https://cdn.tgdd.vn/Products/Images/42/302953/Slider/vi-vn-oppo-find-n3-slider--(1).jpg',
         rating: 4.6,
-        description: "Apple's latest flagship smartphone",
+        description: "High-end foldable smartphone with powerful performance.",
         status: 'On stock',
         createdAt: new Date('2022-04-01T00:00:00Z'),
         category_id: "None",
-        totalRating:10,
         brand_id: "None",
-        createdAt: new Date('2022-05-01T00:00:00Z')
+        isDeleted: false,
+        numReviews: 1,
     },
     {
-        name: 'Samsung 13+ 5G 8GB/256GB',
-        price: 299,
-        salePrice: 249,
+        name: 'Realme 13+ 5G 8GB/256GB',
+        price: 374.06,
+        salePrice: 326.76,
         totalStock: 40,
         image: 'https://cdn.tgdd.vn/Products/Images/42/330620/Slider/realme-13-plus-5g-8gb-256gb638677081877884882.jpg',
         rating: 4.5,
-        description: 'Advanced smartwatch with Wear OS',
+        description: 'Stylish phone, stable performance with 5G support.',
         status: 'On stock',
         createdAt: new Date('2022-05-01T00:00:00Z'),
         category_id: "None",
-        totalRating:10,
         brand_id: "None",
-        createdAt: new Date('2022-05-01T00:00:00Z')
+        isDeleted: false,
+        numReviews: 1,
     },
+
+    // Laptop
     {
         name: 'Laptop Asus Vivobook Go 15 E1504FA R5 7520U/16GB/512GB/Chuột/Win11 (NJ776W)',
-        price: 1399,
-        salePrice: 1299,
+        price: 571.15,
+        salePrice: 492.31,
         totalStock: 25,
         image: 'https://cdn.tgdd.vn/Products/Images/44/311178/Slider/vi-vn-asus-vivobook-go-15-e1504fa-r5-nj776w-slider-1.jpg',
         rating: 4.7,
-        description: 'Premium ultrabook for professionals',
+        description: 'Thin, light laptop, powerful performance, suitable for study and work.',
         status: 'On stock',
         createdAt: new Date('2022-06-01T00:00:00Z'),
         category_id: "None",
-        totalRating:10,
         brand_id: "None",
-        createdAt: new Date('2022-05-01T00:00:00Z')
+        isDeleted: false,
+        numReviews: 1,
     },
     {
         name: 'Laptop Apple MacBook Air 13 inch M1 8GB/256GB (MGN63SA/A)',
-        price: 1199,
-        salePrice: 1099,
+        price: 787.94,
+        salePrice: 716.99,
         totalStock: 60,
         image: 'https://cdn.tgdd.vn/Products/Images/44/231244/Slider/apple-macbook-air-2020-mgn63saa638168474820399305.jpg',
         rating: 4.8,
-        description: 'Samsung\'s flagship smartphone with S-Pen',
+        description: 'Ultra-thin laptop with powerful M1 chip, luxurious design and outstanding performance.',
         status: 'On stock',
         createdAt: new Date('2022-07-01T00:00:00Z'),
         category_id: "None",
-        totalRating:10,
         brand_id: "None",
-        createdAt: new Date('2022-05-01T00:00:00Z')
+        isDeleted: false,
+        numReviews: 1,
     },
     {
         name: 'Laptop Acer Aspire 3 A315 44P R9W8 R7 5700U/8GB/512GB/Win11 (NX.KSJSV.002)',
-        price: 2699,
-        salePrice: 2599,
+        price: 512.02,
+        salePrice: 421.36,
         totalStock: 15,
         image: 'https://cdn.tgdd.vn/Products/Images/44/321436/Slider/vi-vn-acer-aspire-a315-44p-r9w8-r7-nxksjsv002-slider-1.jpg',
         rating: 4.9,
-        description: 'Advanced mirrorless camera with high resolution',
+        description: 'Laptop with stable performance, simple design, suitable for study and work.',
         status: 'On stock',
         createdAt: new Date('2022-08-01T00:00:00Z'),
         category_id: "None",
-        totalRating:10,
         brand_id: "None",
-        createdAt: new Date('2022-05-01T00:00:00Z')
+        isDeleted: false,
+        numReviews: 1,
     },
     {
-        name: 'Laptop Acer Inspiron 15 3520 i5 1235U/16GB/512GB/120Hz/OfficeHS/KYHD/Win11',
-        price: 799,
-        salePrice: 699,
+        name: 'Laptop Dell Inspiron 15 3520 i5 1235U/16GB/512GB/120Hz/OfficeHS/KYHD/Win11',
+        price: 669.69,
+        salePrice: 649.98,
         totalStock: 70,
-        image: 'https://cdn.tgdd.vn/Products/Images/44/326876/acer-aspire-lite-14-51m-36pn-i3-nxktwsv001-thumb-600x600.jpg',
+        image: 'https://cdn.tgdd.vn/Products/Images/44/325242/Slider/dell-inspiron-15-3520-i5-1235u-16gb-512gb-120hz-officehs-win11-n5i5052w1638557748484267591.jpg',
         rating: 4.3,
-        description: 'Affordable laptop with gaming capabilities',
+        description: 'Laptop with smooth 120Hz screen, powerful performance, integrated licensed Office.',
         status: 'On stock',
         createdAt: new Date('2022-09-01T00:00:00Z'),
         category_id: "None",
-        totalRating:10,
         brand_id: "None",
-        createdAt: new Date('2022-05-01T00:00:00Z')
+        isDeleted: false,
+        numReviews: 1,
     },
     {
-        name: 'Laptop Acer Gaming VICTUS 15 fa1139TX i5 12450H/16GB/512GB/4GB RTX2050/144Hz/Win11 (8Y6W3PA)',
-        price: 1999,
-        salePrice: 1899,
+        name: 'Laptop HP Gaming VICTUS 15 fa1139TX i5 12450H/16GB/512GB/4GB RTX2050/144Hz/Win11 (8Y6W3PA)',
+        price: 969.25,
+        salePrice: 748.52,
         totalStock: 35,
-        image: 'https://cdn.tgdd.vn/Products/Images/44/304543/acer-aspire-3-a315-59-5283-i5-nxk6tsv00b-thumb-600x600.jpg',
+        image: 'https://cdn.tgdd.vn/Products/Images/44/318163/Slider/vi-vn-hp-victus-15-fa1139tx-i5-8y6w3pa-slider-1.jpg',
         rating: 4.9,
-        description: 'Best-in-class picture quality with OLED',
+        description: 'Powerful gaming laptop with RTX 2050 graphics card, 144Hz display, outstanding performance.',
         status: 'On stock',
         createdAt: new Date('2022-10-01T00:00:00Z'),
         category_id: "None",
-        totalRating:10,
         brand_id: "None",
-        createdAt: new Date('2022-05-01T00:00:00Z')
+        isDeleted: false,
+        numReviews: 1,
     },
+
+    // Watch
     {
         name: 'BeFit Watch Ultra 52.6mm',
-        price: 627.95,
-        salePrice: 500,
+        price: 58.73,
+        salePrice: 42.96,
         totalStock: 40,
         image: 'https://cdn.tgdd.vn/Products/Images/7077/315596/Slider/vi-vn-befit-watch-ultra-day-silicone-fix-1.jpg',
         rating: 4.1,
-        description: 'Latest generation iphone',
+        description: 'Smartwatch with sporty design, health tracking features and large display.',
         status: 'On stock',
         createdAt: new Date(),
         category_id: "None",
-        totalRating:10,
         brand_id: "None",
-        createdAt: new Date('2022-05-01T00:00:00Z')
+        isDeleted: false,
+        numReviews: 1,
     },
     {
-        name: 'SamSung Watch 3 Active 46mm',
-        price: 1999,
-        salePrice: 1799,
+        name: 'Xiaomi Redmi Watch 3 Active 46mm',
+        price: 58.73,
+        salePrice: 39.02,
         totalStock: 50,
-        image: 'https://cdn.tgdd.vn/Products/Images/7077/327692/samsung-galaxy-watch7-40mm-kem-tn-600x600.jpg',
+        image: 'https://cdn.tgdd.vn/Products/Images/7077/311333/Slider/vi-vn-redmi-watch-3-active-sld-1.jpg',
         rating: 4.8,
-        description: 'Powerful laptop with M1 Pro chip',
+        description: '46mm smartwatch with dynamic design, health tracking and support for many sports features.',
         status: 'On stock',
         createdAt: new Date('2022-01-01T00:00:00Z'),
         category_id: "None",
-        totalRating:10,
         brand_id: "None",
-        createdAt: new Date('2022-05-01T00:00:00Z')
+        isDeleted: false,
+        numReviews: 1,
     },
     {
         name: 'Apple Watch Ultra 2 GPS + Cellular 49mm viền Titanium đen dây Alpine',
-        price: 1999,
-        salePrice: 1799,
+        price: 906.19,
+        salePrice: 886.48,
         totalStock: 50,
         image: 'https://cdn.tgdd.vn/Products/Images/7077/329719/Slider/vi-vn-apple-watch-ultra-2-gps-cellular-49mm-vien-titanium-day-alpine-sld-f-1.jpg',
         rating: 4.8,
-        description: 'Powerful laptop with M1 Pro chip',
+        description: 'Premium smartwatch with black titanium bezel, Alpine strap, GPS and Cellular support, suitable for outdoor activities and adventure sports.',
         status: 'On stock',
         createdAt: new Date('2022-01-01T00:00:00Z'),
         category_id: "None",
-        totalRating:10,
         brand_id: "None",
-        createdAt: new Date('2022-05-01T00:00:00Z')
+        isDeleted: false,
+        numReviews: 1,
     },
     {
         name: 'Apple Watch Series 9 GPS 45mm',
-        price: 1999,
-        salePrice: 1799,
+        price: 445.01,
+        salePrice: 354.36,
         totalStock: 50,
         image: 'https://cdn.tgdd.vn/Products/Images/7077/314708/Slider/apple-watch-s9-45mm-vien-nhom-day-silicone638351569262602904.jpg',
         rating: 4.8,
-        description: 'Powerful laptop with M1 Pro chip',
+        description: '45mm smartwatch with sophisticated design, health tracking features and precise GPS connectivity.',
         status: 'On stock',
         createdAt: new Date('2022-01-01T00:00:00Z'),
         category_id: "None",
-        totalRating:10,
         brand_id: "None",
-        createdAt: new Date('2022-05-01T00:00:00Z')
+        isDeleted: false,
+        numReviews: 1,
     },
     {
         name: 'Samsung Galaxy Watch FE 40mm',
-        price: 1999,
-        salePrice: 1799,
+        price: 196.69,
+        salePrice: 82.38,
         totalStock: 50,
         image: 'https://cdn.tgdd.vn/Products/Images/7077/327469/Slider/samsung-galaxy-watch-fe-40mm638555347177674476.jpg',
         rating: 4.8,
-        description: 'Powerful laptop with M1 Pro chip',
+        description: '40mm smartwatch with compact design, health tracking features and smart connectivity.',
         status: 'On stock',
         createdAt: new Date('2022-01-01T00:00:00Z'),
         category_id: "None",
-        totalRating:10,
         brand_id: "None",
-        createdAt: new Date('2022-05-01T00:00:00Z')
+        isDeleted: false,
+        numReviews: 1,
     },
+
+    // Camera
     {
         name: 'DJI Action 4 Combo',
-        price: 1999,
-        salePrice: 1799,
+        price: 460.78,
+        salePrice: 330.71,
         totalStock: 50,
         image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:0:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/c/o/combo-camera-hanh-dong-dji-action-4_2_.png',
         rating: 4.8,
-        description: 'Powerful laptop with M1 Pro chip',
+        description: 'Versatile action camera with 4K video quality, powerful anti-shake and full accessories for outdoor activities.',
         status: 'On stock',
         createdAt: new Date('2022-01-01T00:00:00Z'),
         category_id: "None",
-        totalRating:10,
         brand_id: "None",
-        createdAt: new Date('2022-05-01T00:00:00Z')
+        isDeleted: false,
+        numReviews: 1,
     },
     {
         name: 'Camera Insta360 One X3',
-        price: 1999,
-        salePrice: 1799,
+        price: 455.66,
+        salePrice: 399,
         totalStock: 50,
         image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:0:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/c/a/camera-hanh-trinh-insta360-one-x3.png',
         rating: 4.8,
-        description: 'Powerful laptop with M1 Pro chip',
+        description: '360-degree action camera with 5.7K video recording, superior anti-shake and compact design.',
         status: 'On stock',
         createdAt: new Date('2022-01-01T00:00:00Z'),
         category_id: "None",
-        totalRating:10,
         brand_id: "None",
-        createdAt: new Date('2022-05-01T00:00:00Z')
+        isDeleted: false,
+        numReviews: 1,
     },
     {
         name: 'GoPro Hero 13 Black',
-        price: 1999,
-        salePrice: 1799,
+        price: 452.90,
+        salePrice: 399,
         totalStock: 50,
         image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:0:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/t/e/text_ng_n_3__5_87.png',
         rating: 4.8,
-        description: 'Powerful laptop with M1 Pro chip',
+        description: 'Powerful action camera with 5.3K video, HyperSmooth stabilization, and superior waterproofing.',
         status: 'On stock',
         createdAt: new Date('2022-01-01T00:00:00Z'),
         category_id: "None",
-        totalRating:10,
         brand_id: "None",
-        createdAt: new Date('2022-05-01T00:00:00Z')
+        isDeleted: false,
+        numReviews: 1,
     },
     {
-        name: 'DJI Action 4 Combo',
-        price: 1999,
-        salePrice: 1799,
+        name: 'Flycam DJI Mini 2 SE',
+        price: 401.66,
+        salePrice: 359,
         totalStock: 50,
-        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:0:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/c/o/combo-camera-hanh-dong-dji-action-4_3_.png',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:0:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/f/l/flycam-dji-mini-2-se_7_.png',
         rating: 4.8,
-        description: 'Powerful laptop with M1 Pro chip',
+        description: 'Compact, easy-to-use flycam, records 4K video, suitable for beginners and travel.',
         status: 'On stock',
         createdAt: new Date('2022-01-01T00:00:00Z'),
         category_id: "None",
-        totalRating:10,
         brand_id: "None",
-        createdAt: new Date('2022-05-01T00:00:00Z')
+        isDeleted: false,
+        numReviews: 1,
     },
     {
         name: 'Camera GoPro Hero 12',
-        price: 1999,
-        salePrice: 1799,
+        price: 492.31,
+        salePrice: 374.06,
         totalStock: 50,
         image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:0:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/c/a/camera-hanh-trinh-gopro-hero-12-phu-kien.png',
         rating: 4.8,
-        description: 'Powerful laptop with M1 Pro chip',
+        description: 'Action camera with 5.3K video recording, HyperSmooth stabilization, and advanced waterproofing, ideal for extreme sports activities.',
         status: 'On stock',
         createdAt: new Date('2022-01-01T00:00:00Z'),
         category_id: "None",
-        totalRating:10,
         brand_id: "None",
-        createdAt: new Date('2022-05-01T00:00:00Z')
+        isDeleted: false,
+        numReviews: 1,
     },
+
+    // Television
     {
         name: 'Smart Tivi Samsung UHD 4K 65 inch UA65AU7700',
-        price: 1999,
-        salePrice: 1799,
+        price: 1060.31,
+        salePrice: 472.61,
         totalStock: 50,
         image: 'https://cdn2.fptshop.com.vn/unsafe/384x0/filters:quality(100)/2023_8_14_638276187497562577_smart-tivi-samsung-uhd-4k-au7700-3.jpg',
         rating: 4.8,
-        description: 'Powerful laptop with M1 Pro chip',
+        description: '65-inch TV with sharp 4K resolution, slim design and smart features, providing a great viewing experience.',
         status: 'On stock',
         createdAt: new Date('2022-01-01T00:00:00Z'),
         category_id: "None",
-        totalRating:10,
         brand_id: "None",
-        createdAt: new Date('2022-05-01T00:00:00Z')
+        isDeleted: false,
+        numReviews: 1,
     },
     {
-        name: 'Samsung Google Tivi A Pro 55 Inch 4K',
-        price: 1999,
-        salePrice: 1799,
+        name: 'Xiaomi Google Tivi A Pro 55 Inch 4K',
+        price: 393.77,
+        salePrice: 359,
         totalStock: 50,
         image: 'https://cdn2.fptshop.com.vn/unsafe/384x0/filters:quality(100)/2023_8_9_638271937140598065_tivi-xiaomi-a-pro-55-inch-4.jpg',
         rating: 4.8,
-        description: 'Powerful laptop with M1 Pro chip',
+        description: '55-inch TV with 4K resolution, integrated Google TV, brings smart entertainment experience and sharp images.',
         status: 'On stock',
         createdAt: new Date('2022-01-01T00:00:00Z'),
         category_id: "None",
-        totalRating:10,
         brand_id: "None",
-        createdAt: new Date('2022-05-01T00:00:00Z')
+        isDeleted: false,
+        numReviews: 1,
     },
     {
-        name: 'Samsung Google Tivi HD 32 inch 32HG5200',
-        price: 1999,
-        salePrice: 1799,
+        name: 'Casper Google Tivi HD 32 inch 32HG5200',
+        price: 236.11,
+        salePrice: 199,
         totalStock: 50,
-        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/7/_/7_267_5.png',
+        image: 'https://cdn2.fptshop.com.vn/unsafe/384x0/filters:quality(100)/2024_4_8_638481808529924616_casper-32hg5200-5.jpg',
         rating: 4.8,
-        description: 'Powerful laptop with M1 Pro chip',
+        description: '32-inch TV with HD resolution, integrated Google TV, brings a simple and easy-to-use entertainment experience.',
         status: 'On stock',
         createdAt: new Date('2022-01-01T00:00:00Z'),
         category_id: "None",
-        totalRating:10,
         brand_id: "None",
-        createdAt: new Date('2022-05-01T00:00:00Z')
+        isDeleted: false,
+        numReviews: 1,
     },
     {
         name: 'Xiaomi Google Tivi 4K A 55 inch 2025 (L55MA-ASEA)',
-        price: 1999,
-        salePrice: 1799,
+        price: 452.90,
+        salePrice: 374.06,
         totalStock: 50,
         image: 'https://cdn2.fptshop.com.vn/unsafe/384x0/filters:quality(100)/00910009_tivi_xiaomi_a_55_2025_l55ma_asea_0b7682dc52.png',
         rating: 4.8,
-        description: 'Powerful laptop with M1 Pro chip',
+        description: '55-inch TV with 4K resolution, integrated Google TV, modern design and many smart features, providing a great entertainment experience.',
         status: 'On stock',
         createdAt: new Date('2022-01-01T00:00:00Z'),
         category_id: "None",
-        totalRating:10,
         brand_id: "None",
-        createdAt: new Date('2022-05-01T00:00:00Z')
+        isDeleted: false,
+        numReviews: 1,
     },
     {
         name: 'Casper Google Tivi QLED 4K 55 inch 55QG8000',
-        price: 1999,
-        salePrice: 1799,
+        price: 512.02,
+        salePrice: 433.19,
         totalStock: 50,
         image: 'https://cdn2.fptshop.com.vn/unsafe/384x0/filters:quality(100)/2024_1_16_638410017664877956_casper-google-tivi-qled-4k-55-inch-55qg8000-1.jpg',
         rating: 4.8,
-        description: 'Powerful laptop with M1 Pro chip',
+        description: '55-inch TV with QLED technology, 4K resolution, integrated Google TV, brings vivid images and smart entertainment experience.',
         status: 'On stock',
         createdAt: new Date('2022-01-01T00:00:00Z'),
         category_id: "None",
-        totalRating:10,
         brand_id: "None",
-        createdAt: new Date('2022-05-01T00:00:00Z')
+        isDeleted: false,
+        numReviews: 1,
     },
 ];
 
@@ -464,7 +480,7 @@ const mockProducts = [
 // Dữ liệu mock cho ProductDetail
 const mockProductDetails = [
     {
-        productId: null,
+        product_id: null,
         type: "Phone",
         weight: "194g",
         internalMemory: "128GB",
@@ -474,7 +490,7 @@ const mockProductDetails = [
         operatingSystem: "IOS 17"
     },
     {
-        productId: "64a0c88a57f1c78d1b634a10",
+        product_id: null,
         type: "Phone",
         weight: "227g",
         internalMemory: "256GB",
@@ -484,7 +500,7 @@ const mockProductDetails = [
         operatingSystem: "IOS 18"
     },
     {
-        productId: "64a0c88a57f1c78d1b634a10",
+        product_id: null,
         type: "Phone",
         weight: "217g",
         internalMemory: "128GB",
@@ -494,7 +510,7 @@ const mockProductDetails = [
         operatingSystem: "Android 14"
     },
     {
-        productId: "64a0c88a57f1c78d1b634a10",
+        product_id: null,
         type: "Phone",
         weight: "245g",
         internalMemory: "512GB",
@@ -504,7 +520,7 @@ const mockProductDetails = [
         operatingSystem: "Android 13"
     },
     {
-        productId: "64a0c88a57f1c78d1b634a10",
+        product_id: null,
         type: "Phone",
         weight: "285g",
         internalMemory: "256GB",
@@ -514,9 +530,9 @@ const mockProductDetails = [
         operatingSystem: "Android 14"
     },
     {
-        productId: "67135ef9a844ab7ea1b00755",
-        weight: "1.63kg",
+        product_id: null,
         type: "Laptop",
+        weight: "1.63kg",
         CPU: "AMD Ryzen 5 - 7520U",
         RAM: "16GB",
         storage: "512GB SSD",
@@ -524,9 +540,9 @@ const mockProductDetails = [
         operatingSystem: "Windows 11"
     },
     {
-        productId: "67135ef9a844ab7ea1b00755",
-        weight: "1.29kg",
+        product_id: null,
         type: "Laptop",
+        weight: "1.29kg",
         CPU: "Apple M1",
         RAM: "8GB",
         storage: "256GB SSD",
@@ -534,9 +550,9 @@ const mockProductDetails = [
         operatingSystem: "macOS"
     },
     {
-        productId: "67135ef9a844ab7ea1b00755",
-        weight: "1.7kg",
+        product_id: null,
         type: "Laptop",
+        weight: "1.7kg",
         CPU: "AMD Ryzen 7 - 5700U",
         RAM: "8GB",
         storage: "512GB SSD",
@@ -544,9 +560,9 @@ const mockProductDetails = [
         operatingSystem: "Windows 11"
     },
     {
-        productId: "67135ef9a844ab7ea1b00755",
-        weight: "1.24kg",
+        product_id: null,
         type: "Laptop",
+        weight: "1.24kg",
         CPU: "Apple M2",
         RAM: "8GB",
         storage: "256GB SSD",
@@ -554,9 +570,9 @@ const mockProductDetails = [
         operatingSystem: "macOS"
     },
     {
-        productId: "67135ef9a844ab7ea1b00755",
-        weight: "2.29kg",
+        product_id: null,
         type: "Laptop",
+        weight: "2.29kg",
         CPU: "Intel Core i5 Alder Lake - 12450H",
         RAM: "16GB",
         storage: "512GB SSD",
@@ -564,49 +580,49 @@ const mockProductDetails = [
         operatingSystem: "Windows 11"
     },
     {
-        productId: "64a0c88a57f1c78d1b634a12",
-        weight: "44.52g",
+        product_id: null,
         type: "Watch",
+        weight: "44.52g",
         batteryCapacity: "230mAh",
         screenSize: "1.95 inches",
         operatingSystem: "Không công bố"
     },
     {
-        productId: "64a0c88a57f1c78d1b634a12",
-        weight: "41.67g",
+        product_id: null,
         type: "Watch",
+        weight: "41.67g",
         batteryCapacity: "289mAh",
         screenSize: "1.83 inches",
         operatingSystem: "Không công bố"
     },
     {
-        productId: "64a0c88a57f1c78d1b634a12",
-        weight: "61.8g",
+        product_id: null,
         type: "Watch",
+        weight: "61.8g",
         batteryCapacity: "36-72 giờ",
         screenSize: "1.92 inches",
         operatingSystem: "WatchOS"
     },
     {
-        productId: "64a0c88a57f1c78d1b634a12",
-        weight: "38.7g",
+        product_id: null,
         type: "Watch",
+        weight: "38.7g",
         batteryCapacity: "18-36 giờ",
         screenSize: "1.9 inches",
         operatingSystem: "WatchOS"
     },
     {
-        productId: "64a0c88a57f1c78d1b634a12",
-        weight: "26.6g",
+        product_id: null,
         type: "Watch",
+        weight: "26.6g",
         batteryCapacity: "247mAh",
         screenSize: "1.2 inches",
         operatingSystem: "WearOS"
     },
     {
-        productId: "67135f33a844ab7ea1b0075b",
-        weight: "190g",
+        product_id: null,
         type: "Camera",
+        weight: "190g",
         batteryCapacity: "1770mAh",
         cameraType: "Action Camera",
         cameraSensor: "CMOS",
@@ -615,9 +631,9 @@ const mockProductDetails = [
         screenType: "Touchscreen"
     },
     {
-        productId: "67135f33a844ab7ea1b0075b",
-        weight: "180g",
+        product_id: null,
         type: "Camera",
+        weight: "180g",
         batteryCapacity: "1800mAh",
         cameraType: "360° Action Camera",
         cameraSensor: "Dual 48MP sensors (1/2 inch)",
@@ -626,9 +642,9 @@ const mockProductDetails = [
         screenType: "LCD Touchscreen"
     },
     {
-        productId: "67135f33a844ab7ea1b0075b",
-        weight: "190g",
+        product_id: null,
         type: "Camera",
+        weight: "190g",
         batteryCapacity: "1900mAh",
         cameraType: "Action Camera",
         cameraSensor: "CMOS",
@@ -637,9 +653,9 @@ const mockProductDetails = [
         screenType: "Touchscreen"
     },
     {
-        productId: "67135f33a844ab7ea1b0075b",
-        weight: "246g",
+        product_id: null,
         type: "Camera",
+        weight: "246g",
         batteryCapacity: "2250mAh",
         cameraType: "Flycam",
         cameraSensor: "CMOS 1/2.3",
@@ -648,9 +664,9 @@ const mockProductDetails = [
         screenType: "Smartphone Screen remote control"
     },
     {
-        productId: "67135f33a844ab7ea1b0075b",
-        weight: "154g",
+        product_id: null,
         type: "Camera",
+        weight: "154g",
         batteryCapacity: "1300mAh",
         cameraType: "Action Camera",
         cameraSensor: "CMOS",
@@ -660,7 +676,7 @@ const mockProductDetails = [
     },
     {
         // https://fptshop.com.vn/tivi/smart-tivi-samsung-uhd-4k-65-inch-ua65au7700
-        productId: "64a0c88a57f1c78d1b634a11",
+        product_id: null,
         type: "Television",
         weight: "20.9kg",
         screenSize: "65 inches",
@@ -672,7 +688,7 @@ const mockProductDetails = [
     },
     {
         // https://fptshop.com.vn/tivi/tivi-xiaomi-a-pro-55-inch
-        productId: "64a0c88a57f1c78d1b634a11",
+        product_id: null,
         type: "Television",
         weight: "11.23kg",
         screenSize: "55 inches",
@@ -684,7 +700,7 @@ const mockProductDetails = [
     },
     {
         // https://fptshop.com.vn/tivi/casper-goolgle-tivi-hd-32-inch-32hg5200
-        productId: "64a0c88a57f1c78d1b634a11",
+        product_id: null,
         type: "Television",
         weight: "3.8kg",
         screenSize: "32 inches",
@@ -696,7 +712,7 @@ const mockProductDetails = [
     },
     {
         // https://fptshop.com.vn/tivi/xiaomi-google-tivi-4k-55-inch-a-55-2025-l55ma-asea
-        productId: "64a0c88a57f1c78d1b634a11",
+        product_id: null,
         type: "Television",
         weight: "14kg",
         screenSize: "55 inches",
@@ -708,7 +724,7 @@ const mockProductDetails = [
     },
     {
         // https://fptshop.com.vn/tivi/casper-google-tivi-qled-4k-55-inch-55qg8000
-        productId: "64a0c88a57f1c78d1b634a11",
+        product_id: null,
         type: "Television",
         weight: "13.4kg",
         screenSize: "65 inches",
@@ -724,61 +740,67 @@ const mockProductDetails = [
 // Dữ liệu mock cho ProductProperty
 const mockProductProperties = [
     // Sản phẩm 1
-    { category_id: null, name: "InternalMemory", createdAt: new Date() },
-    { category_id: null, name: "Chip", createdAt: new Date() },
-    { category_id: null, name: "ScreenSize", createdAt: new Date() },
-    { category_id: null, name: "BatteryCapacity", createdAt: new Date() },
-    { category_id: null, name: "OperatingSystem", createdAt: new Date() },
+    { category_id: null, name: "InternalMemory", description: "128GB", createdAt: new Date() },
+    { category_id: null, name: "Chip", description: "Apple A13 Bionic", createdAt: new Date() },
+    { category_id: null, name: "ScreenSize", description: "6.1 inches", createdAt: new Date() },
+    { category_id: null, name: "BatteryCapacity", description: "3110mAh", createdAt: new Date() },
+    { category_id: null, name: "OperatingSystem", description: "IOS 17", createdAt: new Date() },
 
     // Sản phẩm 6
-    { category_id: null, name: "CPU", createdAt: new Date("2024-12-01T09:00:00.000Z") },
-    { category_id: null, name: "RAM", createdAt: new Date("2024-12-01T09:00:00.000Z") },
-    { category_id: null, name: "Storage", createdAt: new Date("2024-12-01T09:00:00.000Z") },
-    { category_id: null, name: "ScreenSize", createdAt: new Date("2024-12-01T09:00:00.000Z") },
-    { category_id: null, name: "OperatingSystem", createdAt: new Date("2024-12-01T09:00:00.000Z") },
+    { category_id: null, name: "CPU", description: "AMD Ryzen 5 - 7520U", createdAt: new Date("2024-12-01T09:00:00.000Z") },
+    { category_id: null, name: "RAM", description: "16GB", createdAt: new Date("2024-12-01T09:00:00.000Z") },
+    { category_id: null, name: "Storage", description: "512GB SSD", createdAt: new Date("2024-12-01T09:00:00.000Z") },
+    { category_id: null, name: "ScreenSize", description: "15.6 inches", createdAt: new Date("2024-12-01T09:00:00.000Z") },
+    { category_id: null, name: "OperatingSystem", description: "Windows 11", createdAt: new Date("2024-12-01T09:00:00.000Z") },
 
     // Sản phẩm 11
-    { category_id: null, name: "ScreenSize", createdAt: new Date("2024-12-01T13:00:00.000Z") },
-    { category_id: null, name: "OperatingSystem", createdAt: new Date("2024-12-01T13:00:00.000Z") },
-    { category_id: null, name: "BatteryCapacity", createdAt: new Date("2024-12-02T08:05:00.000Z") },
+    { category_id: null, name: "ScreenSize", description: "15.6 inches", createdAt: new Date("2024-12-01T13:00:00.000Z") },
+    { category_id: null, name: "OperatingSystem", description: "Windows 11", createdAt: new Date("2024-12-01T13:00:00.000Z") },
+    { category_id: null, name: "BatteryCapacity", description: "289mAh", createdAt: new Date("2024-12-02T08:05:00.000Z") },
     
     // Sản phẩm 16
-    { category_id: null, name: "ScreenSize", createdAt: new Date("2024-12-02T08:20:00.000Z") },
-    { category_id: null, name: "OperatingSystem", createdAt: new Date("2024-12-02T08:20:00.000Z") },
-    { category_id: null, name: "BatteryCapacity", createdAt: new Date("2024-12-02T08:35:00.000Z") },
-    { category_id: null, name: "CameraType", createdAt: new Date("2024-12-02T08:35:00.000Z") },
-    { category_id: null, name: "CameraSensor", createdAt: new Date("2024-12-02T08:35:00.000Z") },
-    { category_id: null, name: "ImageStabilization", createdAt: new Date("2024-12-02T08:35:00.000Z") },
+    { category_id: null, name: "ScreenSize", description: "1.2 inches", createdAt: new Date("2024-12-02T08:20:00.000Z") },
+    { category_id: null, name: "OperatingSystem", description: "WearOS", createdAt: new Date("2024-12-02T08:20:00.000Z") },
+    { category_id: null, name: "BatteryCapacity", description: "1800mAh", createdAt: new Date("2024-12-02T08:35:00.000Z") },
+    { category_id: null, name: "CameraType", description: "360° Action Camera", createdAt: new Date("2024-12-02T08:35:00.000Z") },
+    { category_id: null, name: "CameraSensor", description: "Dual 48MP sensors (1/2 inch)", createdAt: new Date("2024-12-02T08:35:00.000Z") },
+    { category_id: null, name: "ImageStabilization", description: "FlowState", createdAt: new Date("2024-12-02T08:35:00.000Z") },
 
     // Sản phẩm 22
     {
         category_id: null,
         name: "SoundTechnology",
+        desciption: "Adaptive Sound, Q-Symphony kết hợp loa tivi với loa thanh, Cải thiện âm thanh Dialog Enhancement",
         createdAt: new Date("2024-12-02T09:00:00.000Z")
     },
     {
         category_id: null,
         name: "OperatingSystem",
+        desciption: "OS Tizen",
         createdAt: new Date("2024-12-02T09:00:00.000Z")
     },
     {
         category_id: null,
         name: "ScreenSize",
+        desciption: "65 inches",
         createdAt: new Date("2024-12-02T09:00:00.000Z")
     },
     {
         category_id: null,
         name: "ScreenType",
+        desciption: "UHD",
         createdAt: new Date("2024-12-02T09:00:00.000Z")
     },
     {
         category_id: null,
         name: "RefreshRate",
+        desciption: "60Hz",
         createdAt: new Date("2024-12-02T09:00:00.000Z")
     },
     {
         category_id: null,
         name: "ImageTechnology",
+        desciption: "HDR10+",
         createdAt: new Date("2024-12-02T09:00:00.000Z")
     },
 ];
@@ -1570,108 +1592,6 @@ const mockProductPropertyValues = [
 ];
 
 
-// Mock User
-const mockUsers=[
-    {
-        fullName: "vinh nguyen",
-        userName: "vinh123 nguyenGoogle",
-        email: "vinh01515@gmail.com",
-        password: "$2a$10$B3brr0sjJnx4PYIbZo1ASu0U23nHkNkweRlO8LLRFWFJGjMMZHyFi",
-        avatar: "https://lh3.googleusercontent.com/a/ACg8ocLM8bNJw0NiUYgSnFdZ-jIUnxDKfQ…",
-        role: "user",
-        status:"active",
-        birthDate:"2004-11-22T06:41:57.622+00:00",
-        createdAt: "2024-11-22T06:41:57.622+00:00",
-        __v: 0,
-    },
-    {
-        fullName: "Nguyen quoc vinh",
-        userName: "vinh",
-        email: "vinh@gmail.com",
-        password: "$2a$10$Z1NR6Vc31tUkDMTjN94ZN.2rIUNyaOeQka234Z9yjCzheiNTXsdfa",
-        avatar: "",
-        role: "user",
-        status:"active",
-        birthDate:"2004-11-22T06:41:57.622+00:00",
-        createdAt: "2024-11-24T14:22:21.243+00:00",
-        __v: 0,
-    },
-    {
-        fullName: "abc",
-        userName: "abc",
-        email: "abc@gmail.com",
-        password: "$2a$10$junYf4JC1h3ZfD6ntRSehez6tI.2AJGFdhCODw3l7fj48dFDoRgKy",
-        avatar: "",
-        role: "user",
-        status:"active",
-        birthDate:"2004-11-22T06:41:57.622+00:00",
-        createdAt: "2024-11-24T17:29:19.582+00:00",
-        __v: 0,
-    },
-    {
-        fullName: "Nguyen quoc vinh",
-        userName: "vinh123",
-        email: "vinh123@gmail.com",
-        password: "$2a$10$uXLNcbwIZp/zuZ1VrK36W.2TeS6iG/eN18ZPGVtAR60d80s/mJAgS",
-        avatar: "",
-        role: "user",
-        status:"active",
-        birthDate:"2004-11-22T06:41:57.622+00:00",
-        createdAt: "2024-11-29T01:03:40.420+00:00",
-        __v: 0,
-    },
-    {
-        fullName: "Trần Minh Sơn",
-        userName: "Trần Minh SơnGoogle",
-        email: "sonhotboy82@gmail.com",
-        password: "$2a$10$EEJvQPOx4qCwN1yatGiTLuTZTMuNSRbby0qGtMjymXCkG5phbNeWy",
-        avatar: "https://lh3.googleusercontent.com/a/ACg8ocL3JsRS8yKzjLtPRfd_ErpXKFZOax…",
-        role: "user",
-        status:"active",
-        birthDate:"2004-11-22T06:41:57.622+00:00",
-        createdAt: "2024-11-29T01:24:07.848+00:00",
-        __v: 0,
-    },
-    {
-        fullName: "son",
-        userName: "son",
-        email: "sontranminh82@gmail.com",
-        password: "$2a$10$rYlMSJtHCQAaqvsRvWq52OzfYRfphoYVwLANz0LsvVr6VFZTJl6a2",
-        avatar: "",
-        role: "user",
-        status:"active",
-        birthDate:"2004-11-22T06:41:57.622+00:00",
-        createdAt: "2024-11-29T01:24:48.677+00:00",
-        __v: 0,
-    },
-    {
-        fullName: "duc toan",
-        userName: "dt1",
-        email: "a@gmail.com",
-        password: "$2a$10$afdTmSfFyvm.DGcFLor8uOpnQ.cQXq971xvVnohLAoeu5hmehjq6u",
-        avatar: "",
-        role: "user",
-        status:"active",
-        birthDate:"2004-11-22T06:41:57.622+00:00",
-        createdAt: "2024-11-30T06:39:41.012+00:00",
-        __v: 0,
-    },
-    {
-        fullName: "Duc Toan Nguyen",
-        userName: "Duc Toan NguyenGoogle",
-        email: "ductoan137303@gmail.com",
-        password: "$2a$10$BzYFuMl0Cjucn/e80U2uReoCGL1yTfI9bAJy0tZTehTBnXrNTn/yW",
-        avatar: "https://lh3.googleusercontent.com/a/ACg8ocJuMbPymBYpD88AuzQ20OWZ4k4CpM…",
-        role: "user",
-        status:"active",
-        birthDate:"2004-11-22T06:41:57.622+00:00",
-        createdAt: "2024-11-30T06:40:23.805+00:00",
-        __v: 0,
-    }
-]
-  
-
-
 // Mock Review
 const mockReviews=[
     {
@@ -1703,95 +1623,1015 @@ const mockReviews=[
         createdAt: new Date("2024-11-13T12:37:56.789Z"),
     },
     {
-        productId: "None", // Chuyển sang ObjectId
-        userId: "None", // Chuyển sang ObjectId
+        productId: "None",
+        user: "None",
         rating: 5,
         comment: 'Excellent product, will buy again!',
         createdAt: new Date('2024-01-01T10:00:00'),
     },
     {
-        productId: "None", // Chuyển sang ObjectId
-        userId: "None", // Chuyển sang ObjectId
+        productId: "None",
+        user: "None",
         rating: 3,
         comment: 'Average quality, not worth the price.',
         createdAt: new Date('2024-01-02T11:30:00'),
     },
     {
-        productId: "None", // Chuyển sang ObjectId
-        userId: "None", // Chuyển sang ObjectId
+        productId: "None",
+        user: "None",
         rating: 4,
         comment: 'Good, but could be better.',
         createdAt: new Date('2024-01-03T12:45:00'),
     },
     {
-        productId: "None", // Chuyển sang ObjectId
-        userId: "None", // Chuyển sang ObjectId
+        productId: "None",
+        user: "None",
         rating: 5,
         comment: 'Absolutely love it!',
         createdAt: new Date('2024-01-04T09:00:00'),
     },
     {
-        productId: "None", // Chuyển sang ObjectId
-        userId: "None", // Chuyển sang ObjectId
+        productId: "None",
+        user: "None",
         rating: 2,
         comment: 'Not satisfied, expected better.',
         createdAt: new Date('2024-01-05T08:00:00'),
     },
     {
-        productId: "None", // Chuyển sang ObjectId
-        userId: "None", // Chuyển sang ObjectId
+        productId: "None",
+        user: "None",
         rating: 1,
         comment: 'Terrible quality, do not recommend.',
         createdAt: new Date('2024-01-06T07:15:00'),
     },
     {
-        productId: "None", // Chuyển sang ObjectId
-        userId: "None", // Chuyển sang ObjectId
+        productId: "None",
+        user: "None",
         rating: 4,
         comment: 'Very good, fast delivery.',
         createdAt: new Date('2024-01-07T15:45:00'),
     },
     {
-        productId: "None", // Chuyển sang ObjectId
-        userId: "None", // Chuyển sang ObjectId
+        productId: "None",
+        user: "None",
         rating: 3,
         comment: 'Okay, but not worth the price.',
         createdAt: new Date('2024-01-08T18:00:00'),
     },
     {
-        productId: "None", // Chuyển sang ObjectId
-        userId: "None", // Chuyển sang ObjectId
+        productId: "None",
+        user: "None",
         rating: 5,
         comment: 'Amazing! Highly recommend!',
         createdAt: new Date('2024-01-09T10:30:00'),
     },
     {
-        productId: "None", // Chuyển sang ObjectId
-        userId: "None", // Chuyển sang ObjectId
+        productId: "None",
+        user: "None",
         rating: 4,
         comment: 'Good value for money.',
         createdAt: new Date('2024-01-10T16:00:00'),
     },
-  ];
+    {
+        productId: "None",
+        user: "None",
+        rating: 5,
+        comment: "Excellent product! Exceeded my expectations.",
+        createdAt: new Date("2024-11-15T08:45:12.123Z"),
+    },
+    {
+        productId: "None",
+        user: "None",
+        rating: 3,
+        comment: "Average quality, but reasonable for the price.",
+        createdAt: new Date("2024-11-16T14:22:35.456Z"),
+    },
+    {
+        productId: "None",
+        user: "None",
+        rating: 2,
+        comment: "Not very durable, disappointed with the material.",
+        createdAt: new Date("2024-11-17T10:10:10.789Z"),
+    },
+    {
+        productId: "None",
+        user: "None",
+        rating: 4,
+        comment: "Good value for money, works as advertised.",
+        createdAt: new Date("2024-11-18T09:30:00.123Z"),
+    },
+    {
+        productId: "None",
+        user: "None",
+        rating: 1,
+        comment: "Poor quality, not worth the price. Would not recommend.",
+        createdAt: new Date("2024-11-19T11:15:45.678Z"),
+    },
+    {
+        productId: "None",
+        user: "None",
+        rating: 5,
+        comment: "Fantastic! Would definitely buy again.",
+        createdAt: new Date("2024-11-20T17:50:22.987Z"),
+    },
+    {
+        productId: "None",
+        user: "None",
+        rating: 3,
+        comment: "It is okay, but there are better options out there.",
+        createdAt: new Date("2024-11-21T12:00:00.000Z"),
+    },
+    {
+        productId: "None",
+        user: "None",
+        rating: 4,
+        comment: "Satisfied overall, but delivery was delayed.",
+        createdAt: new Date("2024-11-22T18:25:30.456Z"),
+    },
+    {
+        productId: "None",
+        user: "None",
+        rating: 2,
+        comment: "The product does not match the description provided.",
+        createdAt: new Date("2024-11-23T07:40:20.789Z"),
+    },
+    {
+        productId: "None",
+        user: "None",
+        rating: 5,
+        comment: "High-quality product, would recommend to others!",
+        createdAt: new Date("2024-11-24T20:55:15.321Z"),
+    },
+    {
+        productId: "product001",
+        user: "user001",
+        rating: 5,
+        comment: "Excellent smartphone with great battery life and camera!",
+        createdAt: new Date("2024-11-20T15:35:10.000Z"),
+    },
+    {
+        productId: "product002",
+        user: "user002",
+        rating: 4,
+        comment: "Very good laptop, but the keyboard feels a bit stiff.",
+        createdAt: new Date("2024-11-22T12:20:30.000Z"),
+    },
+    {
+        productId: "product003",
+        user: "user003",
+        rating: 3,
+        comment: "The tablet is fine, but the display is not as sharp as expected.",
+        createdAt: new Date("2024-11-23T18:45:50.000Z"),
+    },
+    {
+        productId: "product004",
+        user: "user004",
+        rating: 5,
+        comment: "Amazing headphones with crystal-clear sound and excellent noise cancellation.",
+        createdAt: new Date("2024-11-25T08:15:25.000Z"),
+    },
+    {
+        productId: "product005",
+        user: "user005",
+        rating: 2,
+        comment: "The smartwatch stopped working after a week. Not satisfied.",
+        createdAt: new Date("2024-11-26T14:05:40.000Z"),
+    },
+    {
+        productId: "product006",
+        user: "user006",
+        rating: 4,
+        comment: "Good gaming mouse, but the software needs improvement.",
+        createdAt: new Date("2024-11-27T11:10:15.000Z"),
+    },
+    {
+        productId: "product007",
+        user: "user007",
+        rating: 5,
+        comment: "Highly recommend this gaming console! Runs smoothly with no issues.",
+        createdAt: new Date("2024-11-28T17:50:05.000Z"),
+    },
+    {
+        productId: "product008",
+        user: "user008",
+        rating: 3,
+        comment: "The external hard drive is fast but overheats after prolonged use.",
+        createdAt: new Date("2024-11-29T13:30:45.000Z"),
+    },
+    {
+        productId: "product009",
+        user: "user009",
+        rating: 4,
+        comment: "Solid monitor with great color accuracy, but slightly expensive.",
+        createdAt: new Date("2024-11-30T09:40:20.000Z"),
+    },
+    {
+        productId: "product010",
+        user: "user010",
+        rating: 1,
+        comment: "Terrible experience with this router. Frequent disconnections.",
+        createdAt: new Date("2024-12-01T10:20:30.000Z"),
+    },
+    {
+        productId: "product011",
+        user: "user011",
+        rating: 5,
+        comment: "Fantastic performance! This graphics card is worth every penny.",
+        createdAt: new Date("2024-12-02T14:25:10.000Z"),
+    },
+    {
+        productId: "product012",
+        user: "user012",
+        rating: 4,
+        comment: "Decent quality earbuds, but the bass could be stronger.",
+        createdAt: new Date("2024-12-03T09:50:20.000Z"),
+    },
+    {
+        productId: "product013",
+        user: "user013",
+        rating: 3,
+        comment: "The printer works fine, but the ink cartridges are too expensive.",
+        createdAt: new Date("2024-12-03T18:10:05.000Z"),
+    },
+    {
+        productId: "product014",
+        user: "user014",
+        rating: 2,
+        comment: "The keyboard feels cheap, and some keys stopped working after a month.",
+        createdAt: new Date("2024-12-04T11:35:15.000Z"),
+    },
+    {
+        productId: "product015",
+        user: "user015",
+        rating: 4,
+        comment: "Great smartwatch for fitness tracking, but battery life is average.",
+        createdAt: new Date("2024-12-05T08:45:25.000Z"),
+    },
+    {
+        productId: "product016",
+        user: "user016",
+        rating: 5,
+        comment: "This external SSD is blazing fast and compact. A must-have for professionals!",
+        createdAt: new Date("2024-12-06T15:30:40.000Z"),
+    }
+];
 
 
 // Mock Cart
 const mockCarts=[
+    // Cart 1
     {
-      userId: "647f8fc01234567890123456",
-      items: [
-        {
-          productId: "648a1fc01234567890123456",
-          quantity: 2
-        },
-        {
-          productId: "648a1fc01234567890123457",
-          quantity: 3
-        }
-      ]
+        userId: "647f8fc01234567890123456",
+        items: [
+            {
+                productId: "648a1fc01234567890123456",
+                quantity: 2
+            },
+            {
+                productId: "648a1fc01234567890123457",
+                quantity: 1
+            },
+            {
+                productId: "648a1fc01234567890123457",
+                quantity: 4
+            },
+            {
+                productId: "648a1fc01234567890123457",
+                quantity: 2
+            }
+        ]
+    },
+    // Cart 2
+    {
+        userId: "647f8fc01234567890123456",
+        items: [
+            {
+                productId: "648a1fc01234567890123456",
+                quantity: 1
+            },
+            {
+                productId: "648a1fc01234567890123457",
+                quantity: 2
+            },
+            {
+                productId: "648a1fc01234567890123457",
+                quantity: 2
+            }
+        ]
+    },
+    // Cart 3
+    {
+        userId: "647f8fc01234567890123456",
+        items: [
+            {
+                productId: "648a1fc01234567890123456",
+                quantity: 10
+            },
+        ]
+    },
+    // Cart 4
+    {
+        userId: "647f8fc01234567890123456",
+        items: [
+            {
+                productId: "648a1fc01234567890123456",
+                quantity: 1
+            },
+            {
+                productId: "648a1fc01234567890123457",
+                quantity: 1
+            },
+            {
+                productId: "648a1fc01234567890123457",
+                quantity: 1
+            }
+        ]
+    },
+    // Cart 5
+    {
+        userId: "647f8fc01234567890123456",
+        items: [
+            {
+                productId: "648a1fc01234567890123456",
+                quantity: 1
+            },
+            {
+                productId: "648a1fc01234567890123457",
+                quantity: 1
+            }
+        ]
+    },
+    // Cart 6
+    {
+        userId: "647f8fc01234567890123456",
+        items: [
+            {
+                productId: "648a1fc01234567890123456",
+                quantity: 1
+            },
+            {
+                productId: "648a1fc01234567890123457",
+                quantity: 1
+            }
+        ]
+    },
+    // Cart 7
+    {
+        userId: "647f8fc01234567890123456",
+        items: [
+            {
+                productId: "648a1fc01234567890123456",
+                quantity: 1
+            },
+            {
+                productId: "648a1fc01234567890123457",
+                quantity: 1
+            },
+            {
+                productId: "648a1fc01234567890123457",
+                quantity: 2
+            },
+            {
+                productId: "648a1fc01234567890123457",
+                quantity: 4
+            }
+        ]
+    },
+    // Cart 8
+    {
+        userId: "647f8fc01234567890123456",
+        items: [
+            {
+                productId: "648a1fc01234567890123456",
+                quantity: 2
+            },
+            {
+                productId: "648a1fc01234567890123457",
+                quantity: 1
+            },
+            {
+                productId: "648a1fc01234567890123457",
+                quantity: 1
+            }
+        ]
+    },
+    // Cart 9
+    {
+        userId: "647f8fc01234567890123456",
+        items: [
+            {
+                productId: "648a1fc01234567890123456",
+                quantity: 1
+            },
+        ]
     },
 ];
 
+
+//     // Order 1
+//     {
+//         userId: "None",
+//         items: [
+//             {
+//                 name: "Laptop Dell Inspiron 15 3520 i5 1235U/16GB/512GB/120Hz/OfficeHS/KYHD/Win11",
+//                 image: "https://cdn.tgdd.vn/Products/Images/44/321192/Slider/vi-vn-dell-inspiron-15-3520-i5-25p231-slider-1.jpg",
+//                 price: 669.69,
+//                 cost: 600,
+//                 quantity: 2,
+//             },
+//             {
+//                 name: "iPhone 11 128GB",
+//                 image: "https://cdn.tgdd.vn/Products/Images/42/210644/Slider/iphone-11-128gb638176672333284623.jpeg",
+//                 price: 472.61,
+//                 cost: 400,
+//                 quantity: 1,
+//             },
+//             {
+//                 name: "Smart Tivi Samsung UHD 4K 65 inch UA65AU7700",
+//                 image: "https://cdn2.fptshop.com.vn/unsafe/384x0/filters:quality(100)/2023_8_14_638276187497562577_smart-tivi-samsung-uhd-4k-au7700-3.jpg",
+//                 price: 1060.31,
+//                 cost: 400,
+//                 quantity: 1,
+//             },
+//         ],
+//         address: {
+//             fullName: "Banh Thi Vinh",
+//             street: "",
+//             city: "",
+//             postalCode: "",
+//             phone: ""
+//         },
+//         total: 100784,
+//         status: "pending",
+//         paymentStatus: false,
+//         createdAt: "2024-12-03T14:56:08.477+00:00",
+//     },
+//     // Order 2
+//     {
+//         userId: "None",
+//         items: [
+//             {
+//                 name: "BeFit Watch Ultra 52.6mm",
+//                 image: "https://cdn.tgdd.vn/Products/Images/7077/315596/Slider/vi-vn-befit-watch-ultra-day-silicone-fix-1.jpg",
+//                 price: 58.73,
+//                 cost: 35,
+//                 quantity: 1,
+//             },
+//             {
+//                 name: "Xiaomi Google Tivi 4K A 55 inch 2025 (L55MA-ASEA)",
+//                 image: "https://cdn2.fptshop.com.vn/unsafe/384x0/filters:quality(100)/00910009_tivi_xiaomi_a_55_2025_l55ma_asea_0b7682dc52.png",
+//                 price: 452.9,
+//                 cost: 350,
+//                 quantity: 1,
+//             },
+//         ],
+//         address: {
+//             fullName: "Nguyen Van A",
+//             street: "456 Ly Thuong Kiet",
+//             city: "Da Nang",
+//             postalCode: "550000",
+//             phone: "0987654321"
+//         },
+//         total: 1199,
+//         status: "pending",
+//         paymentStatus: false,
+//         createdAt: "2024-12-04T10:30:00.000+00:00",
+//     },
+//     // Order 3
+//     {
+//         userId: "None",
+//         items: [
+//             {
+//                 name: "Xiaomi Google Tivi A Pro 55 Inch 4K",
+//                 image: "https://cdn2.fptshop.com.vn/unsafe/384x0/filters:quality(100)/2023_8_9_638271937140598065_tivi-xiaomi-a-pro-55-inch-4.jpg",
+//                 price: 393.77,
+//                 cost: 300,
+//                 quantity: 1,
+//             },
+//             {
+//                 name: "Apple Watch Series 9 GPS 45mm",
+//                 image: "https://cdn.tgdd.vn/Products/Images/7077/314708/Slider/apple-watch-s9-45mm-vien-nhom-day-silicone638351569262602904.jpg",
+//                 price: 445.01,
+//                 cost: 300,
+//                 quantity: 1,
+//             },
+//         ],
+//         address: {
+//             fullName: "Tran Thi B",
+//             street: "789 Tran Hung Dao",
+//             city: "Ha Noi",
+//             postalCode: "100000",
+//             phone: "0931122334"
+//         },
+//         total: 1399,
+//         status: "processing",
+//         paymentStatus: false,
+//         createdAt: "2024-12-05T12:45:00.000+00:00",
+//     },
+//     // Order 4
+//     {
+//         userId: "None",
+//         items: [
+//             {
+//                 name: "Laptop HP Gaming VICTUS 15 fa1139TX i5 12450H/16GB/512GB/4GB RTX2050/144Hz/Win11 (8Y6W3PA)",
+//                 image: "https://cdn.tgdd.vn/Products/Images/44/318163/Slider/vi-vn-hp-victus-15-fa1139tx-i5-8y6w3pa-slider-1.jpg",
+//                 price: 969.25,
+//                 cost: 700,
+//                 quantity: 1,
+//             },
+//         ],
+//         address: {
+//             fullName: "Le Van C",
+//             street: "321 Nguyen Trai",
+//             city: "Can Tho",
+//             postalCode: "900000",
+//             phone: "0911223344"
+//         },
+//         total: 399,
+//         status: "processing",
+//         paymentStatus: true,
+//         createdAt: "2024-12-06T09:00:00.000+00:00",
+//     },
+//     // Order 5
+//     {
+//         userId: "None",
+//         items: [
+//             {
+//                 name: "Realme 13+ 5G 8GB/256GB",
+//                 image: "https://cdn.tgdd.vn/Products/Images/42/330620/Slider/realme-13-plus-5g-8gb-256gb638677081877884882.jpg",
+//                 price: 374.06,
+//                 cost: 300,
+//                 quantity: 1,
+//             },
+//         ],
+//         address: {
+//             fullName: "Nguyen Thi D",
+//             street: "678 Cach Mang Thang 8",
+//             city: "Nha Trang",
+//             postalCode: "650000",
+//             phone: "0901234567"
+//         },
+//         total: 999,
+//         status: "completed",
+//         paymentStatus: false,
+//         createdAt: "2024-12-07T15:20:00.000+00:00",
+//     },
+//     // Order 6
+//     {
+//         userId: "None",
+//         items: [
+//             {
+//                 name: "Realme 13+ 5G 8GB/256GB",
+//                 image: "https://cdn.tgdd.vn/Products/Images/42/330620/Slider/realme-13-plus-5g-8gb-256gb638677081877884882.jpg",
+//                 price: 374.06,
+//                 cost: 300,
+//                 quantity: 1,
+//             },
+//         ],
+//         address: {
+//             fullName: "Le Thanh Vien",
+//             street: "Quoc Lo 26",
+//             city: "Ho Chi Minh City",
+//             postalCode: "700000",
+//             phone: "090xxxx567"
+//         },
+//         total: 999,
+//         status: "completed",
+//         paymentStatus: true,
+//         createdAt: "2024-12-07T15:20:00.000+00:00",
+//     },
+//     // Order 7
+//     {
+//         userId: "None",
+//         items: [
+//             {
+//                 name: "Vivo V40 5G 12GB/256GB",
+//                 image: "https://cdnv2.tgdd.vn/mwg-static/tgdd/Products/Images/42/331985/vivo-v40-5g-cam-hong-1-638682157901110213-750x500.jpg",
+//                 price: 492,
+//                 cost: 450,
+//                 quantity: 1,
+//             },
+//             {
+//                 name: "Xiaomi 14T 5G 12GB/512GB Xanh",
+//                 image: "https://cdn.tgdd.vn/Products/Images/42/329892/Slider/xiaomi-14t-5g-12gb-512gb-xanh638665075497966263.jpg",
+//                 price: 499,
+//                 cost: 400,
+//                 quantity: 1,
+//             },
+//         ],
+//         address: {
+//             fullName: "Nguyen Van Sang",
+//             street: "123 Le Loi",
+//             city: "Ho Chi Minh City",
+//             postalCode: "700000",
+//             phone: "0909001234"
+//         },
+//         total: 1797,
+//         status: "pending",
+//         paymentStatus: false,
+//         createdAt: "2024-12-04T10:20:30.477+00:00"
+//     },
+//     // Order 8
+//     {
+//         userId: "674efe63fa5b9cb7f4020944",
+//         items: [
+//             {
+//                 name: "Apple Watch Ultra 2 GPS + Cellular 49mm viền Titanium đen dây Alpine",
+//                 image: "https://cdn.tgdd.vn/Products/Images/7077/329719/Slider/vi-vn-apple-watch-ultra-2-gps-cellular-49mm-vien-titanium-day-alpine-sld-f-1.jpg",
+//                 price: 906.19,
+//                 cost: 850,
+//                 quantity: 1,
+//             },
+//         ],
+//         address: {
+//             fullName: "Le Thi D",
+//             street: "12 Hai Ba Trung",
+//             city: "Can Tho",
+//             postalCode: "900000",
+//             phone: "0933001234"
+//         },
+//         total: 499,
+//         status: "processing",
+//         paymentStatus: true,
+//         createdAt: "2024-12-07T15:50:00.000+00:00"
+//     },
+//     // Order 9
+//     {
+//         userId: "674efe63fa5b9cb7f4020943",
+//         items: [
+//             {
+//                 name: "GoPro Hero 13 Black",
+//                 image: "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/t/e/text_ng_n_3__5_87.png",
+//                 price: 452.9,
+//                 cost: 350,
+//                 quantity: 1,
+//             },
+//             {
+//                 name: "Camera GoPro Hero 12",
+//                 image: "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/c/a/camera-hanh-trinh-gopro-hero-12-phu-kien.png",
+//                 price: 492.31,
+//                 cost: 350,
+//                 quantity: 1,
+//             },
+//         ],
+//         address: {
+//             fullName: "Hoang Van C",
+//             street: "789 Nguyen Trai",
+//             city: "Da Nang",
+//             postalCode: "550000",
+//             phone: "0928007890"
+//         },
+//         total: 1898,
+//         status: "completed",
+//         paymentStatus: false,
+//         createdAt: "2024-12-06T08:30:45.000+00:00"
+//     },
+//     // Order 10
+//     {
+//         userId: "None",
+//         items: [
+//             {
+//                 name: "iPhone 11 128GB",
+//                 image: "https://cdn.tgdd.vn/Products/Images/42/210644/Slider/iphone-11-128gb638176672333284623.jpeg",
+//                 price: 472.61,
+//                 cost: 400,
+//                 quantity: 10,
+//             },
+//         ],
+//         address: {
+//             fullName: "Le Thanh T",
+//             street: "Mac Dinh Chi Street, Tan Hoa Quarter, Dong Hoa Ward",
+//             city: "Di An City, Binh Duong Province",
+//             postalCode: "820000",
+//             phone: "094xxxxx32"
+//         },
+//         total: 1898,
+//         status: "completed",
+//         paymentStatus: true,
+//         createdAt: "2024-12-06T08:30:45.000+00:00"
+//     },
+// ]
+
+
+// Mock User
+const mockUsers=[
+    // Customer
+    {
+        fullName: "vinh nguyen",
+        userName: "vinh nguyenGoogle",
+        email: "vinh01515@gmail.com",
+        password: "$2a$10$B3brr0sjJnx4PYIbZo1ASu0U23nHkNkweRlO8LLRFWFJGjMMZHyFi",
+        avatar: "https://lh3.googleusercontent.com/a/ACg8ocLM8bNJw0NiUYgSnFdZ-jIUnxDKfQ…",
+        role: "user",
+        status: "active",
+        birthDate:null,
+        createdAt: new Date("2024-11-22T06:41:57.622+00:00"),
+    },
+    {
+        fullName: "Nguyen quoc vinh",
+        userName: "vinh",
+        email: "vinh@gmail.com",
+        password: "$2a$10$Z1NR6Vc31tUkDMTjN94ZN.2rIUNyaOeQka234Z9yjCzheiNTXsdfa",
+        avatar: "",
+        role: "user",
+        status: "active",
+        birthDate:null,
+        createdAt: new Date("2024-11-24T14:22:21.243+00:00"),
+    },
+    {
+        fullName: "abc",
+        userName: "abc",
+        email: "abc@gmail.com",
+        password: "$2a$10$junYf4JC1h3ZfD6ntRSehez6tI.2AJGFdhCODw3l7fj48dFDoRgKy",
+        avatar: "",
+        role: "user",
+        status: "active",
+        birthDate:null,
+        createdAt: new Date("2024-11-24T17:29:19.582+00:00"),
+    },
+    {
+        fullName: "Nguyen quoc vinh",
+        userName: "vinh123",
+        email: "vinh123@gmail.com",
+        password: "$2a$10$uXLNcbwIZp/zuZ1VrK36W.2TeS6iG/eN18ZPGVtAR60d80s/mJAgS",
+        avatar: "",
+        role: "user",
+        status: "active",
+        birthDate:null,
+        createdAt: new Date("2024-11-29T01:03:40.420+00:00"),
+    },
+    {
+        fullName: "Trần Minh Sơn",
+        userName: "Trần Minh SơnGoogle",
+        email: "sonhotboy82@gmail.com",
+        password: "$2a$10$EEJvQPOx4qCwN1yatGiTLuTZTMuNSRbby0qGtMjymXCkG5phbNeWy",
+        avatar: "https://lh3.googleusercontent.com/a/ACg8ocL3JsRS8yKzjLtPRfd_ErpXKFZOax…",
+        role: "user",
+        status: "active",
+        birthDate:null,
+        createdAt: new Date("2024-11-29T01:24:07.848+00:00"),
+    },
+    {
+        fullName: "son",
+        userName: "son",
+        email: "sontranminh82@gmail.com",
+        password: "$2a$10$rYlMSJtHCQAaqvsRvWq52OzfYRfphoYVwLANz0LsvVr6VFZTJl6a2",
+        avatar: "",
+        role: "user",
+        status: "active",
+        birthDate:null,
+        createdAt: new Date("2024-11-29T01:24:48.677+00:00"),
+    },
+    {
+        fullName: "duc toan",
+        userName: "dt1",
+        email: "a@gmail.com",
+        password: "$2a$10$afdTmSfFyvm.DGcFLor8uOpnQ.cQXq971xvVnohLAoeu5hmehjq6u",
+        avatar: "",
+        role: "user",
+        status: "active",
+        birthDate:null,
+        createdAt: new Date("2024-11-30T06:39:41.012+00:00"),
+    },
+    {
+        fullName: "Duc Toan Nguyen",
+        userName: "Duc Toan NguyenGoogle",
+        email: "ductoan137303@gmail.com",
+        password: "$2a$10$BzYFuMl0Cjucn/e80U2uReoCGL1yTfI9bAJy0tZTehTBnXrNTn/yW",
+        avatar: "https://lh3.googleusercontent.com/a/ACg8ocJuMbPymBYpD88AuzQ20OWZ4k4CpM…",
+        role: "user",
+        status: "active",
+        birthDate:null,
+        createdAt: new Date("2024-11-30T06:40:23.805+00:00"),
+    },
+    {
+        fullName: "Alice Johnson",
+        userName: "AliceJ123",
+        email: "alice.johnson@gmail.com",
+        password: "$2b$10$wa5dNYwTH.2rR1Wi3CvpO.CUep.srTKWzLjQj/KIhmnrThgQ/7RX.",
+        avatar: "https://example.com/avatar/alice.jpg",
+        role: "user",
+        status: "active",
+        birthDate:null,
+        createdAt: new Date("2024-11-28T08:30:00.000+00:00"),
+    },
+    {
+        fullName: "Bob Smith",
+        userName: "BobTheCoder",
+        email: "bob.smith@gmail.com",
+        password: "$2b$10$Mjj/8a41S6IvZfRYuBnvPeshLH6GX781Qzacu8eDWenOPhPwXeKMq",
+        avatar: "https://example.com/avatar/bob.jpg",
+        role: "user",
+        status: "active",
+        birthDate:null,
+        createdAt: new Date("2024-12-01T10:15:00.000+00:00"),
+    },
+    {
+        fullName: "Charlie Nguyen",
+        userName: "CharlieN22",
+        email: "charlie.nguyen@gmail.com",
+        password: "$2b$10$K2Dit9SbBJSjBuFC8i7D9eaTGA3RbFvQSs1UZvkz05.JCsDMI4Bfa",
+        avatar: "https://example.com/avatar/charlie.jpg",
+        role: "user",
+        status: "ban",
+        birthDate:null,
+        createdAt: new Date("2024-11-29T12:45:00.000+00:00"),
+    },
+    {
+        fullName: "Diana Carter",
+        userName: "DianaC_99",
+        email: "diana.carter@gmail.com",
+        password: "$2b$10$sOMK/PXw4wQI3sNriHyvK.aaFmBzelwxCAzcIfyPzb/Bd9wkFQojG",
+        avatar: "https://example.com/avatar/diana.jpg",
+        role: "user",
+        status: "ban",
+        birthDate:null,
+        createdAt: new Date("2024-12-02T05:00:00.000+00:00"),
+    },
+    {
+        fullName: "Evan Lee",
+        userName: "EvanLPro",
+        email: "evan.lee@gmail.com",
+        password: "$2b$10$BA7Rn84wISdsUxy.Jb5hhuyn9aTXKAeZNeSoguGui47Sa5Udrs0w.",
+        avatar: "https://example.com/avatar/evan.jpg",
+        role: "user",
+        status: "ban",
+        birthDate:null,
+        createdAt: new Date("2024-12-03T16:30:00.000+00:00"),
+    },
+    {
+        fullName: "Nguyen Van A",
+        userName: "nguyenvana",
+        email: "nguyenvana@gmail.com",
+        password: "$2b$10$rEfBJWhl0H1z./3/rl268ekqxR0sfcusuQA4YmVWRO8jveLa0ZPxu", 
+        avatar: "https://example.com/avatar1.jpg",
+        role: "user",
+        status: "ban",
+        birthDate:null,
+        createdAt: new Date("2024-12-08T07:00:00.000Z"),
+    },
+    {
+        fullName: "Tran Thi B",
+        userName: "tranthib",
+        email: "tranthib@gmail.com",
+        password: "$2b$10$2c2DMHjpUSeXghJNTvGCNuqbz22OLSX/54v7NdwLXzrOq1QwVUjhO", 
+        avatar: "https://example.com/avatar2.jpg",
+        role: "user",
+        status: "ban",
+        birthDate:null,
+        createdAt: new Date("2024-12-08T07:01:00.000Z"),
+    },
+    {
+        fullName: "Le Van C",
+        userName: "levanc",
+        email: "levanc@gmail.com",
+        password: "$2b$10$A64C0yoHRqE38GN1Gw289uPJUKSHPbISk79Yq37ObtZto.AFYZOvq", 
+        avatar: "https://example.com/avatar3.jpg",
+        role: "user",
+        status: "ban",
+        birthDate:null,
+        createdAt: new Date("2024-12-08T07:02:00.000Z"),
+    },
+    {
+        fullName: "Pham Thi D",
+        userName: "phamthid",
+        email: "phamthid@gmail.com",
+        password: "$2b$10$s9itgfkGDsXQnsy25SlpV.PiT9sDLcEs2aFmrkLBOFld3lnFdwQ5y", 
+        avatar: "https://example.com/avatar4.jpg",
+        role: "user",
+        status: "ban",
+        birthDate:null,
+        createdAt: new Date("2024-12-08T07:03:00.000Z"),
+    },
+    {
+        fullName: "Hoang Van E",
+        userName: "hoangvane",
+        email: "hoangvane@gmail.com",
+        password: "$2b$10$JXQVETbfW.F0a67e8FoPUe66kZfuV/sAK0Yf4ySx9L8yrWtZITzfm", 
+        avatar: "https://example.com/avatar5.jpg",
+        role: "user",
+        status: "ban",
+        birthDate:null,
+        createdAt: new Date("2024-12-08T07:04:00.000Z"),
+    },
+    {
+        fullName: "Do Thi F",
+        userName: "dothif",
+        email: "dothif@gmail.com",
+        password: "$2b$10$I8LGHw4G5eGW8/QTxhyHvutFbU8/dgK21/x30ohGiMViStjbOvmjG", 
+        avatar: "https://example.com/avatar6.jpg",
+        role: "user",
+        status: "ban",
+        birthDate:null,
+        createdAt: new Date("2024-12-08T07:05:00.000Z"),
+    },
+    {
+        fullName: "Vo Van G",
+        userName: "vovang",
+        email: "vovang@gmail.com",
+        password: "$2b$10$.rgnBqXqAjrvurvXpBIlXuRTrocZL3TODzbjkO2Z7I1MkcyiTtGNC", 
+        avatar: "https://example.com/avatar7.jpg",
+        role: "user",
+        status: "ban",
+        birthDate:null,
+        createdAt: new Date("2024-12-08T07:06:00.000Z"),
+    }
+]
+
+
+// Mock Address
+// const mockAddresses = [
+//     {
+//         userId: "None",
+//         street: "123 Main St",
+//         city: "Hanoi",
+//         postalCode: "100000",
+//         phone: "090xxxx567",
+//         notes: "Near the park",
+//         isDefault: false,
+//     },
+//     {
+//         userId: "None",
+//         street: "456 Second Ave",
+//         city: "Ho Chi Minh City",
+//         postalCode: "700000",
+//         phone: "091xxxx678",
+//         notes: "Building with green door",
+//         isDefault: false,
+//     },
+//     {
+//         userId: "None",
+//         street: "789 Third Blvd",
+//         city: "Da Nang",
+//         postalCode: "500000",
+//         phone: "092xxxx789",
+//         notes: "",
+//         isDefault: false,
+//     },
+//     {
+//         userId: "None",
+//         street: "1010 Fourth Rd",
+//         city: "Hanoi",
+//         postalCode: "110000",
+//         phone: "093xxxx890",
+//         notes: "Opposite the bookstore",
+//         isDefault: false,
+//     },
+//     {
+//         userId: "None",
+//         street: "2020 Fifth St",
+//         city: "Haiphong",
+//         postalCode: "400000",
+//         phone: "094xxxx901",
+//         notes: "Near the bus station",
+//         isDefault: false,
+//     },
+//     {
+//         userId: "None",
+//         street: "3030 Sixth Ave",
+//         city: "Nha Trang",
+//         postalCode: "200000",
+//         phone: "095xxxx012",
+//         notes: "Behind the shopping mall",
+//         isDefault: false,
+//     },
+//     {
+//         userId: "None",
+//         street: "4040 Seventh Blvd",
+//         city: "Hue",
+//         postalCode: "600000",
+//         phone: "096xxxx123",
+//         notes: "Near the museum",
+//         isDefault: true,
+//     },
+//     {
+//         userId: "None",
+//         street: "5050 Eighth Rd",
+//         city: "Can Tho",
+//         postalCode: "800000",
+//         phone: "097xxxx234",
+//         notes: "Close to the river",
+//         isDefault: false,
+//     },
+//     {
+//         userId: "None",
+//         street: "6060 Ninth Ave",
+//         city: "Quang Ninh",
+//         postalCode: "900000",
+//         phone: "098xxxx345",
+//         notes: "Next to the university",
+//         isDefault: false,
+//     },
+//     {
+//         userId: "None",
+//         street: "7070 Tenth St",
+//         city: "Vung Tau",
+//         postalCode: "100100",
+//         phone: "099xxxx456",
+//         notes: "Near the beach",
+//         isDefault: false,
+//     },
+// ]
 
 
 export const up = async (db, client) => {
@@ -1806,16 +2646,37 @@ export const up = async (db, client) => {
     const products = await db.collection("products").insertMany(mockProducts);
 
     const users=await db.collection("users").insertMany(mockUsers);
-    
-    
-    const userIdMap=users.insertedIds;
-    
+
     const productIdMap = products.insertedIds;
+
+    const userIdMap=users.insertedIds;
+
+    // const addresses = await db.collection("addresses").insertMany(mockAddresses);
+
+    // await db.collection("staffs");
+
+    // const staffUsers = await db.collection("users").find({ role: "staff" }).toArray();
+
+    // if (staffUsers.length > 0) {
+    //     // Tạo dữ liệu để thêm vào bảng staffs
+    //     const updatedStaffs = staffUsers.map(user => ({
+    //         staff_id: user._id,
+    //         salary: 5000,
+    //         phone: "000-000-0000",
+    //         address: "",
+    //     }));
+
+    //     updatedStaffs[0].salary = 6000;
+    //     updatedStaffs[4].salary = 7000;
+
+    //     // Thêm các nhân viên vào bảng staffs
+    //     const staffs = await db.collection("staffproperties").insertMany(updatedStaffs);
+    // }
 
     const updatedProductDetails = mockProductDetails.map((detail,index) => {
         return {
         ...detail,
-        productId: productIdMap[index],  
+        product_id: productIdMap[index],  
         };
     });
 
@@ -1824,7 +2685,7 @@ export const up = async (db, client) => {
 
     const updatedProducts = mockProducts.map((product) => {
         // Lấy thông tin productDetail tương ứng
-        const productDetail = updatedProductDetails.find(detail => detail.productId === product._id);
+        const productDetail = updatedProductDetails.find(detail => detail.product_id === product._id);
 
         // Tìm category phù hợp dựa trên type của productDetail
         const category = mockCategories.find(cat => cat.name === productDetail.type);
@@ -1834,47 +2695,9 @@ export const up = async (db, client) => {
         };
     });
 
-
-    updatedProducts[0].brand_id = brandIdMap[4]._id;
-    updatedProducts[1].brand_id = brandIdMap[4]._id;
-
-    updatedProducts[2].brand_id = brandIdMap[0]._id;
-    updatedProducts[3].brand_id = brandIdMap[3]._id;
-
-    updatedProducts[4].brand_id = brandIdMap[0]._id;
-
-    updatedProducts[5].brand_id = brandIdMap[5]._id;
-
-    updatedProducts[6].brand_id = brandIdMap[6]._id;
-
-    updatedProducts[7].brand_id = brandIdMap[2]._id;
-
-    updatedProducts[8].brand_id = brandIdMap[2]._id;
-    updatedProducts[9].brand_id = brandIdMap[2]._id;
-
-    updatedProducts[10].brand_id = brandIdMap[0]._id;
-    updatedProducts[11].brand_id = brandIdMap[0]._id;
-
-    updatedProducts[12].brand_id = brandIdMap[6]._id;
-    updatedProducts[13].brand_id = brandIdMap[6]._id;
-
-    updatedProducts[14].brand_id = brandIdMap[0]._id;
-    updatedProducts[15].brand_id = brandIdMap[0]._id;
-
-    updatedProducts[16].brand_id = brandIdMap[3]._id;
-    updatedProducts[17].brand_id = brandIdMap[3]._id;
-
-    updatedProducts[18].brand_id = brandIdMap[1]._id;
-
-    updatedProducts[19].brand_id = brandIdMap[6]._id;
-
-    updatedProducts[20].brand_id = brandIdMap[0]._id;
-    updatedProducts[21].brand_id = brandIdMap[0]._id;
-    updatedProducts[22].brand_id = brandIdMap[0]._id;
-
-    updatedProducts[23].brand_id = brandIdMap[7]._id;
-    updatedProducts[24].brand_id = brandIdMap[7]._id;
-
+    updatedProducts.forEach((item, index) => {
+        item.brand_id = brandIdMap[Math.floor(index % 5)];
+    });
 
     for (const product of updatedProducts) {
         // Cập nhật category_id của từng product
@@ -1907,71 +2730,121 @@ export const up = async (db, client) => {
     mockProductProperties[16].category_id = categoryIdMap[2];
     mockProductProperties[17].category_id = categoryIdMap[2];
     mockProductProperties[18].category_id = categoryIdMap[2];
-    mockProductProperties[19].category_id = categoryIdMap[0];
-    mockProductProperties[20].category_id = categoryIdMap[0];
-    mockProductProperties[21].category_id = categoryIdMap[0];
-    mockProductProperties[22].category_id = categoryIdMap[0];
-    mockProductProperties[23].category_id = categoryIdMap[0];
-    mockProductProperties[24].category_id = categoryIdMap[0];
+    mockProductProperties[19].category_id = categoryIdMap[1];
+    mockProductProperties[20].category_id = categoryIdMap[1];
+    mockProductProperties[21].category_id = categoryIdMap[1];
+    mockProductProperties[22].category_id = categoryIdMap[1];
+    mockProductProperties[23].category_id = categoryIdMap[1];
+    mockProductProperties[24].category_id = categoryIdMap[1];
     
 
 
     const productProperties = await db.collection("productproperties").insertMany(mockProductProperties);
     const propertyIdMap = productProperties.insertedIds; // Lưu _id của các productproperties
     
-    const updatedProductPropertyValues = mockProductPropertyValues.map((detail, index) => {
+
+    const updatedProductPropertyValues = mockProductPropertyValues.map((detail, index) => { 
         return {
             ...detail,
-            property_id: index < 50?propertyIdMap[Math.floor(index/25)*5 + (index % 5)]:index<65?propertyIdMap[Math.floor(index/25)*5 + ((index+1) % 3)]:propertyIdMap[3+ Math.floor(index/95) +Math.floor((index - 5)/30)*5 +((index+1)%6) ]
+            // product_id: productIdMap[Math.floor(index / 5)],
+            __v: index,
         };
     });
-    console.log(updatedProductPropertyValues)
+
+
     updatedProductPropertyValues.forEach((item, index) => {
-        //0-4
         if (index < 25) {
             item.product_id = productIdMap[Math.floor(index / 5)];
-            //5-9
-        } else if (index < 50) {
-            item.product_id = productIdMap[Math.floor(index / 5)];
-            //10-12
-        } else if (index < 65) {
-            //13-18
-            item.product_id = productIdMap[Math.floor(index / 5)];
-        } else if (index < 95) {
-            item.product_id = productIdMap[Math.floor(index / 5)];
-            //19-24
-        } else {
-            item.product_id = productIdMap[Math.floor(index / 5)];
+        } 
+        else if (index < 50) {
+            item.product_id = productIdMap[Math.floor(((index - 25) / 5) + 5)];
+        }
+        else if (index < 65) {
+            item.product_id = productIdMap[Math.floor(((index - 50) / 3) + 10)];
+        } 
+        else if (index < 95) {
+            item.product_id = productIdMap[Math.floor(((index - 65) / 6) + 15)];
+        }
+        else {
+            item.product_id = productIdMap[Math.floor(((index - 95) / 6) + 20)];
         }
     });
 
-    await db.collection("productpropertyvalues").insertMany(updatedProductPropertyValues); 
-
-    const updatedReviews=mockReviews.map((review, index)=>{
-        return {
-            ...review,
-            user: userIdMap[0],
-            productId: productIdMap[index],  
+    updatedProductPropertyValues.forEach((item, index) => {
+        if (index < 25) {
+            item.property_id = propertyIdMap[Math.floor(index % 5)];
+        } 
+        else if (index < 50) {
+            item.property_id = propertyIdMap[Math.floor((index % 5) + 5)];
+        } 
+        else if (index < 65) {
+            item.property_id = propertyIdMap[Math.floor((index % 3) + 10)];
+        } 
+        else if (index < 95) {
+            item.property_id = propertyIdMap[Math.floor((index % 6) + 13)];
         }
+        else {
+            item.property_id = propertyIdMap[Math.floor((index % 6) + 19)];
+        }
+    });
+
+    await db.collection("productpropertyvalues").insertMany(updatedProductPropertyValues);
+
+    const updatedReviews = mockReviews.map((review, index) => {
+        return {
+        ...review,
+        user: userIdMap[Math.floor(index / 4)],
+        productId: productIdMap[index % 25],
+        __v: index,
+        };
     });
 
     await db.collection("reviews").insertMany(updatedReviews);
 
-    const updatedCarts=mockCarts.map((cart)=>{
-      return {
-        ...cart,
-        userId:userIdMap[0],
-        items:cart.items.map((item,index)=>{
-          return {
-            ...item,
-            productId:productIdMap[index],
-          }
-        })
-      }
-    });
 
+    const updatedCarts = mockCarts.map((cart, cartIndex) => {
+        return {
+            ...cart,
+            userId: userIdMap[cartIndex],
+            items: cart.items.map((item, itemIndex) => {
+                // Lấy index ngẫu nhiên hoặc theo công thức từ danh sách productIdMap
+                const randomProductIndex = (cartIndex * 3 + itemIndex) % 25;
+                return {
+                    ...item,
+                    productId: productIdMap[randomProductIndex],
+                };
+            }),
+        };
+    });
     
     await db.collection("carts").insertMany(updatedCarts);
+    
+    await db.collection("banners").insertMany(mockBanners);
+    // const updatedOrders = mockOrders.map((order, orderIndex) => {
+    //     return {
+    //         ...order,
+    //         userId: userIdMap[orderIndex],
+    //         address: {
+    //             ...order.address,
+    //             fullName: mockUsers[orderIndex].fullName,
+    //         },
+    //     };
+    // });
+
+    // await db.collection("orders").insertMany(updatedOrders);
+
+    // for (const order of updatedOrders) {
+    //     // Tính tổng tiền từ items
+    //     const newTotal = order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+    //     // Cập nhật giá trị total trong đơn hàng
+    //     await db.collection("orders").updateOne(
+    //         { _id: order._id },
+    //         { $set: { total: newTotal } }
+    //     );
+    // }
+
+    
 };
 
 export const down = async (db, client) => {
@@ -1999,4 +2872,5 @@ export const down = async (db, client) => {
     await db.collection("brands").drop();
     await db.collection("categories").drop();
     await db.collection("carts").drop();
+    await db.collection("orders").drop();
 };

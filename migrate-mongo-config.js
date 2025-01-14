@@ -1,7 +1,7 @@
 const config = {
   mongodb: {
     url: "mongodb+srv://thanhvinh2400:Ed4DnAKsvTWn32vw@mydatabase.huvya.mongodb.net",
-    databaseName: "MyShop-Demo",
+    databaseName: "testabc",
     options: {
       // connectTimeoutMS: 3600000, // Optional: increase connection timeout
       // socketTimeoutMS: 3600000,  // Optional: increase socket timeout
