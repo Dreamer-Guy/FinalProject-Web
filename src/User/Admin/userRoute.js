@@ -11,7 +11,5 @@ adminUserRouter.get("/", adminUserController.getAllUsers);
 adminUserRouter.get("/api/get", adminUserController.getUsersApi);
 adminUserRouter.patch("/api/lock/:id", adminUserController.HandlelockUser);
 adminUserRouter.get("/api/detail/:id", adminUserController.getUserDetail);
-adminUserRouter.get("/profile", adminUserController.getAdminProfile);
-adminUserRouter.get("/changePassword", adminUserController.getAdminChangePassword);
 
 export default adminUserRouter;
