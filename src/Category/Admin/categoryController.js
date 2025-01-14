@@ -49,7 +49,7 @@ const getCategories = async (req, res) => {
 const getCategoryPage = async (req, res) => {
     try {
         const user = req.user || null;
-        res.render('admin/categories', {
+        res.render('admin/Category/categories', {
             user,
             activePage: 'categories'
         });
@@ -64,7 +64,7 @@ const getCategoryPage = async (req, res) => {
 const getAddCategoryPage = async (req, res) => {
     try {
         const user = req.user || null;
-        res.render('admin/addCategory', {
+        res.render('admin/Category/addCategory', {
             user,
             activePage: 'categories'
         });
@@ -118,7 +118,7 @@ const getCategoryDetail = async (req, res) => {
 
         const properties = await productPropertyService.getPropertiesByCategoryId(category._id);
         
-        res.render('admin/categoryDetail', {
+        res.render('admin/Category/categoryDetail', {
             category,
             properties,
             user: req.user

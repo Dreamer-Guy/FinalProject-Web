@@ -117,6 +117,10 @@ const elasticSearchService={
         }));
     },
     async SynchronizeProductsToElastic(products){
+        if (!products || products.length === 0){
+            return;
+        }
+        
         const body=products.flatMap((product)=>[
             {
                 index:{

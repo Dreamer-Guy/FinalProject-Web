@@ -74,7 +74,7 @@ const getProductPage = async (req, res) => {
         const brands = await brandService.getAll();
         const products = await productService.getAll();
         
-        res.render('admin/products', {
+        res.render('admin/Product/products', {
             user,
             categories,
             brands,
@@ -146,14 +146,14 @@ const getProductDetail = async (req, res) => {
         const product = await productService.getProductById(productId);
         
         if (!product) {
-            return res.redirect('/admin/products');
+            return res.redirect('/admin/Product/products');
         }
         
         const productProperties = await productPropertyService.getProductPropertiesByProductId(productId);
         const categoryProperties = await productPropertyService.getPropertiesByCategoryId(product.category_id);
 
         const user = req.user || null;
-        res.render('admin/productDetail', {
+        res.render('admin/Product/productDetail', {
             user,
             product,
             productProperties,
@@ -162,7 +162,7 @@ const getProductDetail = async (req, res) => {
 
     } catch (error) {
         console.error(error);
-        res.redirect('/admin/products');
+        res.redirect('/admin/Product/products');
     }
 };
 
@@ -172,14 +172,14 @@ const getAddProductPage = async (req, res) => {
         const brands = await brandService.getAll();
         const user = req.user || null;
         
-        res.render('admin/addProduct', {
+        res.render('admin/Product/addProduct', {
             user,
             categories,
             brands
         });
     } catch (error) {
         console.error(error);
-        res.redirect('/admin/products');
+        res.redirect('/admin/Product/products');
     }
 };
 
@@ -253,7 +253,7 @@ const getEditProductPage = async (req, res) => {
         const product = await productService.getProductById(productId);
         
         if (!product) {
-            return res.redirect('/admin/products');
+            return res.redirect('/admin/Product/products');
         }
         
         const categories = await categoryService.getAll();
@@ -262,7 +262,7 @@ const getEditProductPage = async (req, res) => {
         const categoryProperties = await productPropertyService.getPropertiesByCategoryId(product.category_id);
         const alternativeImages=await imagesProductService.getAllAlternativeImagesOfProduct(productId)||[];
         const user = req.user || null;
-        res.render('admin/editProduct', {
+        res.render('admin/Product/editProduct', {
             user,
             product,
             categories,
@@ -273,7 +273,7 @@ const getEditProductPage = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.redirect('/admin/products');
+        res.redirect('/admin/Product/products');
     }
 };
 
@@ -344,7 +344,7 @@ const getDeletedProductsPage = async (req, res) => {
         const categories = await categoryService.getAll();
         const brands = await brandService.getAll();
         
-        res.render('admin/deletedProducts', {
+        res.render('admin/Product/deletedProducts', {
             user,
             categories,
             brands
