@@ -447,7 +447,7 @@
                     <div class="flex justify-between mb-6">
                         <div>
                             <div class="text-2xl font-semibold flex flex-row items-center mb-1"><span class="text-base font-normal text-gray-400 align-top">&dollar;</span>
-                                <%=orders.filter(order=>order.checkoutStatus.toLowerCase()==='paid').reduce((acc,order)=>acc+=order.total,0)%></div>
+                                <%=totalMoneyFromPaidOrders%></div>
                             <div class="text-sm font-medium text-gray-400">Paid orders</div>
                         </div>
                         <div class="dropdown">
@@ -753,24 +753,27 @@
                         <div class="rounded-md border border-dashed border-gray-200 p-4">
                             <div class="flex items-center mb-0.5">
                                 <div class="text-xl font-semibold"><%=orders.filter(order=>order.checkoutStatus.toLowerCase()==='paid').length%></div>
+                                <% const totalMonFromPaid=orders.filter(order=>order.checkoutStatus.toLowerCase()==='paid').reduce((acc,order)=>acc+=order.total,0)%>
                                 <span class="p-1 rounded text-[12px] font-semibold bg-blue-500/10 text-blue-500 leading-none ml-1">
-                                    $<%=orders.filter(order=>order.checkoutStatus.toLowerCase()==='paid').reduce((acc,order)=>acc+=order.total,0)%></span>
+                                    $<%=totalMonFromPaid.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g,",")%></span>
                             </div>
                             <span class="text-gray-400 text-sm">Paid</span>
                         </div>
                         <div class="rounded-md border border-dashed border-gray-200 p-4">
                             <div class="flex items-center mb-0.5">
                                 <div class="text-xl font-semibold"><%=orders.filter(order=>order.orderStatus.toLowerCase()==='processing').length%></div>
+                                <% const totalMonFromProcessing=orders.filter(order=>order.orderStatus.toLowerCase()==='processing').reduce((acc,order)=>acc+=order.total,0)%>
                                 <span class="p-1 rounded text-[12px] font-semibold bg-emerald-500/10 text-emerald-500 leading-none ml-1">
-                                    $<%=orders.filter(order=>order.orderStatus.toLowerCase()==='processing').reduce((acc,order)=>acc+=order.total,0)%></span>
+                                    $<%=totalMonFromProcessing.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g,",")%></span>
                             </div>
                             <span class="text-gray-400 text-sm">Processing</span>
                         </div>
                         <div class="rounded-md border border-dashed border-gray-200 p-4">
                             <div class="flex items-center mb-0.5">
                                 <div class="text-xl font-semibold"><%=orders.filter(order=>order.orderStatus.toLowerCase()==='canceled').length%></div>
+                                <% const totalMonFromCancelled=orders.filter(order=>order.orderStatus.toLowerCase()==='canceled').reduce((acc,order)=>acc+=order.total,0)%>
                                 <span class="p-1 rounded text-[12px] font-semibold bg-rose-500/10 text-rose-500 leading-none ml-1">
-                                    -$<%=orders.filter(order=>order.orderStatus.toLowerCase()==='canceled').reduce((acc,order)=>acc+=order.total,0)%></span>
+                                    -$<%=totalMonFromCancelled.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g,",")%></span>
                             </div>
                             <span class="text-gray-400 text-sm">Canceled</span>
                         </div>

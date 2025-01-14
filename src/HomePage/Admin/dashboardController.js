@@ -1,4 +1,5 @@
 import serviceFactory from "../../Factory/serviceFactory.js";
+import formatNumber from "../../utils/formatNumber.js";
 
 const orderService=serviceFactory.getOrderService();
 const userService=serviceFactory.getUserService();
@@ -205,6 +206,8 @@ const getDashBoardPage=async(req,res)=>{
     const yAxisRevenueYear=await getYAxisRevenue(timeRangeCaseYear);
     const yAxisRevenueMonth=await getYAxisRevenue(timeRangeCaseMonth);
     const yAxisRevenueDay=await getYAxisRevenue(timeRangeCaseDay);
+    console.log(orders);
+    const totalMoneyFromPaidOrders=orders.reduce((acc,order)=>order.checkoutStatus==='paid'?acc+order.total:acc,0);
     return res.render('admin/dashboard',{
         xAxisCaseYear,
         yAxisRevenueYear,
@@ -212,6 +215,7 @@ const getDashBoardPage=async(req,res)=>{
         users,
         topRatingProducts,
         topPurchasedProducts,
+        totalMoneyFromPaidOrders:formatNumber.decimal(totalMoneyFromPaidOrders),
     });
 };
 
