@@ -238,10 +238,14 @@
                         <a href="#">
                             <h4 class="uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition"><%= product.name %></h4>
                         </a>
+                        <% if(product.salePrice!=="0.00"){ %>
                         <div class="flex items-baseline mb-1 space-x-2">
                             <p class="text-xl text-primary font-semibold">$<%= product.salePrice %></p>
                             <p class="text-sm text-gray-400 line-through">$<%= product.price %></p>
                         </div>
+                        <% } else { %>
+                            <p class="text-xl text-gray-400 font-semibold">$<%= product.price %></p>
+                        <% } %>
                         <div class="flex items-center">
                             <div class="flex gap-1 text-sm text-yellow-400">
                                 <% for (let i = 0; i < product.rating; i++) { %>

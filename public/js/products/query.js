@@ -149,7 +149,7 @@ async function handleFilters(type,value,value2_optional){
                             </h4>
                         </a>
                         <div class="flex items-baseline mb-1 space-x-2">
-                            ${product.salePrice>0?
+                            ${product.salePrice!=="0.00"?
                                 `<div class="text-xl text-primary font-semibold">$${product.salePrice}
                                 </div>
                                 <div class="text-xl text-gray-500 line-through">$${product.price}
