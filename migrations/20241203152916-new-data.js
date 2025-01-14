@@ -1,5 +1,17 @@
 import mongoose from "mongoose";
 
+const mockBanners = 
+[{
+    "image": "https://firebasestorage.googleapis.com/v0/b/my-app-4c221.appspot.com/o/web%2Fimages%2Fbanner1.jpg?alt=media&token=3eb632f4-66a0-4960-aef2-24af69199547"
+  },
+  {
+    "image": "https://firebasestorage.googleapis.com/v0/b/my-app-4c221.appspot.com/o/web%2Fimages%2Fbanner3.jpg?alt=media&token=f4177f40-3742-44ab-8c02-20e6f2900a3d"
+  },
+  {
+    "image": "https://firebasestorage.googleapis.com/v0/b/my-app-4c221.appspot.com/o/web%2Fimages%2Fbanner.jpg?alt=media&token=d8f45201-6b80-4c1b-8d4e-2c9a4e8aebca"
+  }]
+
+
 // Dữ liệu mock cho Category
 const mockCategories = [
     {
@@ -32,6 +44,12 @@ const mockCategories = [
         deletedAt:null,
         createdAt: new Date('2022-05-01T00:00:00Z'),
     },
+    {
+        name: 'Other',
+        isDeleted:false,
+        deletedAt:null,
+        createdAt: new Date('2022-05-01T00:00:00Z'),
+    },
 ];
 
 
@@ -59,6 +77,11 @@ const mockBrands = [
     },
     {
         name: 'Lazada',
+        isDeleted:false,
+        createdAt: new Date('2024-11-30T06:45:33.946Z'),
+    },
+    {
+        name: 'Other',
         isDeleted:false,
         createdAt: new Date('2024-11-30T06:45:33.946Z'),
     },
@@ -2004,7 +2027,7 @@ const mockCarts=[
     },
 ];
 
-// const mockOrders = [
+
 //     // Order 1
 //     {
 //         userId: "None",
@@ -2796,6 +2819,7 @@ export const up = async (db, client) => {
     
     await db.collection("carts").insertMany(updatedCarts);
     
+    await db.collection("banners").insertMany(mockBanners);
     // const updatedOrders = mockOrders.map((order, orderIndex) => {
     //     return {
     //         ...order,
