@@ -255,9 +255,9 @@
                             <div class="text-xs text-gray-500 ml-3">(<%= product.numReviews>0?product.numReviews:0 %>)</div>
                         </div>
                     </div>
-                    <a href="#"
+                    <div onclick="handleAddToCart('<%= product.productId %>',1)"
                         class="block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition">Add
-                        to cart</a>
+                        to cart</div>
                 </div>
             <% }) %>
         </div>
@@ -353,7 +353,12 @@
     </div>
     <!-- ./copyright -->
     <script src="/js/common/util.js"></script>
+    <script src="/js/products/cart.js"></script>
+    <script src="/js/common/toast.js"></script>
+    <script src="/js/common/util.js"></script>
+    <script src="/js/common/showSpinnerLoading.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const swiper = new Swiper('.swiper', {

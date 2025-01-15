@@ -1,6 +1,7 @@
 
 const handleAddToCart = async (productId,quantity=1) => {
     try{
+        console.log('productId:',productId);
         showSpinnerLoading();
         const res=await fetch('/carts/addItems',{
             method:"POST",
